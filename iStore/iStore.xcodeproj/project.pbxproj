@@ -13,6 +13,17 @@
 		F417639C2BCEFF5800EBB86D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F417639B2BCEFF5800EBB86D /* Assets.xcassets */; };
 		F417639F2BCEFF5800EBB86D /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F417639E2BCEFF5800EBB86D /* Base */; };
 		F41763A92BCF018700EBB86D /* UIColor Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763A82BCF018700EBB86D /* UIColor Extension.swift */; };
+		F41763AB2BCF2A1100EBB86D /* UILabel Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763AA2BCF2A1100EBB86D /* UILabel Extension.swift */; };
+		F41763AD2BCF2D7500EBB86D /* UIFont Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763AC2BCF2D7500EBB86D /* UIFont Extension.swift */; };
+		F41763B42BCF2EB700EBB86D /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F41763B02BCF2EB700EBB86D /* Inter-Bold.ttf */; };
+		F41763B52BCF2EB700EBB86D /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F41763B12BCF2EB700EBB86D /* Inter-Medium.ttf */; };
+		F41763B62BCF2EB700EBB86D /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F41763B22BCF2EB700EBB86D /* Inter-Regular.ttf */; };
+		F41763B72BCF2EB700EBB86D /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F41763B32BCF2EB700EBB86D /* Inter-SemiBold.ttf */; };
+		F41763B92BCF2FB300EBB86D /* UIView Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763B82BCF2FB300EBB86D /* UIView Extension.swift */; };
+		F41763BB2BCF306200EBB86D /* UINavigationController Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763BA2BCF306200EBB86D /* UINavigationController Extension.swift */; };
+		F41763BD2BCF30A700EBB86D /* UIViewController Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763BC2BCF30A700EBB86D /* UIViewController Extension.swift */; };
+		F41763BF2BCF32C400EBB86D /* UIButton Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763BE2BCF32C400EBB86D /* UIButton Extension.swift */; };
+		F41763C12BCF3ACF00EBB86D /* UITextField Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763C02BCF3ACF00EBB86D /* UITextField Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +35,17 @@
 		F417639E2BCEFF5800EBB86D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F41763A02BCEFF5800EBB86D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F41763A82BCF018700EBB86D /* UIColor Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor Extension.swift"; sourceTree = "<group>"; };
+		F41763AA2BCF2A1100EBB86D /* UILabel Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel Extension.swift"; sourceTree = "<group>"; };
+		F41763AC2BCF2D7500EBB86D /* UIFont Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont Extension.swift"; sourceTree = "<group>"; };
+		F41763B02BCF2EB700EBB86D /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
+		F41763B12BCF2EB700EBB86D /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
+		F41763B22BCF2EB700EBB86D /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
+		F41763B32BCF2EB700EBB86D /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		F41763B82BCF2FB300EBB86D /* UIView Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView Extension.swift"; sourceTree = "<group>"; };
+		F41763BA2BCF306200EBB86D /* UINavigationController Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController Extension.swift"; sourceTree = "<group>"; };
+		F41763BC2BCF30A700EBB86D /* UIViewController Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController Extension.swift"; sourceTree = "<group>"; };
+		F41763BE2BCF32C400EBB86D /* UIButton Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton Extension.swift"; sourceTree = "<group>"; };
+		F41763C02BCF3ACF00EBB86D /* UITextField Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +78,9 @@
 		F41763912BCEFF5600EBB86D /* iStore */ = {
 			isa = PBXGroup;
 			children = (
-				F41763A72BCF016300EBB86D /* Extensions */,
 				F41763A62BCF015400EBB86D /* Application */,
+				F41763A72BCF016300EBB86D /* Extensions */,
+				F41763AE2BCF2E6A00EBB86D /* Resources */,
 				F417639B2BCEFF5800EBB86D /* Assets.xcassets */,
 				F417639D2BCEFF5800EBB86D /* LaunchScreen.storyboard */,
 				F41763A02BCEFF5800EBB86D /* Info.plist */,
@@ -79,8 +102,34 @@
 			isa = PBXGroup;
 			children = (
 				F41763A82BCF018700EBB86D /* UIColor Extension.swift */,
+				F41763AA2BCF2A1100EBB86D /* UILabel Extension.swift */,
+				F41763AC2BCF2D7500EBB86D /* UIFont Extension.swift */,
+				F41763B82BCF2FB300EBB86D /* UIView Extension.swift */,
+				F41763BA2BCF306200EBB86D /* UINavigationController Extension.swift */,
+				F41763BC2BCF30A700EBB86D /* UIViewController Extension.swift */,
+				F41763BE2BCF32C400EBB86D /* UIButton Extension.swift */,
+				F41763C02BCF3ACF00EBB86D /* UITextField Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F41763AE2BCF2E6A00EBB86D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F41763AF2BCF2E9500EBB86D /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F41763AF2BCF2E9500EBB86D /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F41763B02BCF2EB700EBB86D /* Inter-Bold.ttf */,
+				F41763B12BCF2EB700EBB86D /* Inter-Medium.ttf */,
+				F41763B22BCF2EB700EBB86D /* Inter-Regular.ttf */,
+				F41763B32BCF2EB700EBB86D /* Inter-SemiBold.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,6 +190,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F41763B72BCF2EB700EBB86D /* Inter-SemiBold.ttf in Resources */,
+				F41763B52BCF2EB700EBB86D /* Inter-Medium.ttf in Resources */,
+				F41763B62BCF2EB700EBB86D /* Inter-Regular.ttf in Resources */,
+				F41763B42BCF2EB700EBB86D /* Inter-Bold.ttf in Resources */,
 				F417639C2BCEFF5800EBB86D /* Assets.xcassets in Resources */,
 				F417639F2BCEFF5800EBB86D /* Base in Resources */,
 			);
@@ -153,9 +206,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F41763BB2BCF306200EBB86D /* UINavigationController Extension.swift in Sources */,
+				F41763C12BCF3ACF00EBB86D /* UITextField Extension.swift in Sources */,
+				F41763AB2BCF2A1100EBB86D /* UILabel Extension.swift in Sources */,
+				F41763BF2BCF32C400EBB86D /* UIButton Extension.swift in Sources */,
+				F41763AD2BCF2D7500EBB86D /* UIFont Extension.swift in Sources */,
+				F41763B92BCF2FB300EBB86D /* UIView Extension.swift in Sources */,
 				F41763A92BCF018700EBB86D /* UIColor Extension.swift in Sources */,
 				F41763972BCEFF5600EBB86D /* ViewController.swift in Sources */,
 				F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */,
+				F41763BD2BCF30A700EBB86D /* UIViewController Extension.swift in Sources */,
 				F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,7 +363,6 @@
 				DEVELOPMENT_TEAM = 87P7GYW9VY;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iStore/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -335,7 +394,6 @@
 				DEVELOPMENT_TEAM = 87P7GYW9VY;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iStore/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";

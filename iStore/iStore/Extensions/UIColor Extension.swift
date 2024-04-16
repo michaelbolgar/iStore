@@ -13,12 +13,12 @@ extension UIColor {
     }()
 
     ///paragraph, disable menu, inactive menu
-    static var lightGray: UIColor = {
+    static var customLightGray: UIColor = {
         return UIColor (red: 147/255, green: 147/255, blue: 147/255, alpha: 1.0)
     }()
 
     ///title, text button, text field label
-    static var darkGray: UIColor = {
+    static var customDarkGray: UIColor = {
         return UIColor (red: 57/255, green: 63/255, blue: 66/255, alpha: 1.0)
     }()
 
@@ -30,5 +30,10 @@ extension UIColor {
     ///buttons, fill icons, link button
     static var customYellow: UIColor = {
         return UIColor (red: 247/255, green: 144/255, blue: 8/255, alpha: 1.0)
+    }()
+
+    /// text field on the login
+    static var lightViolet: UIColor = {
+        return UIColor (red: 246/255, green: 248/255, blue: 254/255, alpha: 1.0)
     }()
 }
