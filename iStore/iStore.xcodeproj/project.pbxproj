@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D016ACEE2BCFA584007455ED /* UICollectionView Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D016ACED2BCFA584007455ED /* UICollectionView Extension.swift */; };
+		D016ACF02BCFA9F9007455ED /* SearchCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D016ACEF2BCFA9F9007455ED /* SearchCollectionCell.swift */; };
+		D016ACF22BCFAF23007455ED /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D016ACF12BCFAF23007455ED /* SearchCell.swift */; };
 		F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763922BCEFF5600EBB86D /* AppDelegate.swift */; };
 		F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763942BCEFF5600EBB86D /* SceneDelegate.swift */; };
 		F41763972BCEFF5600EBB86D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763962BCEFF5600EBB86D /* ViewController.swift */; };
@@ -49,6 +52,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D016ACED2BCFA584007455ED /* UICollectionView Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView Extension.swift"; sourceTree = "<group>"; };
+		D016ACEF2BCFA9F9007455ED /* SearchCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionCell.swift; sourceTree = "<group>"; };
+		D016ACF12BCFAF23007455ED /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		F417638F2BCEFF5600EBB86D /* iStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41763922BCEFF5600EBB86D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F41763942BCEFF5600EBB86D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -155,6 +161,7 @@
 				F41763BC2BCF30A700EBB86D /* UIViewController Extension.swift */,
 				F41763BE2BCF32C400EBB86D /* UIButton Extension.swift */,
 				F41763C02BCF3ACF00EBB86D /* UITextField Extension.swift */,
+				D016ACED2BCFA584007455ED /* UICollectionView Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -329,6 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				F41763D32BCF477500EBB86D /* ItemCell.swift */,
+				D016ACF12BCFAF23007455ED /* SearchCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -401,6 +409,7 @@
 			isa = PBXGroup;
 			children = (
 				F41763EA2BCF499900EBB86D /* SearchVC.swift */,
+				D016ACEF2BCFA9F9007455ED /* SearchCollectionCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -549,9 +558,11 @@
 				F41763AB2BCF2A1100EBB86D /* UILabel Extension.swift in Sources */,
 				F41763BF2BCF32C400EBB86D /* UIButton Extension.swift in Sources */,
 				F41763EF2BCF49C700EBB86D /* CartVC.swift in Sources */,
+				D016ACF22BCFAF23007455ED /* SearchCell.swift in Sources */,
 				F41763AD2BCF2D7500EBB86D /* UIFont Extension.swift in Sources */,
 				F41763B92BCF2FB300EBB86D /* UIView Extension.swift in Sources */,
 				F41764112BCF4C4F00EBB86D /* LoginPresenter.swift in Sources */,
+				D016ACEE2BCFA584007455ED /* UICollectionView Extension.swift in Sources */,
 				F41763F42BCF4A3200EBB86D /* DetailsVC.swift in Sources */,
 				F41764052BCF4B6C00EBB86D /* WishlistPresenter.swift in Sources */,
 				F41764032BCF4B4D00EBB86D /* ManagerPresenter.swift in Sources */,
@@ -566,6 +577,7 @@
 				F41763EB2BCF499900EBB86D /* SearchVC.swift in Sources */,
 				F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */,
 				F41763E72BCF495200EBB86D /* ProfileVC.swift in Sources */,
+				D016ACF02BCFA9F9007455ED /* SearchCollectionCell.swift in Sources */,
 				F41763BD2BCF30A700EBB86D /* UIViewController Extension.swift in Sources */,
 				F41763E52BCF493B00EBB86D /* ManagerVC.swift in Sources */,
 				F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */,

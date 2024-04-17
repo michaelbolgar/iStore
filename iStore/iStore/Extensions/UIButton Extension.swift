@@ -20,7 +20,9 @@ extension UIButton {
                            titleColor: UIColor,
                            titleSize: CGFloat,
                            width: CGFloat,
-                           height: CGFloat) -> UIButton {
+                           height: CGFloat,
+                           cornerRadius: CGFloat? = nil
+    ) -> UIButton {
 
         let button = UIButton(type: .system)
         button.setTitle(text, for: .normal)
@@ -30,6 +32,7 @@ extension UIButton {
         button.widthAnchor.constraint(equalToConstant: width).isActive = true
         button.heightAnchor.constraint(equalToConstant: height).isActive = true
         button.backgroundColor = buttonColor.color
+        button.layer.cornerRadius = cornerRadius ?? 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }
