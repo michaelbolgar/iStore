@@ -10,6 +10,7 @@
 		D016ACEE2BCFA584007455ED /* UICollectionView Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D016ACED2BCFA584007455ED /* UICollectionView Extension.swift */; };
 		D016ACF02BCFA9F9007455ED /* SearchCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D016ACEF2BCFA9F9007455ED /* SearchCollectionCell.swift */; };
 		D016ACF22BCFAF23007455ED /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D016ACF12BCFAF23007455ED /* SearchCell.swift */; };
+		D0A3ADD92BD0825B006D2619 /* UISearchBar Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A3ADD82BD0825B006D2619 /* UISearchBar Extension.swift */; };
 		F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763922BCEFF5600EBB86D /* AppDelegate.swift */; };
 		F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763942BCEFF5600EBB86D /* SceneDelegate.swift */; };
 		F41763972BCEFF5600EBB86D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763962BCEFF5600EBB86D /* ViewController.swift */; };
@@ -55,6 +56,7 @@
 		D016ACED2BCFA584007455ED /* UICollectionView Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView Extension.swift"; sourceTree = "<group>"; };
 		D016ACEF2BCFA9F9007455ED /* SearchCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionCell.swift; sourceTree = "<group>"; };
 		D016ACF12BCFAF23007455ED /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
+		D0A3ADD82BD0825B006D2619 /* UISearchBar Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar Extension.swift"; sourceTree = "<group>"; };
 		F417638F2BCEFF5600EBB86D /* iStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41763922BCEFF5600EBB86D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F41763942BCEFF5600EBB86D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +111,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D0A3ADDA2BD08C10006D2619 /* Empty Search */ = {
+			isa = PBXGroup;
+			children = (
+				D0A3ADDC2BD08C4F006D2619 /* Presenter */,
+				D0A3ADDB2BD08C42006D2619 /* View */,
+			);
+			path = "Empty Search";
+			sourceTree = "<group>";
+		};
+		D0A3ADDB2BD08C42006D2619 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D0A3ADDC2BD08C4F006D2619 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
 		F41763862BCEFF5600EBB86D = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +187,7 @@
 				F41763BE2BCF32C400EBB86D /* UIButton Extension.swift */,
 				F41763C02BCF3ACF00EBB86D /* UITextField Extension.swift */,
 				D016ACED2BCFA584007455ED /* UICollectionView Extension.swift */,
+				D0A3ADD82BD0825B006D2619 /* UISearchBar Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -248,6 +274,7 @@
 			children = (
 				F41763CB2BCF46F700EBB86D /* Onboarding */,
 				F41763CC2BCF470100EBB86D /* Login */,
+				D0A3ADDA2BD08C10006D2619 /* Empty Search */,
 				F41763C92BCF46E200EBB86D /* Search */,
 				F41763CD2BCF470E00EBB86D /* Cart */,
 				F41763CA2BCF46E600EBB86D /* Details */,
@@ -559,6 +586,7 @@
 				F41763BF2BCF32C400EBB86D /* UIButton Extension.swift in Sources */,
 				F41763EF2BCF49C700EBB86D /* CartVC.swift in Sources */,
 				D016ACF22BCFAF23007455ED /* SearchCell.swift in Sources */,
+				D0A3ADD92BD0825B006D2619 /* UISearchBar Extension.swift in Sources */,
 				F41763AD2BCF2D7500EBB86D /* UIFont Extension.swift in Sources */,
 				F41763B92BCF2FB300EBB86D /* UIView Extension.swift in Sources */,
 				F41764112BCF4C4F00EBB86D /* LoginPresenter.swift in Sources */,

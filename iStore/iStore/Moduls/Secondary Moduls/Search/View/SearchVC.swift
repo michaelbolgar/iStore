@@ -16,7 +16,7 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         collectionView.backgroundColor = .white
         return collectionView
     }()
-    private let searchBar = UISearchBar()
+    private let searchBar = SearchBarView()
     private let searchlabel = UILabel.makeLabel(text: "Search result for Earphones",
                                                 font: UIFont.InterRegular(ofSize: 14),
                                                 textColor: UIColor.customDarkGray,
@@ -54,7 +54,15 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         configureCollectionView()
         setViews()
         setupUI()
-        navigationItem.titleView = searchBar
+
+        let frame = CGRect(x: 55, y: 0, width: 250, height: 44)
+        let titleView = UIView(frame: frame)
+
+        searchBar.frame = frame
+        titleView.addSubview(searchBar)
+        navigationItem.titleView = titleView
+        searchBar.delegate = self
+    
     }
 
     // MARK: Private Methods
@@ -78,10 +86,9 @@ final class SearchVC: UIViewController, SearchVCProtocol {
 
 extension SearchVC {
     func setViews() {
-        [searchBar, collectionView, searchlabel, filterView].forEach { view.addSubview($0)}
+        [collectionView, searchlabel, filterView].forEach { view.addSubview($0)}
         filterView.addSubview(filterlabel)
         filterView.addSubview(imageFilter)
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchlabel.translatesAutoresizingMaskIntoConstraints = false
         filterView.translatesAutoresizingMaskIntoConstraints = false
         filterlabel.translatesAutoresizingMaskIntoConstraints = false
@@ -90,9 +97,6 @@ extension SearchVC {
     }
 
     func setupUI() {
-        searchBar.sizeToFit()
-        searchBar.delegate = self
-
         NSLayoutConstraint.activate([
             searchlabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             searchlabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 117),
@@ -134,20 +138,30 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
 }
 
 
-extension SearchVC: UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print("Search bar editing did begin..")
-    }
-
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        print("Search bar editing did end..")
-    }
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-
-    }
-
+//extension SearchVC: UISearchBarDelegate {
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//        print("Search bar editing did begin..")
+//    }
+//
+//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+//        print("Search bar editing did end..")
+//    }
+//
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//
+//    }
+//
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        print("Search text is \(searchText)")
+//    }
+//}
+extension SearchVC: SearchBarViewDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("Search text is \(searchText)")
+      print(searchText)
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        print(searchText)
     }
 }
