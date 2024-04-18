@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0A3ADEA2BD10D5E006D2619 /* CartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A3ADE92BD10D5E006D2619 /* CartCell.swift */; };
+		D0A3ADEC2BD11BF0006D2619 /* CartCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A3ADEB2BD11BF0006D2619 /* CartCellPresenter.swift */; };
+		D0A3ADEE2BD11D7E006D2619 /* CartTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A3ADED2BD11D7E006D2619 /* CartTableCell.swift */; };
 		F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763922BCEFF5600EBB86D /* AppDelegate.swift */; };
 		F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763942BCEFF5600EBB86D /* SceneDelegate.swift */; };
 		F41763972BCEFF5600EBB86D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763962BCEFF5600EBB86D /* ViewController.swift */; };
@@ -49,6 +52,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D0A3ADE92BD10D5E006D2619 /* CartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCell.swift; sourceTree = "<group>"; };
+		D0A3ADEB2BD11BF0006D2619 /* CartCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCellPresenter.swift; sourceTree = "<group>"; };
+		D0A3ADED2BD11D7E006D2619 /* CartTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartTableCell.swift; sourceTree = "<group>"; };
 		F417638F2BCEFF5600EBB86D /* iStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41763922BCEFF5600EBB86D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F41763942BCEFF5600EBB86D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -329,6 +335,7 @@
 			isa = PBXGroup;
 			children = (
 				F41763D32BCF477500EBB86D /* ItemCell.swift */,
+				D0A3ADE92BD10D5E006D2619 /* CartCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -409,6 +416,7 @@
 			isa = PBXGroup;
 			children = (
 				F41763FA2BCF4AD100EBB86D /* CartPresenter.swift */,
+				D0A3ADEB2BD11BF0006D2619 /* CartCellPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -417,6 +425,7 @@
 			isa = PBXGroup;
 			children = (
 				F41763EE2BCF49C700EBB86D /* CartVC.swift */,
+				D0A3ADED2BD11D7E006D2619 /* CartTableCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -547,6 +556,7 @@
 				F41764092BCF4BBE00EBB86D /* OnboardingVC.swift in Sources */,
 				F41763FB2BCF4AD100EBB86D /* CartPresenter.swift in Sources */,
 				F41763AB2BCF2A1100EBB86D /* UILabel Extension.swift in Sources */,
+				D0A3ADEA2BD10D5E006D2619 /* CartCell.swift in Sources */,
 				F41763BF2BCF32C400EBB86D /* UIButton Extension.swift in Sources */,
 				F41763EF2BCF49C700EBB86D /* CartVC.swift in Sources */,
 				F41763AD2BCF2D7500EBB86D /* UIFont Extension.swift in Sources */,
@@ -555,6 +565,7 @@
 				F41763F42BCF4A3200EBB86D /* DetailsVC.swift in Sources */,
 				F41764052BCF4B6C00EBB86D /* WishlistPresenter.swift in Sources */,
 				F41764032BCF4B4D00EBB86D /* ManagerPresenter.swift in Sources */,
+				D0A3ADEE2BD11D7E006D2619 /* CartTableCell.swift in Sources */,
 				F41764012BCF4B3F00EBB86D /* ProfileModel.swift in Sources */,
 				F41763E32BCF492500EBB86D /* WishlistVC.swift in Sources */,
 				F41763FD2BCF4AFE00EBB86D /* SearchPresenter.swift in Sources */,
@@ -563,6 +574,7 @@
 				F41763D42BCF477500EBB86D /* ItemCell.swift in Sources */,
 				F417640D2BCF4C0B00EBB86D /* SignUpVC.swift in Sources */,
 				F41763FF2BCF4B2000EBB86D /* ProfilePresenter.swift in Sources */,
+				D0A3ADEC2BD11BF0006D2619 /* CartCellPresenter.swift in Sources */,
 				F41763EB2BCF499900EBB86D /* SearchVC.swift in Sources */,
 				F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */,
 				F41763E72BCF495200EBB86D /* ProfileVC.swift in Sources */,
