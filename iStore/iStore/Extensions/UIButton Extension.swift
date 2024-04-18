@@ -16,7 +16,7 @@ enum ButtonColor {
 
 extension UIButton {
     static func makeButton(text: String, 
-                           buttonColor: ButtonColor,
+                           buttonColor: ButtonColor? = nil,
                            titleColor: UIColor,
                            titleSize: CGFloat,
                            width: CGFloat,
@@ -31,7 +31,7 @@ extension UIButton {
         button.tintColor = titleColor
         button.widthAnchor.constraint(equalToConstant: width).isActive = true
         button.heightAnchor.constraint(equalToConstant: height).isActive = true
-        button.backgroundColor = buttonColor.color
+        button.backgroundColor = buttonColor?.color
         button.layer.cornerRadius = cornerRadius ?? 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

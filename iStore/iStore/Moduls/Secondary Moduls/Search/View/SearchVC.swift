@@ -54,18 +54,19 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         configureCollectionView()
         setViews()
         setupUI()
+        setupSearchBar()
+    }
 
-        let frame = CGRect(x: 55, y: 0, width: 250, height: 44)
+    // MARK: Private Methods
+    private func setupSearchBar() {
+        let frame = CGRect(x: 55, y: 0, width: 270, height: 44)
         let titleView = UIView(frame: frame)
-
         searchBar.frame = frame
         titleView.addSubview(searchBar)
         navigationItem.titleView = titleView
         searchBar.delegate = self
-    
     }
-
-    // MARK: Private Methods
+    
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -137,24 +138,6 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
     }
 }
 
-
-//extension SearchVC: UISearchBarDelegate {
-//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//        print("Search bar editing did begin..")
-//    }
-//
-//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-//        print("Search bar editing did end..")
-//    }
-//
-//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//
-//    }
-//
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        print("Search text is \(searchText)")
-//    }
-//}
 extension SearchVC: SearchBarViewDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
       print(searchText)
