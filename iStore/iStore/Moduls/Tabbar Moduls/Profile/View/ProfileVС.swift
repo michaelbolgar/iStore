@@ -30,6 +30,17 @@ final class ProfileViewController: UIViewController {
                                                  numberOfLines: 1,
                                                  alignment: .left)
     
+    private lazy var settingsProfileButton: UIButton = {
+        let element = UIButton(type: .system)
+        element.setBackgroundImage(UIImage(systemName: "gearshape.2"), for: .normal)
+        element.backgroundColor = .white
+        element.tintColor = .customDarkGray
+        element.addTarget(self, action: #selector(settingsProfileButtonTapped), for: .touchUpInside)
+        element.translatesAutoresizingMaskIntoConstraints = false
+        return element
+    }()
+    
+    
     private lazy var changePhotoProfileButton: UIButton = {
         let element = UIButton(type: .system)
         element.setBackgroundImage(UIImage(systemName: "square.and.pencil.circle.fill"), for: .normal)
@@ -68,8 +79,10 @@ final class ProfileViewController: UIViewController {
     private func setupViews() {
         
         view.backgroundColor = .white
+        
+        view.hideKeyboard() // это нужно для реализации функции по изменению логина и почты
      
-        [profileTitle, profileImage, profileName, profileEmail, changePhotoProfileButton, typeAccountView, termsView, signoutView].forEach { view.addSubview($0) }
+        [profileTitle, settingsProfileButton, profileImage, profileName, profileEmail, changePhotoProfileButton, typeAccountView, termsView, signoutView].forEach { view.addSubview($0) }
         
         //добавляем рекогнайзер на кнопки(вью)
         typeAccountView.isUserInteractionEnabled = true
@@ -88,6 +101,10 @@ final class ProfileViewController: UIViewController {
     }
     
     // MARK: Selector Methods
+    @objc private func settingsProfileButtonTapped() {
+        print("settingsProfile button tapped")
+    }
+    
     @objc private func changePhotoProfileButtonTapped() {
         let changePhotoVC = ChangePhotoViewController()
         changePhotoVC.modalPresentationStyle = .automatic
@@ -95,7 +112,9 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func typeAccountViewTapped() {
-        print("typeAccount button tapped")
+        let changePhotoVC = ChangeProfileViewController()
+        changePhotoVC.modalPresentationStyle = .automatic
+        present(changePhotoVC, animated: true, completion: nil)
     }
     
     @objc private func termsViewTapped() {
@@ -122,6 +141,9 @@ private extension ProfileViewController {
             profileTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             profileTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
+            settingsProfileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            settingsProfileButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
+            
             profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 92),
             profileImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: inset),
             profileImage.widthAnchor.constraint(equalToConstant: 130),
@@ -134,12 +156,12 @@ private extension ProfileViewController {
             
             profileName.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 104),
             profileName.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 150),
-            profileName.widthAnchor.constraint(equalTo: view.widthAnchor),
+            profileName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
             profileName.heightAnchor.constraint(equalToConstant: 24),
             
             profileEmail.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 128),
             profileEmail.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 150),
-            profileEmail.widthAnchor.constraint(equalTo: view.widthAnchor),
+            profileEmail.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
             profileEmail.heightAnchor.constraint(equalToConstant: 24),
             
             typeAccountView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: inset),

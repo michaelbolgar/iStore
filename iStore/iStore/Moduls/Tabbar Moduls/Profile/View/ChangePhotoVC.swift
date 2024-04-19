@@ -20,17 +20,17 @@ final class ChangePhotoViewController: UIViewController {
     }()
   
     private let takePhotoView = UIView.makeView(textLabel: "Take a Photo", 
-                                                textColor: .black,
+                                                textColor: .customDarkGray,
                                                 nameMarker: "camera",
                                                 colorMarker: .customDarkGray)
     
     private let chooseFromFileView = UIView.makeView(textLabel: "Choose from Your Files", 
-                                                     textColor: .black,
+                                                     textColor: .customDarkGray,
                                                      nameMarker: "folder",
                                                      colorMarker: .customDarkGray)
     
     private let deletePhotoView = UIView.makeView(textLabel: "Delete Photo", 
-                                                  textColor: .red,
+                                                  textColor: .customRed,
                                                   nameMarker: "trash.fill",
                                                   colorMarker: .customRed)
     
@@ -56,26 +56,26 @@ final class ChangePhotoViewController: UIViewController {
         chooseFromFileView.isUserInteractionEnabled = true
         deletePhotoView.isUserInteractionEnabled = true
 
-        let typeAccountTapGesture = UITapGestureRecognizer(target: self, action: #selector(takePhotoButtonTapped))
+        let typeAccountTapGesture = UITapGestureRecognizer(target: self, action: #selector(takePhotoViewTapped))
         takePhotoView.addGestureRecognizer(typeAccountTapGesture)
 
-        let termsTapGesture = UITapGestureRecognizer(target: self, action: #selector(chooseFromFileButtonTapped))
+        let termsTapGesture = UITapGestureRecognizer(target: self, action: #selector(chooseFromFileViewTapped))
         chooseFromFileView.addGestureRecognizer(termsTapGesture)
 
-        let signoutTapGesture = UITapGestureRecognizer(target: self, action: #selector(deletePhotoButtonTapped))
+        let signoutTapGesture = UITapGestureRecognizer(target: self, action: #selector(deletePhotoViewTapped))
         deletePhotoView.addGestureRecognizer(signoutTapGesture)
     }
     
     // MARK: - Selector Methods
-    @objc private func takePhotoButtonTapped() {
+    @objc private func takePhotoViewTapped() {
         print("takePhotoButton Tapped")
     }
 
-    @objc private func chooseFromFileButtonTapped() {
+    @objc private func chooseFromFileViewTapped() {
         print("chooseFromFileButton Tapped")
     }
 
-    @objc private func deletePhotoButtonTapped() {
+    @objc private func deletePhotoViewTapped() {
         print("deletePhotoButton Tapped")
     }
 }
