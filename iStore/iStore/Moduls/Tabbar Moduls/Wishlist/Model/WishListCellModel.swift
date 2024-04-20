@@ -11,5 +11,5 @@ struct Product {
     let picture: String?
     let description: String?
     let price: Double?
-    let isFavourite: Bool?
+    var isFavourite: Bool?
 }

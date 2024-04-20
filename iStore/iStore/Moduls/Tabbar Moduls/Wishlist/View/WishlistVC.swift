@@ -90,7 +90,7 @@ extension WishlistVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WishCollectionCell.identifier, for: indexPath) as! WishCollectionCell
         let product = presenter.getProduct(at: indexPath.item)
-        cell.set(info: product)
+        cell.set(info: product, at: indexPath.item) // Update this line to include the index
         cell.delegate = presenter
         return cell
     }

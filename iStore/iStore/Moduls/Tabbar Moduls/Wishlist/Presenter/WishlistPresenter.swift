@@ -44,8 +44,9 @@ extension WishlistPresenter: WishCollectionCellDelegate {
         print("Buy pressed")
     }
     
-    func heartButtonPressed() {
-        print("Heart pressed")
-        
-    }
+    func heartButtonPressed(at index: Int) {
+            guard products.indices.contains(index) else { return }
+            products[index].isFavourite?.toggle()
+            view?.reloadCollectionView()
+        }
 }

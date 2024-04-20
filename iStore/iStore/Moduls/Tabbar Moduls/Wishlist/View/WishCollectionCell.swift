@@ -9,11 +9,12 @@ import UIKit
 
 protocol WishCollectionCellDelegate: AnyObject {
     func buyButtonPressed()
-    func heartButtonPressed()
+    func heartButtonPressed(at index: Int)
 }
 
 final class WishCollectionCell: UICollectionViewCell {
 //MARK: - Properties
+    var index: Int?
     static let identifier = String(describing: WishCollectionCell.self)
     weak var delegate: WishCollectionCellDelegate?
     
@@ -66,7 +67,8 @@ final class WishCollectionCell: UICollectionViewCell {
     }
  
     //MARK: - Methods
-    func set(info: Product) {
+    func set(info: Product, at index: Int) {
+        self.index = index
         let pictureName = info.picture ?? "Buy"
         productImage.image = UIImage(named: pictureName)
         productLabel.text = info.description
@@ -97,7 +99,9 @@ final class WishCollectionCell: UICollectionViewCell {
     }
     
     @objc func heartButtonTapped() {
-        delegate?.heartButtonPressed()
+        if let index = index {
+            delegate?.heartButtonPressed(at: index)
+        }
     }
 }
 
