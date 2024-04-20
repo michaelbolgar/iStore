@@ -14,7 +14,7 @@ final class OnboardingVC: UIViewController {
                               "OnBoarding2", 
                               "OnBoarding3"]
     
-    private var slides: [PagesViewController] = []
+    private var slides: [PagesView] = []
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -81,7 +81,7 @@ final class OnboardingVC: UIViewController {
         scrollView.contentSize = CGSize(width: scrollViewWidth * CGFloat(titles.count), height: scrollViewHeight)
         
         for (index, title) in titles.enumerated() {
-            let slide = PagesViewController()
+            let slide = PagesView()
             slide.configure(title: title, description: descriptions[index], imageName: imageNames[index])
             slides.append(slide)
             scrollView.addSubview(slide)
@@ -108,7 +108,8 @@ final class OnboardingVC: UIViewController {
             let point = CGPoint(x: scrollView.frame.width * CGFloat(nextPage), y: 0)
             scrollView.setContentOffset(point, animated: true)
         } else {
-//            let vc = LoginViewController()
+            // Переход на экран Логина
+//            let vc = LoginVC()
 //            vc.modalPresentationStyle = .fullScreen
 //            present(vc, animated: true)
         }
@@ -137,19 +138,22 @@ extension OnboardingVC: UIScrollViewDelegate {
 extension OnboardingVC {
     
     private func setupLayouts() {
+        let edgePadding: CGFloat = 20
+        let buttonSize: CGFloat = 70
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            nextButtonImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            nextButtonImageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            nextButtonImageView.widthAnchor.constraint(equalToConstant: 70),
-            nextButtonImageView.heightAnchor.constraint(equalToConstant: 70),
+            nextButtonImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -edgePadding),
+            nextButtonImageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -edgePadding),
+            nextButtonImageView.widthAnchor.constraint(equalToConstant: buttonSize),
+            nextButtonImageView.heightAnchor.constraint(equalToConstant: buttonSize),
             
-            pageControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            pageControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: edgePadding),
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -edgePadding)
         ])
     }
 }
