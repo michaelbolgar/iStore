@@ -1,7 +1,7 @@
 import Foundation
 
 protocol SearchPresenterProtocol: AnyObject {
-    func viewDidLoad()
+    func getData()
     var productCount: Int { get }
     func getProduct(at index: Int) -> Product
 }
@@ -20,7 +20,7 @@ final class SearchPresenter: SearchPresenterProtocol {
     func getProduct(at index: Int) -> Product {
         return products[index]
     }
-    func viewDidLoad() {
+    func getData() {
      products = [Product(picture: "imgProduct", description: "Earphones for monitor", price: 100),
             Product(picture: "imgProduct", description: "Earphones for monitor", price: 100),
             Product(picture: "imgProduct", description: "Earphones for monitor", price: 100),

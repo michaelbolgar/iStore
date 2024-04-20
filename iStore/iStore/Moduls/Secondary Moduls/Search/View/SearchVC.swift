@@ -26,7 +26,7 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         let view = UIView()
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 5
-        view.layer.borderColor = UIColor(red: 0.941, green: 0.949, blue: 0.945, alpha: 1).cgColor
+        view.layer.borderColor = UIColor.veryLightGray.cgColor
         return view
     }()
     private let filterlabel = UILabel.makeLabel(text: "Filters",
@@ -45,27 +45,27 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         super.viewDidLoad()
         view.backgroundColor = .white
         view.hideKeyboard()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Buy"), 
-                                                            style: .plain, target: self,
-                                                            action: #selector(buyButtonPressed))
-        navigationController?.navigationBar.tintColor = UIColor.black
         presenter = SearchPresenter(viewController: self)
-        presenter.viewDidLoad()
+        presenter.getData()
         configureCollectionView()
         setViews()
         setupUI()
+        setSearchBar()
+    }
 
+    // MARK: Private Methods
+    private func setSearchBar() {
         let frame = CGRect(x: 55, y: 0, width: 250, height: 44)
         let titleView = UIView(frame: frame)
-
         searchBar.frame = frame
         titleView.addSubview(searchBar)
         navigationItem.titleView = titleView
         searchBar.delegate = self
-    
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Buy"),
+                                                            style: .plain, target: self,
+                                                            action: #selector(buyButtonPressed))
+        navigationController?.navigationBar.tintColor = UIColor.black
     }
-
-    // MARK: Private Methods
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -137,24 +137,6 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
     }
 }
 
-
-//extension SearchVC: UISearchBarDelegate {
-//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//        print("Search bar editing did begin..")
-//    }
-//
-//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-//        print("Search bar editing did end..")
-//    }
-//
-//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//
-//    }
-//
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        print("Search text is \(searchText)")
-//    }
-//}
 extension SearchVC: SearchBarViewDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
       print(searchText)
