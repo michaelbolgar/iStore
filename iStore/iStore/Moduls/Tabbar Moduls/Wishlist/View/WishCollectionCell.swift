@@ -140,3 +140,4 @@ private extension WishCollectionCell {
         ])
     }
 }
+

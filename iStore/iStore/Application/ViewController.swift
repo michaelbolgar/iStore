@@ -69,5 +69,7 @@ class ViewController: UIViewController {
 
     @objc private func buttonTapped() {
         print ("click")
+        let vc = WishlistVC()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
