@@ -1,99 +1,109 @@
 import UIKit
 
-final class WishlistVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+protocol WishlistVCProtocol: AnyObject {
+    func reloadCollectionView()
+}
 
+final class WishlistVC: UIViewController, WishlistVCProtocol {
+    var presenter: WishlistPresenter!
+    
+    // MARK: UI Elements
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionFlowLayout.createTwoColFlowLayout(in: view)
+        layout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .white
+        return collectionView
+    }()
+    
+    private let searchBar = SearchBarView()
+    
+    // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        
-        // Register the custom cell class
-                collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        
-        // Search Bar
-        let searchBar = UISearchBar()
-        searchBar.placeholder = "Search"
-        navigationItem.titleView = searchBar
-        
-        // Cart Button
-        let cartButton = UIBarButtonItem(image: UIImage(systemName: "cart"), style: .plain, target: self, action: #selector(cartButtonTapped))
-        navigationItem.rightBarButtonItem = cartButton
-    }
-
-
-
-
-    
-    lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 16
-                layout.minimumLineSpacing = 16
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.showsVerticalScrollIndicator = false
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.dataSource = self
-        cv.delegate = self
-        return cv
-    }()
-    
-    @objc func cartButtonTapped() {
-        // Handle cart button tap
-        print("tap-tap")
+        view.hideKeyboard()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.cart,
+                                                            style: .plain, target: self,
+                                                            action: #selector(cartButtonPressed))
+        navigationController?.navigationBar.tintColor = UIColor.black
+        presenter = WishlistPresenter(viewController: self)
+        presenter.viewDidLoad()
+        configureCollectionView()
+        setViews()
+        setupUI()
+        setupSearchBar()
     }
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+    // MARK: Private Methods
+    private func setupSearchBar() {
+        let frame = CGRect(x: 55, y: 0, width: 270, height: 44)
+        let titleView = UIView(frame: frame)
+        searchBar.frame = frame
+        titleView.addSubview(searchBar)
+        navigationItem.titleView = titleView
+        searchBar.delegate = self
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 16
+    private func configureCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(WishCollectionCell.self,
+                                forCellWithReuseIdentifier: WishCollectionCell.identifier)
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CustomCollectionViewCell
-        cell.backgroundColor = UIColor.random
-        cell.colorLabel.text = cell.backgroundColor?.description
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
-        print("tap-tap cell is opened")
-        
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell else {
-            return
+    func reloadCollectionView() {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
         }
-        
-        let detailViewController = ManagerVC()
-        detailViewController.view.backgroundColor = cell.backgroundColor
-        navigationController?.pushViewController(detailViewController, animated: true)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (view.frame.width - 32 - 16) / 2
-        return CGSize(width: width, height: width)
-    }
+    // MARK: Selector Methods
+    @objc func cartButtonPressed() {}
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
+}
+
+//MARK: - Extensions
+//MARK: Setup
+extension WishlistVC {
+    func setViews() {
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
+
+    func setupUI() {
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
 }
 
-extension UIColor {
-    static var random: UIColor {
-        return UIColor(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1), alpha: 1)
+//MARK: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
+extension WishlistVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return presenter.productCount
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WishCollectionCell.identifier, for: indexPath) as! WishCollectionCell
+        let product = presenter.getProduct(at: indexPath.item)
+        cell.set(info: product)
+        cell.delegate = presenter
+        return cell
+    }
+}
+
+//MARK: SearchBarViewDelegate
+extension WishlistVC: SearchBarViewDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+      print(searchText)
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        print(searchText)
     }
 }
