@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol RegistrationViewProtocol: AnyObject {
-    func showSuccessPopup(message: String)
-}
-
 class RegistrationViewController: UIViewController {
     
     var usernameTextField: UITextField!
@@ -61,11 +57,5 @@ class RegistrationViewController: UIViewController {
 
     @objc func registerButtonTapped() {
         presenter?.registerButtonTapped(username: usernameTextField.text, password: passwordTextField.text)
-    }
-    
-    func showSuccessPopup(message: String) {
-        let alert = UIAlertController(title: "Failure", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
     }
 }

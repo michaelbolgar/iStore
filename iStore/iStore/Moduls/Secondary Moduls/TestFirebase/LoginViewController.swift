@@ -8,7 +8,7 @@
 import UIKit
 
 protocol LoginViewProtocol: AnyObject {
-    func showSuccessPopup(message: String)
+    func showPopup(title: String, message: String)
 }
 
 class LoginViewController: UIViewController, LoginViewProtocol {
@@ -78,8 +78,8 @@ class LoginViewController: UIViewController, LoginViewProtocol {
         presenter?.logOutButtonTapped()
     }
     
-    func showSuccessPopup(message: String) {
-        let alert = UIAlertController(title: "Failure", message: message, preferredStyle: .alert)
+    func showPopup(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
