@@ -31,7 +31,7 @@ class LoginPresenter: LoginPresenterProtocol {
             
             Auth.auth().signIn(withEmail: username, password: password) { authResult, error in
                 if let error = error {
-                    self.view?.showSuccessPopup(message: error.localizedDescription)
+                    self.view?.showPopup(title: "Error", message: error.localizedDescription)
                 } else {
                     print("Success")
                 }
@@ -42,17 +42,17 @@ class LoginPresenter: LoginPresenterProtocol {
     func logOutButtonTapped() {
         do {
             try Auth.auth().signOut()
-            self.view?.showSuccessPopup(message: "Success Log Out")
+            self.view?.showPopup(title: "Success", message: "Success Log Out")
         } catch let signOutError as NSError {
             print("Error signing out: %@", signOutError)
-            self.view?.showSuccessPopup(message: "Error signing out: %@")
+            self.view?.showPopup(title: "Error", message: "Error signing out: %@")
         }
     }
 }
 
 class RegistrationPresenter: RegistrationPresenterProtocol {
     
-    weak var view: RegistrationViewProtocol?
+    weak var view: LoginViewProtocol?
     
     func registerButtonTapped(username: String?, password: String?) {
         
@@ -60,7 +60,7 @@ class RegistrationPresenter: RegistrationPresenterProtocol {
             
             Auth.auth().createUser(withEmail: username, password: password) { authResult, error in
                 if let error = error {
-                    self.view?.showSuccessPopup(message: error.localizedDescription)
+                    self.view?.showPopup(title: "Error", message: error.localizedDescription)
                 } else {
                     print("Registration Success")
                 }
