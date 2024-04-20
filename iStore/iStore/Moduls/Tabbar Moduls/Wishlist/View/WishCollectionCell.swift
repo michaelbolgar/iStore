@@ -17,6 +17,7 @@ final class WishCollectionCell: UICollectionViewCell {
     var index: Int?
     static let identifier = String(describing: WishCollectionCell.self)
     weak var delegate: WishCollectionCellDelegate?
+    let spacing: CGFloat = 13
     
     
    //MARK: - UI elements
@@ -29,7 +30,7 @@ final class WishCollectionCell: UICollectionViewCell {
     private lazy var productLabel = UILabel.makeLabel(text: nil,
                                                       font: UIFont.InterRegular(ofSize: 12),
                                                       textColor: UIColor.darkGray,
-                                                      numberOfLines: 1,
+                                                      numberOfLines: 0,
                                                       alignment: .left)
     
     private lazy var priceLabel = UILabel.makeLabel(text: nil,
@@ -72,7 +73,7 @@ final class WishCollectionCell: UICollectionViewCell {
         let pictureName = info.picture ?? "Buy"
         productImage.image = UIImage(named: pictureName)
         productLabel.text = info.description
-        priceLabel.text = "$\(info.price ?? 0)"
+        priceLabel.text = String(format: "$%.2f", info.price ?? 0)
         
         // Update heart button based on favourite status
         if let isFavourite = info.isFavourite, isFavourite {
@@ -113,31 +114,29 @@ private extension WishCollectionCell {
         buyButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            backView.heightAnchor.constraint(equalToConstant: 217),
-            backView.widthAnchor.constraint(equalToConstant: 170),
             backView.topAnchor.constraint(equalTo: contentView.topAnchor),
             backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            productImage.widthAnchor.constraint(equalToConstant: 170),
-            productImage.heightAnchor.constraint(equalToConstant: 112),
             productImage.topAnchor.constraint(equalTo: backView.topAnchor),
             productImage.leadingAnchor.constraint(equalTo: backView.leadingAnchor),
             productImage.trailingAnchor.constraint(equalTo: backView.trailingAnchor),
+            productImage.heightAnchor.constraint(equalTo: backView.heightAnchor, multiplier: 0.5),
             
-            productLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
-            productLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),
-            productLabel.topAnchor.constraint(equalTo: productImage.bottomAnchor, constant: 13),
+            productLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: spacing),
+            productLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -spacing),
+            productLabel.topAnchor.constraint(equalTo: productImage.bottomAnchor, constant: spacing),
             
-            priceLabel.topAnchor.constraint(equalTo: productLabel.bottomAnchor, constant: 4),
-            priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
+            priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: spacing),
+            priceLabel.bottomAnchor.constraint(equalTo: buyButton.topAnchor, constant: -spacing),
             
-            heartButton.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
+            heartButton.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: spacing),
             heartButton.centerYAnchor.constraint(equalTo: buyButton.centerYAnchor),
             
-            buyButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 11),
-            buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),
-            buyButton.widthAnchor.constraint(equalTo: backView.widthAnchor, multiplier: 2/3)
+            buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -spacing),
+            buyButton.widthAnchor.constraint(equalTo: backView.widthAnchor, multiplier: 2/3),
+            buyButton.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -spacing)
         ])
     }
 }

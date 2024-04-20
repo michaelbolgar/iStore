@@ -9,7 +9,8 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionFlowLayout.createTwoColFlowLayout(in: view)
+        let layout = UICollectionViewFlowLayout.createTwoColumnFlowLayout(in: view)
+        
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
@@ -59,7 +60,9 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     }
     
     // MARK: Selector Methods
-    @objc func cartButtonPressed() {}
+    @objc func cartButtonPressed() {
+        // go to cart screen
+    }
     
 }
 
@@ -90,7 +93,7 @@ extension WishlistVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WishCollectionCell.identifier, for: indexPath) as! WishCollectionCell
         let product = presenter.getProduct(at: indexPath.item)
-        cell.set(info: product, at: indexPath.item) // Update this line to include the index
+        cell.set(info: product, at: indexPath.item)
         cell.delegate = presenter
         return cell
     }
