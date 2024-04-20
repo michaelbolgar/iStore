@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37EF42692BD1B92900AEB339 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EF42682BD1B92900AEB339 /* CustomCollectionViewCell.swift */; };
 		F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763922BCEFF5600EBB86D /* AppDelegate.swift */; };
 		F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763942BCEFF5600EBB86D /* SceneDelegate.swift */; };
 		F41763972BCEFF5600EBB86D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763962BCEFF5600EBB86D /* ViewController.swift */; };
@@ -49,6 +50,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		37EF42682BD1B92900AEB339 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		F417638F2BCEFF5600EBB86D /* iStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41763922BCEFF5600EBB86D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F41763942BCEFF5600EBB86D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 			isa = PBXGroup;
 			children = (
 				F41763E22BCF492500EBB86D /* WishlistVC.swift */,
+				37EF42682BD1B92900AEB339 /* CustomCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -561,6 +564,7 @@
 				F41763A92BCF018700EBB86D /* UIColor Extension.swift in Sources */,
 				F41763972BCEFF5600EBB86D /* ViewController.swift in Sources */,
 				F41763D42BCF477500EBB86D /* ItemCell.swift in Sources */,
+				37EF42692BD1B92900AEB339 /* CustomCollectionViewCell.swift in Sources */,
 				F417640D2BCF4C0B00EBB86D /* SignUpVC.swift in Sources */,
 				F41763FF2BCF4B2000EBB86D /* ProfilePresenter.swift in Sources */,
 				F41763EB2BCF499900EBB86D /* SearchVC.swift in Sources */,
