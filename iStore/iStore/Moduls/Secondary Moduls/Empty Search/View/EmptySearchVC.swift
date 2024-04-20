@@ -92,8 +92,8 @@ extension EmptySearchVC {
             clearButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 121),
 
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 144),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 23),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
@@ -109,9 +109,10 @@ extension EmptySearchVC: UITableViewDelegate, UITableViewDataSource {
         let product = presenter.getWord(at: indexPath.row)
         cell.set(info: product)
         return cell
-
   }
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 
 }
 

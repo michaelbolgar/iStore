@@ -8,6 +8,7 @@
 import UIKit
 
 class EmptySearchTableCell: UITableViewCell {
+    //MARK: -> Properties
     static let identifier = "EmptySearchTableCell"
         private let timeCircle: UIImageView = {
             let view = UIImageView()
@@ -25,15 +26,18 @@ class EmptySearchTableCell: UITableViewCell {
             button.setImage(UIImage(named: "close_icon"), for: .normal)
             return button
         }()
+    //MARK: -> init
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             super.init(style: style, reuseIdentifier: reuseIdentifier)
             configure()
             setupConstraints()
+            contentView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         }
     
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+    //MARK: -> Functions
         func set(info: LastSearchData) {
             searchLabel.text = info.enteredWord
         }
@@ -48,7 +52,7 @@ class EmptySearchTableCell: UITableViewCell {
             NSLayoutConstraint.activate([
                 timeCircle.heightAnchor.constraint(equalToConstant: 17.73),
                 timeCircle.widthAnchor.constraint(equalToConstant: 17.73),
-                timeCircle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2.64),
+                timeCircle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
                 timeCircle.centerYAnchor.constraint(equalTo: centerYAnchor),
 
                 searchLabel.leadingAnchor.constraint(equalTo: timeCircle.trailingAnchor, constant: 14),
@@ -58,7 +62,7 @@ class EmptySearchTableCell: UITableViewCell {
                 closeButton.heightAnchor.constraint(equalToConstant: 12),
                 closeButton.widthAnchor.constraint(equalToConstant: 12),
                 closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-                closeButton.trailingAnchor.constraint(equalTo: trailingAnchor)
+                closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             ])
         }
     }
