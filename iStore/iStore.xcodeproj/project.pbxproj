@@ -16,6 +16,8 @@
 		E0364B4B2BD2DDE600CACBCC /* RegistrationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0364B4A2BD2DDE600CACBCC /* RegistrationPresenter.swift */; };
 		E0364B512BD46EAE00CACBCC /* WishCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0364B502BD46EAE00CACBCC /* WishCollectionCell.swift */; };
 		E0364B542BD46F1300CACBCC /* WishListCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0364B532BD46F1300CACBCC /* WishListCellModel.swift */; };
+		E0364B582BD4713200CACBCC /* UISearchBar Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0364B572BD4713200CACBCC /* UISearchBar Extension.swift */; };
+		E0364B5A2BD4716700CACBCC /* UICollectionView Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0364B592BD4716700CACBCC /* UICollectionView Extension.swift */; };
 		F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763922BCEFF5600EBB86D /* AppDelegate.swift */; };
 		F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763942BCEFF5600EBB86D /* SceneDelegate.swift */; };
 		F41763972BCEFF5600EBB86D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763962BCEFF5600EBB86D /* ViewController.swift */; };
@@ -64,6 +66,8 @@
 		E0364B4A2BD2DDE600CACBCC /* RegistrationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationPresenter.swift; sourceTree = "<group>"; };
 		E0364B502BD46EAE00CACBCC /* WishCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishCollectionCell.swift; sourceTree = "<group>"; };
 		E0364B532BD46F1300CACBCC /* WishListCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListCellModel.swift; sourceTree = "<group>"; };
+		E0364B572BD4713200CACBCC /* UISearchBar Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISearchBar Extension.swift"; sourceTree = "<group>"; };
+		E0364B592BD4716700CACBCC /* UICollectionView Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView Extension.swift"; sourceTree = "<group>"; };
 		F417638F2BCEFF5600EBB86D /* iStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41763922BCEFF5600EBB86D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F41763942BCEFF5600EBB86D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -184,6 +188,8 @@
 		F41763A72BCF016300EBB86D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				E0364B572BD4713200CACBCC /* UISearchBar Extension.swift */,
+				E0364B592BD4716700CACBCC /* UICollectionView Extension.swift */,
 				F41763A82BCF018700EBB86D /* UIColor Extension.swift */,
 				F41763AA2BCF2A1100EBB86D /* UILabel Extension.swift */,
 				F41763AC2BCF2D7500EBB86D /* UIFont Extension.swift */,
@@ -585,7 +591,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0364B582BD4713200CACBCC /* UISearchBar Extension.swift in Sources */,
 				F417640B2BCF4BF500EBB86D /* LoginVC.swift in Sources */,
+				E0364B5A2BD4716700CACBCC /* UICollectionView Extension.swift in Sources */,
 				F41763DF2BCF488500EBB86D /* CategoryCell.swift in Sources */,
 				F41763E12BCF48D200EBB86D /* HomeVC.swift in Sources */,
 				F41763BB2BCF306200EBB86D /* UINavigationController Extension.swift in Sources */,
