@@ -38,7 +38,7 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     
     // MARK: Private Methods
     private func setupSearchBar() {
-        let frame = CGRect(x: 55, y: 0, width: 270, height: 44)
+        let frame = CGRect(x: 0, y: 0, width: 270, height: 44)
         let titleView = UIView(frame: frame)
         searchBar.frame = frame
         titleView.addSubview(searchBar)

@@ -17,7 +17,7 @@ final class WishCollectionCell: UICollectionViewCell {
     var index: Int?
     static let identifier = String(describing: WishCollectionCell.self)
     weak var delegate: WishCollectionCellDelegate?
-    let spacing: CGFloat = 13
+    let spacing: CGFloat = 12
     
     
    //MARK: - UI elements
@@ -30,7 +30,7 @@ final class WishCollectionCell: UICollectionViewCell {
     private lazy var productLabel = UILabel.makeLabel(text: nil,
                                                       font: UIFont.InterRegular(ofSize: 12),
                                                       textColor: UIColor.darkGray,
-                                                      numberOfLines: 0,
+                                                      numberOfLines: 2,
                                                       alignment: .left)
     
     private lazy var priceLabel = UILabel.makeLabel(text: nil,
@@ -39,7 +39,7 @@ final class WishCollectionCell: UICollectionViewCell {
                                                     numberOfLines: 1,
                                                     alignment: .left)
     
-    private let buyButton = UIButton.makeButtonFlexWidth(text: "Add to card",
+    private let buyButton = UIButton.makeButtonFlexWidth(text: "Add to cart",
                                                          buttonColor: ButtonColor.green,
                                                          titleColor: .white,
                                                          titleSize: 12,
@@ -129,7 +129,7 @@ private extension WishCollectionCell {
             productLabel.topAnchor.constraint(equalTo: productImage.bottomAnchor, constant: spacing),
             
             priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: spacing),
-            priceLabel.bottomAnchor.constraint(equalTo: buyButton.topAnchor, constant: -spacing),
+            priceLabel.bottomAnchor.constraint(equalTo: buyButton.topAnchor, constant: -spacing / 2),
             
             heartButton.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: spacing),
             heartButton.centerYAnchor.constraint(equalTo: buyButton.centerYAnchor),
