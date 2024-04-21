@@ -14,14 +14,14 @@ final class ProfileRouter: ProfileRouterProtocol {
 
     let navigationController: UINavigationController
     var moduleBuilder: (any ProfileBuilderProtocol)?
-    private let builder: AppBuilder
+    private let factory: AppFactory
 
     init(navigationController: UINavigationController,
-         factory: AppBuilder,
+         factory: AppFactory,
          builder: ProfileBuilderProtocol) {
         self.navigationController = navigationController
         self.moduleBuilder = builder
-        self.builder = factory
+        self.factory = factory
     }
 
     func initialViewController() {
@@ -31,6 +31,6 @@ final class ProfileRouter: ProfileRouterProtocol {
     }
 
     func start() {
-        navigationController.viewControllers = [builder.makeProfileVC()]
+        navigationController.viewControllers = [factory.makeProfileVC()]
     }
 }

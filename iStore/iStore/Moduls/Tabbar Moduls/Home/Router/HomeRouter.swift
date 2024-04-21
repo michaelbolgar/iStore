@@ -16,14 +16,14 @@ final class HomeRouter: HomeRouterProtocol {
 
     let navigationController: UINavigationController
     var moduleBuilder: (any HomeBuilderProtocol)?
-    private let builder: AppBuilder
+    private let factory: AppFactory
 
     init(navigationController: UINavigationController,
-         factory: AppBuilder,
+         factory: AppFactory,
          builder: HomeBuilderProtocol) {
         self.navigationController = navigationController
         self.moduleBuilder = builder
-        self.builder = factory
+        self.factory = factory
     }
 
     func initialViewController() {
@@ -33,7 +33,7 @@ final class HomeRouter: HomeRouterProtocol {
     }
 
     func start() {
-        navigationController.viewControllers = [builder.makeHomeVC()]
+        navigationController.viewControllers = [factory.makeHomeVC()]
     }
 
     func showSearchVC(searchText: String) {

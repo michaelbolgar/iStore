@@ -15,14 +15,14 @@ final class WishlistRouter: WishlistRouterProtocol {
 
     let navigationController: UINavigationController
     var moduleBuilder: (any WishlistBuilderProtocol)?
-    private let builder: AppBuilder
+    private let factory: AppFactory
 
     init(navigationController: UINavigationController,
-         factory: AppBuilder,
+         factory: AppFactory,
          builder: WishlistBuilderProtocol) {
         self.navigationController = navigationController
         self.moduleBuilder = builder
-        self.builder = factory
+        self.factory = factory
     }
 
     func initialViewController() {
@@ -32,7 +32,7 @@ final class WishlistRouter: WishlistRouterProtocol {
     }
 
     func start() {
-        navigationController.viewControllers = [builder.makeWishlistVC()]
+        navigationController.viewControllers = [factory.makeWishlistVC()]
     }
 
     func showCartVC() {

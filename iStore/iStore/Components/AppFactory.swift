@@ -18,7 +18,7 @@ extension BaseRouter {
     }
 }
 
-protocol AppBuilder: AnyObject {
+protocol AppFactory: AnyObject {
 
     func makeRootRouter(_ window: UIWindow?) -> RootRouter
     func makeTabBar(_ viewControllers: UIViewController...) -> UITabBarController
@@ -34,7 +34,7 @@ protocol AppBuilder: AnyObject {
     func makeProfileRouter() -> BaseRouter
 }
 
-final class Builder: AppBuilder {
+final class Factory: AppFactory {
 
     func makeRootRouter(_ window: UIWindow?) -> RootRouter {
         RootRouter(window: window, builder: self)

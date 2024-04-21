@@ -50,7 +50,7 @@
 		F426C4032BD54D87003683DE /* ManagerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4022BD54D87003683DE /* ManagerBuilder.swift */; };
 		F426C4072BD54F7D003683DE /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4062BD54F7D003683DE /* ProfileRouter.swift */; };
 		F426C4092BD54F87003683DE /* ProfileBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4082BD54F87003683DE /* ProfileBuilder.swift */; };
-		F4900BA12BD046AE009BB675 /* AppBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA02BD046AE009BB675 /* AppBuilder.swift */; };
+		F4900BA12BD046AE009BB675 /* AppFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA02BD046AE009BB675 /* AppFactory.swift */; };
 		F4900BA42BD0495C009BB675 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA32BD0495C009BB675 /* MainTabBarController.swift */; };
 		F4900BA62BD04AB7009BB675 /* RootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA52BD04AB7009BB675 /* RootRouter.swift */; };
 		F4900BAA2BD04F7B009BB675 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA92BD04F7B009BB675 /* HomeRouter.swift */; };
@@ -105,7 +105,7 @@
 		F426C4022BD54D87003683DE /* ManagerBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerBuilder.swift; sourceTree = "<group>"; };
 		F426C4062BD54F7D003683DE /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
 		F426C4082BD54F87003683DE /* ProfileBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBuilder.swift; sourceTree = "<group>"; };
-		F4900BA02BD046AE009BB675 /* AppBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBuilder.swift; sourceTree = "<group>"; };
+		F4900BA02BD046AE009BB675 /* AppFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFactory.swift; sourceTree = "<group>"; };
 		F4900BA32BD0495C009BB675 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		F4900BA52BD04AB7009BB675 /* RootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
 		F4900BA92BD04F7B009BB675 /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
@@ -529,7 +529,7 @@
 		F4900B9F2BD04657009BB675 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F4900BA02BD046AE009BB675 /* AppBuilder.swift */,
+				F4900BA02BD046AE009BB675 /* AppFactory.swift */,
 				F4900BA52BD04AB7009BB675 /* RootRouter.swift */,
 			);
 			path = Components;
@@ -664,7 +664,7 @@
 				F4900BAA2BD04F7B009BB675 /* HomeRouter.swift in Sources */,
 				F41764072BCF4B8900EBB86D /* HomePresenter.swift in Sources */,
 				F41763F72BCF4A4D00EBB86D /* DetailsModel.swift in Sources */,
-				F4900BA12BD046AE009BB675 /* AppBuilder.swift in Sources */,
+				F4900BA12BD046AE009BB675 /* AppFactory.swift in Sources */,
 				F41763F92BCF4A7100EBB86D /* DetailsPresenter.swift in Sources */,
 				F41764092BCF4BBE00EBB86D /* OnboardingVC.swift in Sources */,
 				F41763FB2BCF4AD100EBB86D /* CartPresenter.swift in Sources */,

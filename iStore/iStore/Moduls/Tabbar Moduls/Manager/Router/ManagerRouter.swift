@@ -15,14 +15,14 @@ final class ManagerRouter: ManagerRouterProtocol {
 
     let navigationController: UINavigationController
     var moduleBuilder: (any ManagerBuilderProtocol)?
-    private let builder: AppBuilder
+    private let factory: AppFactory
 
     init(navigationController: UINavigationController,
-         factory: AppBuilder,
+         factory: AppFactory,
          builder: ManagerBuilderProtocol) {
         self.navigationController = navigationController
         self.moduleBuilder = builder
-        self.builder = factory
+        self.factory = factory
     }
 
     func initialViewController() {
@@ -32,7 +32,7 @@ final class ManagerRouter: ManagerRouterProtocol {
     }
 
     func start() {
-        navigationController.viewControllers = [builder.makeManagerVC()]
+        navigationController.viewControllers = [factory.makeManagerVC()]
     }
 
     func showProductManagerVC() {

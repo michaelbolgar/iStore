@@ -3,11 +3,11 @@ import UIKit
 final class RootRouter {
 
     private let window: UIWindow?
-    private let builder: AppBuilder
+    private let factory: AppFactory
 
-    init(window: UIWindow?, builder: AppBuilder) {
+    init(window: UIWindow?, builder: AppFactory) {
         self.window = window
-        self.builder = builder
+        self.factory = builder
     }
 
     func start() {
@@ -19,11 +19,11 @@ final class RootRouter {
     }
 
     func showMainTabBar() -> UITabBarController {
-        return builder.makeTabBar(
-            builder.makeHomeRouter().navigationController,
-            builder.makeWishlistRouter().navigationController,
-            builder.makeManagerRouter().navigationController,
-            builder.makeProfileRouter().navigationController
+        return factory.makeTabBar(
+            factory.makeHomeRouter().navigationController,
+            factory.makeWishlistRouter().navigationController,
+            factory.makeManagerRouter().navigationController,
+            factory.makeProfileRouter().navigationController
         )
     }
 

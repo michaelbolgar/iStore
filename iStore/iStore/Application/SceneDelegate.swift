@@ -4,12 +4,12 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    let builder: AppBuilder = Builder()
+    let factory: AppFactory = Factory()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let rootRouter = builder.makeRootRouter(window!)
+        let rootRouter = factory.makeRootRouter(window!)
         rootRouter.start()
     }
 }
