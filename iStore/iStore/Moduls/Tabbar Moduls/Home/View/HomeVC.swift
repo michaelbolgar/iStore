@@ -1,7 +1,13 @@
 import UIKit
 import SwiftUI
 
+protocol HomeVCProtocol: AnyObject {
+//    func reloadCollectionView(section: Int)
+}
+
 final class HomeVC: UIViewController {
+  
+   var presenter: HomePresenterProtocol!
     
     //MARK: - Properties
     
@@ -17,6 +23,7 @@ final class HomeVC: UIViewController {
     }()
     
     //MARK: - Init
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
