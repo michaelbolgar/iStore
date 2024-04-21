@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5144524B2BD0EB170093B9D5 /* ProfileVС.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5144524A2BD0EB170093B9D5 /* ProfileVС.swift */; };
+		514452522BD10DCB0093B9D5 /* ChangePhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514452502BD10DCB0093B9D5 /* ChangePhotoVC.swift */; };
+		514452532BD10DCB0093B9D5 /* TermsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514452512BD10DCB0093B9D5 /* TermsVC.swift */; };
+		514452552BD140F90093B9D5 /* TermsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514452542BD140F80093B9D5 /* TermsModel.swift */; };
+		514452592BD23CAE0093B9D5 /* ChangeProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514452582BD23CAD0093B9D5 /* ChangeProfileVC.swift */; };
 		F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763922BCEFF5600EBB86D /* AppDelegate.swift */; };
 		F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763942BCEFF5600EBB86D /* SceneDelegate.swift */; };
 		F41763972BCEFF5600EBB86D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763962BCEFF5600EBB86D /* ViewController.swift */; };
@@ -29,7 +34,6 @@
 		F41763E12BCF48D200EBB86D /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763E02BCF48D200EBB86D /* HomeVC.swift */; };
 		F41763E32BCF492500EBB86D /* WishlistVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763E22BCF492500EBB86D /* WishlistVC.swift */; };
 		F41763E52BCF493B00EBB86D /* ManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763E42BCF493B00EBB86D /* ManagerVC.swift */; };
-		F41763E72BCF495200EBB86D /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763E62BCF495200EBB86D /* ProfileVC.swift */; };
 		F41763EB2BCF499900EBB86D /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763EA2BCF499900EBB86D /* SearchVC.swift */; };
 		F41763EF2BCF49C700EBB86D /* CartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763EE2BCF49C700EBB86D /* CartVC.swift */; };
 		F41763F42BCF4A3200EBB86D /* DetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763F32BCF4A3200EBB86D /* DetailsVC.swift */; };
@@ -60,6 +64,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5144524A2BD0EB170093B9D5 /* ProfileVС.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileVС.swift"; sourceTree = "<group>"; };
+		514452502BD10DCB0093B9D5 /* ChangePhotoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePhotoVC.swift; sourceTree = "<group>"; };
+		514452512BD10DCB0093B9D5 /* TermsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsVC.swift; sourceTree = "<group>"; };
+		514452542BD140F80093B9D5 /* TermsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsModel.swift; sourceTree = "<group>"; };
+		514452582BD23CAD0093B9D5 /* ChangeProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileVC.swift; sourceTree = "<group>"; };
 		F417638F2BCEFF5600EBB86D /* iStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41763922BCEFF5600EBB86D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F41763942BCEFF5600EBB86D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -84,7 +93,6 @@
 		F41763E02BCF48D200EBB86D /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		F41763E22BCF492500EBB86D /* WishlistVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistVC.swift; sourceTree = "<group>"; };
 		F41763E42BCF493B00EBB86D /* ManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerVC.swift; sourceTree = "<group>"; };
-		F41763E62BCF495200EBB86D /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		F41763EA2BCF499900EBB86D /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		F41763EE2BCF49C700EBB86D /* CartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartVC.swift; sourceTree = "<group>"; };
 		F41763F32BCF4A3200EBB86D /* DetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsVC.swift; sourceTree = "<group>"; };
@@ -273,8 +281,8 @@
 			children = (
 				F41763CB2BCF46F700EBB86D /* Onboarding */,
 				F41763CC2BCF470100EBB86D /* Login */,
-				F41763C92BCF46E200EBB86D /* Search */,
 				F41763CD2BCF470E00EBB86D /* Cart */,
+				F41763C92BCF46E200EBB86D /* Search */,
 				F41763CA2BCF46E600EBB86D /* Details */,
 			);
 			path = "Secondary Moduls";
@@ -408,7 +416,10 @@
 		F41763DC2BCF47CA00EBB86D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F41763E62BCF495200EBB86D /* ProfileVC.swift */,
+				5144524A2BD0EB170093B9D5 /* ProfileVС.swift */,
+				514452502BD10DCB0093B9D5 /* ChangePhotoVC.swift */,
+				514452582BD23CAD0093B9D5 /* ChangeProfileVC.swift */,
+				514452512BD10DCB0093B9D5 /* TermsVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -417,6 +428,7 @@
 			isa = PBXGroup;
 			children = (
 				F41764002BCF4B3F00EBB86D /* ProfileModel.swift */,
+				514452542BD140F80093B9D5 /* TermsModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -652,6 +664,7 @@
 				F417640B2BCF4BF500EBB86D /* LoginVC.swift in Sources */,
 				F41763DF2BCF488500EBB86D /* CategoryCell.swift in Sources */,
 				F41763E12BCF48D200EBB86D /* HomeVC.swift in Sources */,
+				514452552BD140F90093B9D5 /* TermsModel.swift in Sources */,
 				F426C4092BD54F87003683DE /* ProfileBuilder.swift in Sources */,
 				F4900BB02BD05356009BB675 /* WishlistRouter.swift in Sources */,
 				F41763BB2BCF306200EBB86D /* UINavigationController Extension.swift in Sources */,
@@ -660,6 +673,7 @@
 				F4900BB22BD05379009BB675 /* WishlistBuilder.swift in Sources */,
 				F426C4072BD54F7D003683DE /* ProfileRouter.swift in Sources */,
 				F41763C12BCF3ACF00EBB86D /* UITextField Extension.swift in Sources */,
+				514452522BD10DCB0093B9D5 /* ChangePhotoVC.swift in Sources */,
 				F4900BAC2BD04F83009BB675 /* HomeBuilder.swift in Sources */,
 				F4900BAA2BD04F7B009BB675 /* HomeRouter.swift in Sources */,
 				F41764072BCF4B8900EBB86D /* HomePresenter.swift in Sources */,
@@ -669,6 +683,7 @@
 				F41764092BCF4BBE00EBB86D /* OnboardingVC.swift in Sources */,
 				F41763FB2BCF4AD100EBB86D /* CartPresenter.swift in Sources */,
 				F41763AB2BCF2A1100EBB86D /* UILabel Extension.swift in Sources */,
+				514452532BD10DCB0093B9D5 /* TermsVC.swift in Sources */,
 				F41763BF2BCF32C400EBB86D /* UIButton Extension.swift in Sources */,
 				F41763EF2BCF49C700EBB86D /* CartVC.swift in Sources */,
 				F41763AD2BCF2D7500EBB86D /* UIFont Extension.swift in Sources */,
@@ -683,15 +698,16 @@
 				F41763FD2BCF4AFE00EBB86D /* SearchPresenter.swift in Sources */,
 				F41763A92BCF018700EBB86D /* UIColor Extension.swift in Sources */,
 				F41763972BCEFF5600EBB86D /* ViewController.swift in Sources */,
+				5144524B2BD0EB170093B9D5 /* ProfileVС.swift in Sources */,
 				F41763D42BCF477500EBB86D /* ItemCell.swift in Sources */,
 				F417640D2BCF4C0B00EBB86D /* SignUpVC.swift in Sources */,
 				F41763FF2BCF4B2000EBB86D /* ProfilePresenter.swift in Sources */,
 				F41763EB2BCF499900EBB86D /* SearchVC.swift in Sources */,
 				F426C4012BD54D7F003683DE /* ManagerRouter.swift in Sources */,
 				F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */,
-				F41763E72BCF495200EBB86D /* ProfileVC.swift in Sources */,
 				F41763BD2BCF30A700EBB86D /* UIViewController Extension.swift in Sources */,
 				F41763E52BCF493B00EBB86D /* ManagerVC.swift in Sources */,
+				514452592BD23CAE0093B9D5 /* ChangeProfileVC.swift in Sources */,
 				F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
