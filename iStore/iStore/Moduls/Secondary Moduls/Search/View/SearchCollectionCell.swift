@@ -8,37 +8,47 @@
 import UIKit
 
 class SearchCollectionCell: UICollectionViewCell {
-    //MARK: -> Properties
+
+    #warning("заменить на зашитый идентификатор")
     static let identifier = "SearchCollectionViewCell"
+
+    //MARK: UI Elements
+
     private let productImage: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = 5
         return image
     }()
+
+
     private let productLabel = UILabel.makeLabel(text: nil,
                                                  font: UIFont.InterRegular(ofSize: 12),
                                                  textColor: UIColor.darkGray,
                                                  numberOfLines: 1,
                                                  alignment: .left)
-    private let priceLabel = UILabel.makeLabel(text: nil, 
+
+    private let priceLabel = UILabel.makeLabel(text: nil,
                                                font: UIFont.InterSemiBold(ofSize: 14),
                                                textColor: UIColor.customDarkGray,
                                                numberOfLines: 1,
                                                alignment: .left)
-    private let buyButton = UIButton.makeButton(text: "Add to card", 
+
+    private let buyButton = UIButton.makeButton(text: "Add to card",
                                                 buttonColor: ButtonColor.green,
                                                 titleColor: .white,
                                                 titleSize: 12,
                                                 width: 144,
                                                 height: 31,
                                                 cornerRadius: 4)
+
     private let backView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.backLightGray
         view.layer.cornerRadius = 6
         return view
     }()
-    //MARK: -> init
+
+    //MARK: Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -49,13 +59,18 @@ class SearchCollectionCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    //MARK: -> Functions
-     func set(info: Product) {
+
+    //MARK: Public Methods
+
+    func set(info: Product) {
         let pictureName = info.picture ?? "Buy"
         productImage.image = UIImage(named: pictureName)
         productLabel.text = info.description
         priceLabel.text = "$\(info.price ?? 0)"
     }
+
+    //MARK: Private Methods
+
     private func setupShadow() {
         backView.layer.shadowColor = UIColor.gray.cgColor
         backView.layer.shadowOpacity = 0.5
@@ -67,6 +82,7 @@ class SearchCollectionCell: UICollectionViewCell {
         contentView.addSubview(backView)
         [productImage, productLabel, buyButton, priceLabel].forEach { backView.addSubview($0)}
     }
+
     private func setupConstraints() {
         productImage.translatesAutoresizingMaskIntoConstraints = false
         backView.translatesAutoresizingMaskIntoConstraints = false
@@ -96,6 +112,4 @@ class SearchCollectionCell: UICollectionViewCell {
             buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13)
         ])
     }
-
-
 }

@@ -5,6 +5,7 @@ protocol SearchVCProtocol: AnyObject {
 }
 
 final class SearchVC: UIViewController, SearchVCProtocol {
+
     var presenter: SearchPresenter!
 
     // MARK: UI Elements
@@ -16,12 +17,15 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         collectionView.backgroundColor = .white
         return collectionView
     }()
+
     private let searchBar = SearchBarView()
+
     private let searchlabel = UILabel.makeLabel(text: "Search result for Earphones",
                                                 font: UIFont.InterRegular(ofSize: 14),
                                                 textColor: UIColor.customDarkGray,
                                                 numberOfLines: 1,
                                                 alignment: .left)
+
     private let filterView: UIView = {
         let view = UIView()
         view.layer.borderWidth = 1
@@ -29,11 +33,13 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         view.layer.borderColor = UIColor.veryLightGray.cgColor
         return view
     }()
+
     private let filterlabel = UILabel.makeLabel(text: "Filters",
                                                 font: UIFont.InterRegular(ofSize: 12),
                                                 textColor: UIColor.customDarkGray,
                                                 numberOfLines: 1,
                                                 alignment: .left)
+
     private let imageFilter: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "Filter")
@@ -54,6 +60,7 @@ final class SearchVC: UIViewController, SearchVCProtocol {
     }
 
     // MARK: Private Methods
+
     private func setSearchBar() {
         let frame = CGRect(x: 55, y: 0, width: 250, height: 44)
         let titleView = UIView(frame: frame)
@@ -66,6 +73,7 @@ final class SearchVC: UIViewController, SearchVCProtocol {
                                                             action: #selector(buyButtonPressed))
         navigationController?.navigationBar.tintColor = UIColor.black
     }
+
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -73,18 +81,19 @@ final class SearchVC: UIViewController, SearchVCProtocol {
                                 forCellWithReuseIdentifier: SearchCollectionCell.identifier)
     }
 
-
     func reloadCollectionView() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
     }
+
     // MARK: Selector Methods
     @objc func buyButtonPressed() {}
 
 }
 
 extension SearchVC {
+
     func setViews() {
         [collectionView, searchlabel, filterView].forEach { view.addSubview($0)}
         filterView.addSubview(filterlabel)
@@ -120,8 +129,6 @@ extension SearchVC {
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-
-
 }
 
 extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
