@@ -11,6 +11,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         let rootRouter = factory.makeRootRouter(window!)
         rootRouter.start()
+
+///запуск сёрча
+//         let window = UIWindow(windowScene: windowScene)
+//         let startVC = SearchVC()
+//         let navigationController = UINavigationController(rootViewController: startVC)
+//         window.rootViewController = navigationController
+//         window.makeKeyAndVisible()
+//         self.window = window
     }
 }
 

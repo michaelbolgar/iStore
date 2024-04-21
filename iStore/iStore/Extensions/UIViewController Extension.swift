@@ -23,6 +23,7 @@ extension UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    /// hiding left navbar item
     func hideLeftNavigationItem() {
         navigationItem.setHidesBackButton(true, animated: false)
     }

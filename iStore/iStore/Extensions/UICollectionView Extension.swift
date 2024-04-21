@@ -25,6 +25,13 @@ extension UICollectionViewFlowLayout {
         // Set the spacing between rows to be three times the padding
         flowLayout.minimumLineSpacing = padding * 3
 
+      
+enum UICollectionFlowLayout {
+    static func createTwoColFlowLayout(in view: UIView) -> UICollectionViewFlowLayout {
+        let padding: CGFloat = 12
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+        flowLayout.itemSize = CGSize(width: 170, height: 217)
         return flowLayout
     }
 }
