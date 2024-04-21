@@ -1,7 +1,7 @@
 import Foundation
 
 protocol CartPresenterProtocol: AnyObject {
-    func viewDidLoad()
+    func getData()
     var itemsCount: Int { get }
     func getItem(at index: Int) -> ChosenItem
 }
@@ -21,15 +21,15 @@ final class CartPresenter: CartPresenterProtocol {
     func getItem(at index: Int) -> ChosenItem {
         return items[index]
     }
-    func viewDidLoad() {
+    func getData() {
         items = [ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
                  ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
                  ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
                  ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99)
+//                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
+//                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
+//                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
+//                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99)
         ]
     }
 }
