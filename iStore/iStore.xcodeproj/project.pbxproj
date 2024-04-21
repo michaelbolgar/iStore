@@ -50,6 +50,17 @@
 		F417640B2BCF4BF500EBB86D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417640A2BCF4BF500EBB86D /* LoginVC.swift */; };
 		F417640D2BCF4C0B00EBB86D /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417640C2BCF4C0B00EBB86D /* SignUpVC.swift */; };
 		F41764112BCF4C4F00EBB86D /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41764102BCF4C4F00EBB86D /* LoginPresenter.swift */; };
+		F426C4012BD54D7F003683DE /* ManagerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4002BD54D7F003683DE /* ManagerRouter.swift */; };
+		F426C4032BD54D87003683DE /* ManagerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4022BD54D87003683DE /* ManagerBuilder.swift */; };
+		F426C4072BD54F7D003683DE /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4062BD54F7D003683DE /* ProfileRouter.swift */; };
+		F426C4092BD54F87003683DE /* ProfileBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4082BD54F87003683DE /* ProfileBuilder.swift */; };
+		F4900BA12BD046AE009BB675 /* AppFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA02BD046AE009BB675 /* AppFactory.swift */; };
+		F4900BA42BD0495C009BB675 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA32BD0495C009BB675 /* MainTabBarController.swift */; };
+		F4900BA62BD04AB7009BB675 /* RootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA52BD04AB7009BB675 /* RootRouter.swift */; };
+		F4900BAA2BD04F7B009BB675 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA92BD04F7B009BB675 /* HomeRouter.swift */; };
+		F4900BAC2BD04F83009BB675 /* HomeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BAB2BD04F83009BB675 /* HomeBuilder.swift */; };
+		F4900BB02BD05356009BB675 /* WishlistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BAF2BD05356009BB675 /* WishlistRouter.swift */; };
+		F4900BB22BD05379009BB675 /* WishlistBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BB12BD05379009BB675 /* WishlistBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +109,17 @@
 		F417640A2BCF4BF500EBB86D /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		F417640C2BCF4C0B00EBB86D /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		F41764102BCF4C4F00EBB86D /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
+		F426C4002BD54D7F003683DE /* ManagerRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerRouter.swift; sourceTree = "<group>"; };
+		F426C4022BD54D87003683DE /* ManagerBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerBuilder.swift; sourceTree = "<group>"; };
+		F426C4062BD54F7D003683DE /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
+		F426C4082BD54F87003683DE /* ProfileBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBuilder.swift; sourceTree = "<group>"; };
+		F4900BA02BD046AE009BB675 /* AppFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFactory.swift; sourceTree = "<group>"; };
+		F4900BA32BD0495C009BB675 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		F4900BA52BD04AB7009BB675 /* RootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
+		F4900BA92BD04F7B009BB675 /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
+		F4900BAB2BD04F83009BB675 /* HomeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBuilder.swift; sourceTree = "<group>"; };
+		F4900BAF2BD05356009BB675 /* WishlistRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistRouter.swift; sourceTree = "<group>"; };
+		F4900BB12BD05379009BB675 /* WishlistBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				F41763A62BCF015400EBB86D /* Application */,
+				F4900B9F2BD04657009BB675 /* Components */,
 				F41763D12BCF475E00EBB86D /* Model */,
 				F41763C22BCF467D00EBB86D /* Moduls */,
 				F41763A72BCF016300EBB86D /* Extensions */,
@@ -189,6 +212,7 @@
 		F41763C22BCF467D00EBB86D /* Moduls */ = {
 			isa = PBXGroup;
 			children = (
+				F4900BA22BD0494A009BB675 /* Tabbar */,
 				F41763C72BCF46AD00EBB86D /* Tabbar Moduls */,
 				F41763C82BCF46C000EBB86D /* Secondary Moduls */,
 			);
@@ -198,6 +222,8 @@
 		F41763C32BCF469000EBB86D /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				F426C4052BD54F6E003683DE /* Module Builder */,
+				F426C4042BD54F6B003683DE /* Router */,
 				F41763DD2BCF47CE00EBB86D /* Model */,
 				F41763DC2BCF47CA00EBB86D /* View */,
 				F41763DB2BCF47C500EBB86D /* Presenter */,
@@ -208,6 +234,8 @@
 		F41763C42BCF469B00EBB86D /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				F426C3FF2BD54D6C003683DE /* Module Builder */,
+				F426C3FE2BD54D68003683DE /* Router */,
 				F41763D92BCF47BC00EBB86D /* View */,
 				F41763D82BCF47B700EBB86D /* Presenter */,
 			);
@@ -217,6 +245,8 @@
 		F41763C52BCF469F00EBB86D /* Wishlist */ = {
 			isa = PBXGroup;
 			children = (
+				F4900BAE2BD05346009BB675 /* Module Builder */,
+				F4900BAD2BD05343009BB675 /* Router */,
 				F41763D62BCF47AF00EBB86D /* View */,
 				F41763D52BCF47A900EBB86D /* Presenter */,
 			);
@@ -226,6 +256,8 @@
 		F41763C62BCF46A900EBB86D /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				F4900BA72BD04F3B009BB675 /* Module Builder */,
+				F4900BA82BD04F69009BB675 /* Router */,
 				F41763D02BCF475400EBB86D /* Model */,
 				F41763CF2BCF474E00EBB86D /* View */,
 				F41763CE2BCF474500EBB86D /* Presenter */,
@@ -474,6 +506,87 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
+		F426C3FE2BD54D68003683DE /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				F426C4002BD54D7F003683DE /* ManagerRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		F426C3FF2BD54D6C003683DE /* Module Builder */ = {
+			isa = PBXGroup;
+			children = (
+				F426C4022BD54D87003683DE /* ManagerBuilder.swift */,
+			);
+			path = "Module Builder";
+			sourceTree = "<group>";
+		};
+		F426C4042BD54F6B003683DE /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				F426C4062BD54F7D003683DE /* ProfileRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		F426C4052BD54F6E003683DE /* Module Builder */ = {
+			isa = PBXGroup;
+			children = (
+				F426C4082BD54F87003683DE /* ProfileBuilder.swift */,
+			);
+			path = "Module Builder";
+			sourceTree = "<group>";
+		};
+		F4900B9F2BD04657009BB675 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F4900BA02BD046AE009BB675 /* AppFactory.swift */,
+				F4900BA52BD04AB7009BB675 /* RootRouter.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F4900BA22BD0494A009BB675 /* Tabbar */ = {
+			isa = PBXGroup;
+			children = (
+				F4900BA32BD0495C009BB675 /* MainTabBarController.swift */,
+			);
+			path = Tabbar;
+			sourceTree = "<group>";
+		};
+		F4900BA72BD04F3B009BB675 /* Module Builder */ = {
+			isa = PBXGroup;
+			children = (
+				F4900BAB2BD04F83009BB675 /* HomeBuilder.swift */,
+			);
+			path = "Module Builder";
+			sourceTree = "<group>";
+		};
+		F4900BA82BD04F69009BB675 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				F4900BA92BD04F7B009BB675 /* HomeRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		F4900BAD2BD05343009BB675 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				F4900BAF2BD05356009BB675 /* WishlistRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		F4900BAE2BD05346009BB675 /* Module Builder */ = {
+			isa = PBXGroup;
+			children = (
+				F4900BB12BD05379009BB675 /* WishlistBuilder.swift */,
+			);
+			path = "Module Builder";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -552,11 +665,20 @@
 				F41763DF2BCF488500EBB86D /* CategoryCell.swift in Sources */,
 				F41763E12BCF48D200EBB86D /* HomeVC.swift in Sources */,
 				514452552BD140F90093B9D5 /* TermsModel.swift in Sources */,
+				F426C4092BD54F87003683DE /* ProfileBuilder.swift in Sources */,
+				F4900BB02BD05356009BB675 /* WishlistRouter.swift in Sources */,
 				F41763BB2BCF306200EBB86D /* UINavigationController Extension.swift in Sources */,
+				F426C4032BD54D87003683DE /* ManagerBuilder.swift in Sources */,
+				F4900BA62BD04AB7009BB675 /* RootRouter.swift in Sources */,
+				F4900BB22BD05379009BB675 /* WishlistBuilder.swift in Sources */,
+				F426C4072BD54F7D003683DE /* ProfileRouter.swift in Sources */,
 				F41763C12BCF3ACF00EBB86D /* UITextField Extension.swift in Sources */,
 				514452522BD10DCB0093B9D5 /* ChangePhotoVC.swift in Sources */,
+				F4900BAC2BD04F83009BB675 /* HomeBuilder.swift in Sources */,
+				F4900BAA2BD04F7B009BB675 /* HomeRouter.swift in Sources */,
 				F41764072BCF4B8900EBB86D /* HomePresenter.swift in Sources */,
 				F41763F72BCF4A4D00EBB86D /* DetailsModel.swift in Sources */,
+				F4900BA12BD046AE009BB675 /* AppFactory.swift in Sources */,
 				F41763F92BCF4A7100EBB86D /* DetailsPresenter.swift in Sources */,
 				F41764092BCF4BBE00EBB86D /* OnboardingVC.swift in Sources */,
 				F41763FB2BCF4AD100EBB86D /* CartPresenter.swift in Sources */,
@@ -567,6 +689,7 @@
 				F41763AD2BCF2D7500EBB86D /* UIFont Extension.swift in Sources */,
 				F41763B92BCF2FB300EBB86D /* UIView Extension.swift in Sources */,
 				F41764112BCF4C4F00EBB86D /* LoginPresenter.swift in Sources */,
+				F4900BA42BD0495C009BB675 /* MainTabBarController.swift in Sources */,
 				F41763F42BCF4A3200EBB86D /* DetailsVC.swift in Sources */,
 				F41764052BCF4B6C00EBB86D /* WishlistPresenter.swift in Sources */,
 				F41764032BCF4B4D00EBB86D /* ManagerPresenter.swift in Sources */,
@@ -580,6 +703,7 @@
 				F417640D2BCF4C0B00EBB86D /* SignUpVC.swift in Sources */,
 				F41763FF2BCF4B2000EBB86D /* ProfilePresenter.swift in Sources */,
 				F41763EB2BCF499900EBB86D /* SearchVC.swift in Sources */,
+				F426C4012BD54D7F003683DE /* ManagerRouter.swift in Sources */,
 				F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */,
 				F41763BD2BCF30A700EBB86D /* UIViewController Extension.swift in Sources */,
 				F41763E52BCF493B00EBB86D /* ManagerVC.swift in Sources */,
