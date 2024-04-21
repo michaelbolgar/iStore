@@ -22,23 +22,18 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        view.hideKeyboard()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.cart,
-                                                            style: .plain, target: self,
-                                                            action: #selector(cartButtonPressed))
-        navigationController?.navigationBar.tintColor = UIColor.black
-        presenter = WishlistPresenter(viewController: self)
-        presenter.viewDidLoad()
+        setPresenter()
         configureCollectionView()
         setViews()
         setupUI()
+        hideLeftNavigationItem()
         setupSearchBar()
     }
     
     // MARK: Private Methods
     private func setupSearchBar() {
-        let frame = CGRect(x: 0, y: 0, width: 270, height: 44)
+#warning("Изменить реализацию searchBar. Вероятно уйти от фреймов и navigationBar")
+        let frame = CGRect(x: 0, y: 0, width: 300, height: 40)
         let titleView = UIView(frame: frame)
         searchBar.frame = frame
         titleView.addSubview(searchBar)
@@ -73,10 +68,23 @@ extension WishlistVC {
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
     }
+    
+    func setPresenter() {
+        presenter = WishlistPresenter(viewController: self)
+        presenter.viewDidLoad()
+    }
 
     func setupUI() {
+        view.backgroundColor = .white
+        #warning ("Клавиатура не убирается по тапу")
+        view.hideKeyboard()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.cart,
+                                                            style: .plain, target: self,
+                                                            action: #selector(cartButtonPressed))
+        navigationController?.navigationBar.tintColor = UIColor.black
+        
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
