@@ -9,6 +9,14 @@ extension UIView {
         tap.cancelsTouchesInView = false //иначе при тапе на ячейку задержка в несколько секунд
     }
     
+  
+    static func makeGreyView(cornerRadius: CGFloat?) -> UIView {
+        let view = UIView()
+        view.backgroundColor = UIColor(red: 0.941, green: 0.949, blue: 0.945, alpha: 1)
+        view.layer.cornerRadius = cornerRadius ?? 0
+        view.translatesAutoresizingMaskIntoConstraints = false
+
+      /// grey button
     static func makeView(textLabel: String, textColor: UIColor, nameMarker: String, colorMarker: UIColor) -> UIView {
         
         let view = UIView()
