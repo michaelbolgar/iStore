@@ -20,6 +20,7 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     private let searchBar = SearchBarView()
     
     // MARK: Life cycle
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         setPresenter()
