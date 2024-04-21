@@ -1,6 +1,15 @@
 import UIKit
 import SwiftUI
 
+#warning("внести правки:")
+/*
+
+ 1. делать лейблы через extension (заметил в ячейках)
+ 2. выставить марки по шаблону, который я закрепил в ветке в дискорде
+ 3. поправить кнопку filters и сделать её более похожей на макет в фигме
+
+ */
+
 protocol HomeVCProtocol: AnyObject {
 //    func reloadCollectionView(section: Int)
 }
