@@ -66,7 +66,7 @@ final class Builder: AppBuilder {
     /// making Routers
     func makeHomeRouter() -> BaseRouter {
         let navController = UINavigationController()
-        navController.configureTabBarItem("home")
+        navController.configureTabBarItem("home", image: "home")
         let moduleBuilder = HomeBuilder()
         let router = HomeRouter(navigationController: navController, factory: self, builder: moduleBuilder)
         router.initialViewController()
@@ -76,7 +76,7 @@ final class Builder: AppBuilder {
     
     func makeWishlistRouter() -> BaseRouter {
         let navController = UINavigationController()
-        navController.configureTabBarItem("wishlist")
+        navController.configureTabBarItem("Wishlist", image: "heart")
         let moduleBuilder = WishlistBuilder()
         let router = WishlistRouter(navigationController: navController, factory: self, builder: moduleBuilder)
         router.initialViewController()
@@ -86,7 +86,7 @@ final class Builder: AppBuilder {
     
     func makeManagerRouter() -> BaseRouter {
         let navController = UINavigationController()
-        navController.configureTabBarItem("manager")
+        navController.configureTabBarItem("Manager", image: "paper")
         let moduleBuilder = ManagerBuilder()
         let router = ManagerRouter(navigationController: navController, factory: self, builder: moduleBuilder)
         router.initialViewController()
@@ -96,7 +96,7 @@ final class Builder: AppBuilder {
     
     func makeProfileRouter() -> BaseRouter {
         let navController = UINavigationController()
-        navController.configureTabBarItem("profile")
+        navController.configureTabBarItem("Profile", image: "profile")
         let moduleBuilder = ProfileBuilder()
         let router = ProfileRouter(navigationController: navController, factory: self, builder: moduleBuilder)
         router.initialViewController()

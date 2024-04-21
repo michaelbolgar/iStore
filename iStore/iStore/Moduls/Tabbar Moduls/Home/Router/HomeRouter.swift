@@ -23,7 +23,7 @@ final class HomeRouter: HomeRouterProtocol {
          builder: HomeBuilderProtocol) {
         self.navigationController = navigationController
         self.moduleBuilder = builder
-        self.builder = builder
+        self.builder = factory
     }
 
     func initialViewController() {
