@@ -66,7 +66,7 @@ final class Factory: AppFactory {
     /// making Routers
     func makeHomeRouter() -> BaseRouter {
         let navController = UINavigationController()
-        navController.configureTabBarItem("home", image: "home")
+        navController.configureTabBarItem("Home", image: "home")
         let moduleBuilder = HomeBuilder()
         let router = HomeRouter(navigationController: navController, factory: self, builder: moduleBuilder)
         router.initialViewController()

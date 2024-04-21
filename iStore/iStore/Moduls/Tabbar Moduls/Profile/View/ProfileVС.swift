@@ -1,7 +1,9 @@
 import UIKit
 
-final class ProfileViewController: UIViewController {
-    
+final class ProfileVC: UIViewController {
+
+    var presenter: ProfilePresenterProtocol!
+
     // MARK: - UI Elements
     private let profileTitle = UILabel.makeLabel(text: "Profile",
                                                  font: .InterBold(ofSize: 24),
@@ -130,7 +132,7 @@ final class ProfileViewController: UIViewController {
 }
 
 // MARK: - Setup Constraints
-private extension ProfileViewController {
+private extension ProfileVC {
     
     func setupConstraints() {
         // Определение константы для удобства
