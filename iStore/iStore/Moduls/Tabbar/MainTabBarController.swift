@@ -13,7 +13,6 @@ final class MainTabBarController: UITabBarController {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.backgroundColor = .white
         tabBar.tintColor = .lightGreen
-        tabBar.unselectedItemTintColor = .customLightGray
         tabBar.standardAppearance = tabBarAppearance
         tabBar.scrollEdgeAppearance = tabBarAppearance
 
