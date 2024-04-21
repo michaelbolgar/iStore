@@ -55,17 +55,17 @@ final class ProfileVC: UIViewController {
         return element
     }()
     
-    private let typeAccountView = UIView.makeView(textLabel: "Type of account", 
+    private let typeAccountView = UIView.makeGreyButton(textLabel: "Type of account", 
                                                   textColor: .customDarkGray,
                                                   nameMarker: "chevron.forward", 
                                                   colorMarker: .customDarkGray)
     
-    private let termsView = UIView.makeView(textLabel: "Terms & Conditions", 
+    private let termsView = UIView.makeGreyButton(textLabel: "Terms & Conditions", 
                                             textColor: .customDarkGray,
                                             nameMarker: "chevron.forward",
                                             colorMarker: .customDarkGray)
     
-    private let signoutView = UIView.makeView(textLabel: "Sign Out",
+    private let signoutView = UIView.makeGreyButton(textLabel: "Sign Out",
                                               textColor: .customDarkGray,
                                               nameMarker: "arrow.forward.to.line.square", 
                                               colorMarker: .customDarkGray)

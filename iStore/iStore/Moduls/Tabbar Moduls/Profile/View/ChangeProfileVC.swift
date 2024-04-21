@@ -19,12 +19,12 @@ final class ChangeProfileViewController: UIViewController {
         return element
     }()
   
-    private let userView = UIView.makeView(textLabel: "User",
+    private let userView = UIView.makeGreyButton(textLabel: "User",
                                                 textColor: .customDarkGray,
                                                 nameMarker: "person.fill",
                                                 colorMarker: .deepGreen)
     
-    private let managerView = UIView.makeView(textLabel: "Manager",
+    private let managerView = UIView.makeGreyButton(textLabel: "Manager",
                                                      textColor: .customDarkGray,
                                                      nameMarker: "person.badge.key.fill",
                                                      colorMarker: .customYellow)

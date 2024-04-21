@@ -5,8 +5,9 @@ protocol WishlistVCProtocol: AnyObject {
 }
 
 final class WishlistVC: UIViewController, WishlistVCProtocol {
-    var presenter: WishlistPresenter!
     
+    var presenter: WishlistPresenter!
+
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout.createTwoColumnFlowLayout(in: view)

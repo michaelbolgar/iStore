@@ -15,25 +15,30 @@ extension UIView {
         view.backgroundColor = UIColor(red: 0.941, green: 0.949, blue: 0.945, alpha: 1)
         view.layer.cornerRadius = cornerRadius ?? 0
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }
 
       /// grey button
-    static func makeView(textLabel: String, textColor: UIColor, nameMarker: String, colorMarker: UIColor) -> UIView {
-        
+    static func makeGreyButton(textLabel: String, 
+                         textColor: UIColor,
+                         nameMarker: String,
+                         colorMarker: UIColor) -> UIView {
+
         let view = UIView()
         
         view.layer.cornerRadius = 12
         view.backgroundColor = UIColor.lightViolet
         view.tintColor = UIColor.darkGray
         view.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Создание и настройка надписи
+
+        /// setup label
         let label = UILabel.makeLabel(text: textLabel,
                                       font: UIFont.systemFont(ofSize: 16, weight: .semibold),
                                       textColor: textColor,
                                       numberOfLines: 1,
                                       alignment: .left)
         
-        // Создание и настройка метки
+        /// setup button image
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: nameMarker)
         imageView.contentMode = .scaleAspectFit
