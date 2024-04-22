@@ -26,5 +26,12 @@
 			</array>
 		</dict>
 	</dict>
-</dict>
-</plist>
+    <!-- Permissions for accessing camera and photo library -->
+       <key>NSCameraUsageDescription</key>
+       <string>This application needs access to the camera to take photos.</string>
+       <key>NSPhotoLibraryUsageDescription</key>
+       <string>This application needs access to your photo library for photo selection and saving.</string>
+       <key>NSPhotoLibraryAddUsageDescription</key>
+       <string>This application needs access to your photo library to save photos.</string>
+   </dict>
+   </plist>
