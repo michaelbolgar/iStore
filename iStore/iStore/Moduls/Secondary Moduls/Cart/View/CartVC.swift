@@ -50,7 +50,7 @@ final class CartVC: UIViewController, CartVCProtocol {
 
     override func viewDidLayoutSubviews() {
          super.viewDidLayoutSubviews()
-        footerView.addBorder(y: 0)
+        CartVC.addBorder(y: 0, view: footerView)
         view.backgroundColor = .white
         title = "Your Cart"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Buy"),
@@ -76,6 +76,14 @@ final class CartVC: UIViewController, CartVCProtocol {
             self.tableView.reloadData()
              }
     }
+
+    static func addBorder(y: CGFloat, view: UIView) {
+        let borderLayer = CALayer()
+        borderLayer.frame = CGRect(x: 0, y: y, width: view.bounds.width, height: 1.0)
+        borderLayer.backgroundColor = UIColor.lightGray.cgColor
+        view.layer.addSublayer(borderLayer)
+    }
+
     // MARK: Selector Methods
     @objc func selectButtonPressed() {}
 }
@@ -93,7 +101,7 @@ extension CartVC {
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: footerView.topAnchor, constant: -1),
 
             footerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -134,4 +142,6 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderView") as! HeaderView
         return headerView
     }
+
+
 }
