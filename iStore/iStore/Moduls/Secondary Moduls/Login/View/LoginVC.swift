@@ -132,7 +132,6 @@ class LoginVC: UIViewController {
                 // Обработка ошибок, например, показать сообщение пользователю
             } else {
                 print("User logged in successfully")
-                self?.navigationController?.dismiss(animated: true, completion: nil)
             }
         }
     }

@@ -16,7 +16,13 @@ final class RootRouter {
         
         window?.rootViewController = showMainTabBar()
         window?.makeKeyAndVisible()
-        
+
+        /// логика показа Onboarding с проверкой, был ли уже пройден онбординг
+        // сделать проверку через UserDefaults
+//        showOnboarding()
+
+
+        /// логика показа экрана LoginVC с проверкой, авторизован ли пользователь
         func isUserLoggedIn() -> Bool {
             return false
         }
@@ -35,13 +41,13 @@ final class RootRouter {
         )
     }
     
-    //    func showOnboarding() {
-    //        UserDefaults.standard.set(true, forKey: "isLaunchedBefore")
-    //        let onboardingVC = OnboardingVC()
-    //        onboardingVC.modalPresentationStyle = .fullScreen
-    //        onboardingVC.isModalInPresentation = true
-    //        window?.rootViewController?.present(onboardingVC, animated: true, completion: nil)
-    //    }
+    func showOnboarding() {
+//        UserDefaults.standard.set(true, forKey: "isLaunchedBefore")
+        let onboardingVC = OnboardingVC()
+        onboardingVC.modalPresentationStyle = .fullScreen
+        onboardingVC.isModalInPresentation = true
+        window?.rootViewController?.present(onboardingVC, animated: true, completion: nil)
+    }
     
     func showLoginNavigationController() {
         let loginVC = LoginVC()

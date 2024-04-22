@@ -110,6 +110,7 @@ final class OnboardingVC: UIViewController {
 //            let vc = LoginVC()
 //            vc.modalPresentationStyle = .fullScreen
 //            present(vc, animated: true)
+            self.navigationController?.dismiss(animated: true, completion: nil)
         }
     }
     
