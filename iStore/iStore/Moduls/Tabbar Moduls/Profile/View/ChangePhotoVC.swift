@@ -24,12 +24,13 @@ final class ChangePhotoViewController: UIViewController {
                                                 nameMarker: "camera",
                                                 colorMarker: .customDarkGray)
     
-    private let chooseFromFileView = UIView.makeGreyButton(textLabel: "Choose from Your Files", 
+
+    private let chooseFromFileView = UIView.makeView(textLabel: "Choose from Your Files", 
                                                      textColor: .customDarkGray,
                                                      nameMarker: "folder",
                                                      colorMarker: .customDarkGray)
     
-    private let deletePhotoView = UIView.makeGreyButton(textLabel: "Delete Photo", 
+    private let deletePhotoView = UIView.makeView(textLabel: "Delete Photo", 
                                                   textColor: .customRed,
                                                   nameMarker: "trash.fill",
                                                   colorMarker: .customRed)

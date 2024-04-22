@@ -45,5 +45,4 @@ final class RootRouter {
         loginVC.isModalInPresentation = true
         window?.rootViewController?.present(loginVC, animated: true, completion: nil)
     }
-
 }

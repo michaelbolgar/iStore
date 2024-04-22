@@ -67,14 +67,12 @@
 		F426C4012BD54D7F003683DE /* ManagerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4002BD54D7F003683DE /* ManagerRouter.swift */; };
 		F426C4032BD54D87003683DE /* ManagerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4022BD54D87003683DE /* ManagerBuilder.swift */; };
 		F426C4072BD54F7D003683DE /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4062BD54F7D003683DE /* ProfileRouter.swift */; };
-		F426C4092BD54F87003683DE /* ProfileBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4082BD54F87003683DE /* ProfileBuilder.swift */; };
 		F426C40C2BD5CF78003683DE /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C40A2BD5CF78003683DE /* Section.swift */; };
 		F426C40D2BD5CF78003683DE /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C40B2BD5CF78003683DE /* Mock.swift */; };
 		F426C4132BD5CF9D003683DE /* HeaderNavBarMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C40E2BD5CF9D003683DE /* HeaderNavBarMenuView.swift */; };
 		F426C4142BD5CF9D003683DE /* ProductsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C40F2BD5CF9D003683DE /* ProductsHeaderView.swift */; };
 		F426C4152BD5CF9D003683DE /* ProductViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4102BD5CF9D003683DE /* ProductViewCell.swift */; };
 		F426C4162BD5CF9D003683DE /* SearchFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4112BD5CF9D003683DE /* SearchFieldView.swift */; };
-		F426C4172BD5CF9D003683DE /* CategoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F426C4122BD5CF9D003683DE /* CategoryViewCell.swift */; };
 		F4900BA12BD046AE009BB675 /* AppFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA02BD046AE009BB675 /* AppFactory.swift */; };
 		F4900BA42BD0495C009BB675 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA32BD0495C009BB675 /* MainTabBarController.swift */; };
 		F4900BA62BD04AB7009BB675 /* RootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BA52BD04AB7009BB675 /* RootRouter.swift */; };
@@ -317,7 +315,6 @@
 				37EF426A2BD3AABF00AEB339 /* Model */,
 				F4900BAE2BD05346009BB675 /* Module Builder */,
 				F4900BAD2BD05343009BB675 /* Router */,
-				E0364B522BD46EF200CACBCC /* Model */,
 				F41763D62BCF47AF00EBB86D /* View */,
 				F41763D52BCF47A900EBB86D /* Presenter */,
 			);

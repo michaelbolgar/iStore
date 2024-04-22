@@ -14,6 +14,10 @@ protocol HomeVCProtocol: AnyObject {
 //    func reloadCollectionView(section: Int)
 }
 
+protocol HomeVCProtocol: AnyObject {
+//    func reloadCollectionView(section: Int)
+}
+
 final class HomeVC: UIViewController {
   
    var presenter: HomePresenterProtocol!
@@ -32,6 +36,8 @@ final class HomeVC: UIViewController {
     }()
     
     //MARK: - Init
+
+    var presenter: HomePresenterProtocol!
 
     override func viewDidLoad() {
         super.viewDidLoad()
