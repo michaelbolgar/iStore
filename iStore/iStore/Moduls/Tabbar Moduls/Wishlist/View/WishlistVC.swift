@@ -5,9 +5,8 @@ protocol WishlistVCProtocol: AnyObject {
 }
 
 final class WishlistVC: UIViewController, WishlistVCProtocol {
-    
     var presenter: WishlistPresenter!
-
+    
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout.createTwoColumnFlowLayout(in: view)
@@ -21,7 +20,6 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     private let searchBar = SearchBarView()
     
     // MARK: Life cycle
-  
     override func viewDidLoad() {
         super.viewDidLoad()
         setPresenter()
@@ -78,6 +76,7 @@ extension WishlistVC {
 
     func setupUI() {
         view.backgroundColor = .white
+
         #warning ("Клавиатура не убирается по тапу")
         view.hideKeyboard()
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.cart,
@@ -85,8 +84,58 @@ extension WishlistVC {
                                                             action: #selector(cartButtonPressed))
         navigationController?.navigationBar.tintColor = UIColor.black
         
+//         NSLayoutConstraint.activate([
+//             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+      
+        presenter = WishlistPresenter(viewController: self)
+        presenter.viewDidLoad()
+        configureCollectionView()
+        setViews()
+        setupUI()
+        setupSearchBar()
+    }
+    
+    // MARK: Private Methods
+    private func setupSearchBar() {
+        let frame = CGRect(x: 0, y: 0, width: 270, height: 44)
+        let titleView = UIView(frame: frame)
+        searchBar.frame = frame
+        titleView.addSubview(searchBar)
+        navigationItem.titleView = titleView
+        searchBar.delegate = self
+    }
+    
+    private func configureCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(WishCollectionCell.self,
+                                forCellWithReuseIdentifier: WishCollectionCell.identifier)
+    }
+    
+    func reloadCollectionView() {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    // MARK: Selector Methods
+    @objc func cartButtonPressed() {
+        // go to cart screen
+    }
+    
+}
+
+//MARK: - Extensions
+//MARK: Setup
+extension WishlistVC {
+    func setViews() {
+        view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    func setupUI() {
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)

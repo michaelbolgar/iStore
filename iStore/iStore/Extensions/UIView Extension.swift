@@ -9,7 +9,6 @@ extension UIView {
         tap.cancelsTouchesInView = false //иначе при тапе на ячейку задержка в несколько секунд
     }
     
-  
     static func makeGreyView(cornerRadius: CGFloat?) -> UIView {
         let view = UIView()
         view.backgroundColor = UIColor(red: 0.941, green: 0.949, blue: 0.945, alpha: 1)
