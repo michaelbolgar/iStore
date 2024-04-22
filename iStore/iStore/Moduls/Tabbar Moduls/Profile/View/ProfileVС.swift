@@ -1,4 +1,6 @@
 import UIKit
+import FirebaseFirestore
+import Firebase
 
 final class ProfileVC: UIViewController {
 
@@ -20,13 +22,13 @@ final class ProfileVC: UIViewController {
         return element
     }()
     
-    private let profileName = UILabel.makeLabel(text: "Mstr. Anderson",
+    private let profileName = UILabel.makeLabel(text: "",
                                                 font: .InterSemiBold(ofSize: 20),
                                                 textColor: .customDarkGray,
                                                 numberOfLines: 1,
                                                 alignment: .left)
     
-    private let profileEmail = UILabel.makeLabel(text: "dev@gmail.com",
+    private let profileEmail = UILabel.makeLabel(text: "",
                                                  font: .InterSemiBold(ofSize: 14),
                                                  textColor: .customLightGray,
                                                  numberOfLines: 1,
@@ -75,6 +77,7 @@ final class ProfileVC: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
+        fetchUserProfile()
     }
     
     //MARK: Private Methods
@@ -100,6 +103,34 @@ final class ProfileVC: UIViewController {
         let signoutTapGesture = UITapGestureRecognizer(target: self, action: #selector(signoutViewTapped))
         signoutView.addGestureRecognizer(signoutTapGesture)
         
+    }
+    
+    private func fetchUserProfile() {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+        let db = Firestore.firestore()
+        db.collection("users").document(userId).getDocument { (document, error) in
+            if let document = document, document.exists {
+                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                print("Document data: \(dataDescription)")
+                self.updateUI(with: document.data())
+            } else {
+                print("Document does not exist")
+            }
+        }
+    }
+    
+    func updateUI(with userData: [String: Any]?) {
+        DispatchQueue.main.async {
+            self.profileName.text = userData?["login"] as? String ?? "Name not available"
+            self.profileEmail.text = userData?["email"] as? String ?? "Email not available"
+            
+//            if let imageUrl = userData?["profileImageUrl"] as? String {
+//                self.loadImage(from: imageUrl)
+//            }
+        }
     }
     
     // MARK: Selector Methods

@@ -1,6 +1,11 @@
 import UIKit
 
+protocol ChangeProfileViewControllerDelegate: AnyObject {
+    func didSelectAccountType(_ type: String)
+}
+
 final class ChangeProfileViewController: UIViewController {
+    weak var delegate: ChangeProfileViewControllerDelegate?
     
     // MARK: - UI Element
     private lazy var containerView: UIView = {
@@ -60,11 +65,13 @@ final class ChangeProfileViewController: UIViewController {
     
     // MARK: - Selector Methods
     @objc private func userViewTapped() {
-        print("takePhotoButton Tapped")
+        delegate?.didSelectAccountType("User")
+        dismiss(animated: true, completion: nil)
     }
-
+    
     @objc private func managerViewTapped() {
-        print("chooseFromFileButton Tapped")
+        delegate?.didSelectAccountType("Manager")
+        dismiss(animated: true, completion: nil)
     }
 }
 
