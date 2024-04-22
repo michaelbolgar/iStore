@@ -7,4 +7,10 @@
 
 import Foundation
 
-// code
+struct DetailsModel {
+    let productImage: String
+    let productLabel: String
+    let priceLabel: Double
+    let isFavorited: Bool
+    let descriptionProduct: String
+}
