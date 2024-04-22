@@ -11,7 +11,6 @@ final class WishlistPresenter: WishlistPresenterProtocol {
     
     weak var view: WishlistVCProtocol?
     var products: [Product] = []
-    
     private let db = Firestore.firestore()
     
     init(viewController: WishlistVC? = nil) {
