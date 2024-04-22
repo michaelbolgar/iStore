@@ -31,7 +31,7 @@ class SignUpVC: UIViewController {
                                                     numberOfLines: 0,
                                                     alignment: .left)
     
-    private lazy var emailTextField = UITextField.makeTextField(placeholder: "Enter your E-mail",
+    private lazy var emailTextField = UITextField.makeTextField(placeholder: "Enter your e-mail",
                                                                 backgroundColor: .violet,
                                                                 textColor: .customLightGray,
                                                                 font: UIFont.InterRegular(ofSize: 16),

@@ -17,8 +17,6 @@ final class RootRouter {
         window?.rootViewController = showMainTabBar()
         window?.makeKeyAndVisible()
         
-        // подготовил функцию для Никиты, чтобы он мог реализовать логинку. В случае успешного залогина этот экран убивается и больше не используется в текущей сессии. Аналогично с SignUp'ом
-        
         func isUserLoggedIn() -> Bool {
             return false
         }

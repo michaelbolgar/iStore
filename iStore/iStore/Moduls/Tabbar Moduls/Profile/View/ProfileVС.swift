@@ -74,7 +74,7 @@ final class ProfileVC: UIViewController {
                                                   nameMarker: "chevron.forward",
                                                   colorMarker: .customDarkGray)
     
-    private let signoutView = UIView.makeGreyButton(textLabel: "Sign Out",
+    private let signoutView = UIView.makeGreyButton(textLabel: "Log out",
                                                     textColor: .customDarkGray,
                                                     nameMarker: "arrow.forward.to.line.square",
                                                     colorMarker: .customDarkGray)

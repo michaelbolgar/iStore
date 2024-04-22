@@ -5,7 +5,7 @@ class LoginVC: UIViewController {
     
     // MARK: UI Elements
     
-    private lazy var loginLabel = UILabel.makeLabel(text: "Emil",
+    private lazy var loginLabel = UILabel.makeLabel(text: "Email",
                                                     font: UIFont.InterRegular(ofSize: 14),
                                                     textColor: .customLightGray, 
                                                     numberOfLines: 0, 
@@ -174,7 +174,8 @@ extension LoginVC {
     }
 }
 
-//Layouts
+// MARK: Layout
+
 extension LoginVC {
     
     private func setupLayout() {
@@ -202,7 +203,7 @@ extension LoginVC {
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: standardSpacing),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -standardSpacing),
             
-            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: standardSpacing),
+            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: standardSpacing + 10),
             loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: standardSpacing),
             loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -standardSpacing),
             loginButton.heightAnchor.constraint(equalToConstant: elementHeight),
