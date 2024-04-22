@@ -60,6 +60,7 @@ final class ProfileVC: UIViewController {
                                                   nameMarker: "chevron.forward", 
                                                   colorMarker: .customDarkGray)
     
+
     private let termsView = UIView.makeView(textLabel: "Terms & Conditions", 
                                             textColor: .customDarkGray,
                                             nameMarker: "chevron.forward",

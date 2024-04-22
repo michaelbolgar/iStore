@@ -19,7 +19,7 @@ final class ChangeProfileViewController: UIViewController {
         return element
     }()
   
-    private let userView = UIView.makeView(textLabel: "User",
+let userView = UIView.makeView(textLabel: "User",
                                                 textColor: .customDarkGray,
                                                 nameMarker: "person.fill",
                                                 colorMarker: .deepGreen)

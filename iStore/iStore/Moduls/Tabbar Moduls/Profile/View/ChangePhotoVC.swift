@@ -19,11 +19,12 @@ final class ChangePhotoViewController: UIViewController {
         return element
     }()
   
-    private let takePhotoView = UIView.makeView(textLabel: "Take a Photo", 
+    private let takePhotoView = UIView.makeGreyButton(textLabel: "Take a Photo", 
                                                 textColor: .customDarkGray,
                                                 nameMarker: "camera",
                                                 colorMarker: .customDarkGray)
     
+
     private let chooseFromFileView = UIView.makeView(textLabel: "Choose from Your Files", 
                                                      textColor: .customDarkGray,
                                                      nameMarker: "folder",

@@ -16,6 +16,9 @@ final class RootRouter {
 
         window?.rootViewController = showMainTabBar()
         window?.makeKeyAndVisible()
+
+        // подготовил функцию для Никиты, чтобы он мог реализовать логинку. В случае успешного залогина этот экран убивается и больше не используется в текущей сессии. Аналогично с SignUp'ом
+//        showLoginVC()
     }
 
     func showMainTabBar() -> UITabBarController {
@@ -30,7 +33,16 @@ final class RootRouter {
 //    func showOnboarding() {
 //        UserDefaults.standard.set(true, forKey: "isLaunchedBefore")
 //        let onboardingVC = OnboardingVC()
+//        onboardingVC.modalPresentationStyle = .fullScreen
+//        onboardingVC.isModalInPresentation = true
 //        window?.rootViewController?.present(onboardingVC, animated: true, completion: nil)
 //    }
 
+    func showLoginVC() {
+        // проверка на то, авторизован ли пользователь
+        let loginVC = LoginVC()
+        loginVC.modalPresentationStyle = .fullScreen
+        loginVC.isModalInPresentation = true
+        window?.rootViewController?.present(loginVC, animated: true, completion: nil)
+    }
 }

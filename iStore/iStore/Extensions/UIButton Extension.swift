@@ -1,3 +1,4 @@
+
 import UIKit
 
 enum ButtonColor {
@@ -15,7 +16,7 @@ enum ButtonColor {
 }
 
 extension UIButton {
-    static func makeButton(text: String, 
+    static func makeButton(text: String,
                            buttonColor: ButtonColor,
                            titleColor: UIColor,
                            titleSize: CGFloat,

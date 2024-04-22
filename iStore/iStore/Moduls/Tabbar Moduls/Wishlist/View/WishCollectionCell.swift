@@ -77,9 +77,9 @@ final class WishCollectionCell: UICollectionViewCell {
         
         // Update heart button based on favourite status
         if let isFavourite = info.isFavourite, isFavourite {
-            heartButton.setImage(UIImage.heart, for: .normal)
+            heartButton.setImage(UIImage.selectedheart, for: .normal)
         } else {
-            heartButton.setImage(UIImage.heartClear, for: .normal)
+            heartButton.setImage(UIImage.heart, for: .normal)
         }
     }
    
