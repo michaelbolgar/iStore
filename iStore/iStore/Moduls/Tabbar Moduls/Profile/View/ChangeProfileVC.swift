@@ -64,7 +64,9 @@ final class ChangeProfileViewController: UIViewController {
     }
 
     @objc private func managerViewTapped() {
-        print("chooseFromFileButton Tapped")
+        let termsVC = ManagerViewController()
+        termsVC.modalTransitionStyle = .coverVertical
+        present(termsVC, animated: true, completion: nil)
     }
 }
 
