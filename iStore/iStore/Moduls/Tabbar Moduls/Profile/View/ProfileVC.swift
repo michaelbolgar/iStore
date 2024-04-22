@@ -2,6 +2,8 @@ import UIKit
 
 final class ProfileVC: UIViewController {
 
+    var presenter: ProfilePresenterProtocol!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
