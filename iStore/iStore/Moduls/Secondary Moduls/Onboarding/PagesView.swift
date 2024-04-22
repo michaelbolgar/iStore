@@ -36,9 +36,8 @@ class PagesView: UIView {
     }
     
     private func setupView() {
-        addSubview(imageView)
-        addSubview(titleLabel)
-        addSubview(descriptionLabel)
+
+        [imageView, titleLabel, descriptionLabel].forEach { self.addSubview($0) }
     }
     
     // MARK: Configuration Pages

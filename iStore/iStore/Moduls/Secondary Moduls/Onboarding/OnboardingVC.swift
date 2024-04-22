@@ -42,7 +42,6 @@ final class OnboardingVC: UIViewController {
         imageView.image = UIImage(named: "RightArrow")
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
-        imageView.layer.cornerRadius = 25
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(nextButtonTapped)))
@@ -67,9 +66,8 @@ final class OnboardingVC: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
         navigationController?.isNavigationBarHidden = true
-        view.addSubview(scrollView)
-        view.addSubview(pageControl)
-        view.addSubview(nextButtonImageView)
+
+        [scrollView, pageControl, nextButtonImageView].forEach { view.addSubview($0) }
     }
     
     private func configurePages() {
@@ -139,7 +137,7 @@ extension OnboardingVC {
     
     private func setupLayouts() {
         let edgePadding: CGFloat = 20
-        let buttonSize: CGFloat = 70
+        let buttonSize: CGFloat = 50
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -152,8 +150,8 @@ extension OnboardingVC {
             nextButtonImageView.widthAnchor.constraint(equalToConstant: buttonSize),
             nextButtonImageView.heightAnchor.constraint(equalToConstant: buttonSize),
             
-            pageControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: edgePadding),
-            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -edgePadding)
+            pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -edgePadding + 5),
+            pageControl.centerYAnchor.constraint(equalTo: nextButtonImageView.centerYAnchor)
         ])
     }
 }
