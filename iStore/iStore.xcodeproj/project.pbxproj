@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		047E0F6E2BD3BDB20096E150 /* PagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E0F6D2BD3BDB20096E150 /* PagesView.swift */; };
 		37EF42692BD1B92900AEB339 /* WishCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EF42682BD1B92900AEB339 /* WishCollectionCell.swift */; };
 		37EF426C2BD3AAE100AEB339 /* WishListCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EF426B2BD3AAE100AEB339 /* WishListCellModel.swift */; };
 		37EF426E2BD3AC0100AEB339 /* UISearchBar Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EF426D2BD3AC0100AEB339 /* UISearchBar Extension.swift */; };
@@ -79,6 +80,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		047E0F6D2BD3BDB20096E150 /* PagesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagesView.swift; sourceTree = "<group>"; };
 		37EF42682BD1B92900AEB339 /* WishCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishCollectionCell.swift; sourceTree = "<group>"; };
 		37EF426B2BD3AAE100AEB339 /* WishListCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListCellModel.swift; sourceTree = "<group>"; };
 		37EF426D2BD3AC0100AEB339 /* UISearchBar Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISearchBar Extension.swift"; sourceTree = "<group>"; };
@@ -353,6 +355,7 @@
 			isa = PBXGroup;
 			children = (
 				F41764082BCF4BBE00EBB86D /* OnboardingVC.swift */,
+				047E0F6D2BD3BDB20096E150 /* PagesView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -724,6 +727,7 @@
 				F426C4172BD5CF9D003683DE /* CategoryViewCell.swift in Sources */,
 				F426C4132BD5CF9D003683DE /* HeaderNavBarMenuView.swift in Sources */,
 				F41763E12BCF48D200EBB86D /* HomeVC.swift in Sources */,
+				047E0F6E2BD3BDB20096E150 /* PagesView.swift in Sources */,
 				514452552BD140F90093B9D5 /* TermsModel.swift in Sources */,
 				F426C4092BD54F87003683DE /* ProfileBuilder.swift in Sources */,
 				F4900BB02BD05356009BB675 /* WishlistRouter.swift in Sources */,
