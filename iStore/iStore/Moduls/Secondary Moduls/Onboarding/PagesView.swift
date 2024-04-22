@@ -6,7 +6,8 @@ class PagesView: UIView {
     
     private lazy var titleLabel = UILabel.makeLabel(text: nil, 
                                                     font: .InterBold(ofSize: 30), 
-                                                    textColor: .black, numberOfLines: 0, 
+                                                    textColor: .black, 
+                                                    numberOfLines: 0, 
                                                     alignment: .left)
     
     private lazy var descriptionLabel = UILabel.makeLabel(text: nil, 
@@ -54,24 +55,28 @@ class PagesView: UIView {
 extension PagesView {
     
     private func setupLayout() {
-        let topImageConstraint: CGFloat = 60
-        let imageSize: CGFloat = 300
-        let labelTopPadding: CGFloat = 20
+        let imageTopPadding: CGFloat = 15
+        let labelBottomPadding: CGFloat = 90
         let labelSidePadding: CGFloat = 20
+        let labelToLabelSpacing: CGFloat = 10
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: topImageConstraint),
-            imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: imageSize),
-            imageView.widthAnchor.constraint(equalToConstant: imageSize),
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: imageTopPadding),
+            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -imageTopPadding),
+            imageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
+            imageView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.6),
             
-            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: labelTopPadding),
-            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: labelSidePadding),
-            titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -labelSidePadding),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: labelTopPadding),
+            descriptionLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -labelBottomPadding),
             descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: labelSidePadding),
-            descriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -labelSidePadding)
+            descriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -labelSidePadding),
+            
+            titleLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -labelToLabelSpacing),
+            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: labelSidePadding),
+            titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -labelSidePadding)
         ])
     }
 }
