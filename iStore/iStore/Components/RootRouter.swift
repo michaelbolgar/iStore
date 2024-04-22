@@ -45,27 +45,11 @@ final class RootRouter {
     //        window?.rootViewController?.present(onboardingVC, animated: true, completion: nil)
     //    }
     
-//    func showLoginVC() {
-//        // проверка на то, авторизован ли пользователь
-//        let loginVC = LoginVC()
-//        loginVC.modalPresentationStyle = .fullScreen
-//        loginVC.isModalInPresentation = true
-//        window?.rootViewController?.present(loginVC, animated: true, completion: nil)
-//    }
-    
     func showLoginNavigationController() {
         let loginVC = LoginVC()
         let navigationController = UINavigationController(rootViewController: loginVC)
         navigationController.modalPresentationStyle = .fullScreen
         navigationController.isModalInPresentation = true
         window?.rootViewController?.present(navigationController, animated: true, completion: nil)
-    }
-    
-    func showSignUpVC() {
-        // проверка на то, авторизован ли пользователь
-        let loginVC = SignUpVC()
-        loginVC.modalPresentationStyle = .fullScreen
-        loginVC.isModalInPresentation = true
-        window?.rootViewController?.present(loginVC, animated: true, completion: nil)
     }
 }

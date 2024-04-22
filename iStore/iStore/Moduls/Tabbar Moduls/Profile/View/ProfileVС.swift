@@ -2,10 +2,17 @@ import UIKit
 import FirebaseFirestore
 import Firebase
 
+protocol ProfileViewProtocol: AnyObject {
+    func updateProfile(with name: String, email: String, imageUrl: String?)
+    func updateProfileImage(_ image: UIImage)
+    func navigateToLoginScreen()
+    func showSignOutError(_ error: Error)
+    func imageUploadCompleted()
+}
+
 final class ProfileVC: UIViewController {
-
     var presenter: ProfilePresenterProtocol!
-
+    
     // MARK: - UI Elements
     private let profileTitle = UILabel.makeLabel(text: "Profile",
                                                  font: .InterBold(ofSize: 24),
@@ -57,20 +64,20 @@ final class ProfileVC: UIViewController {
         return element
     }()
     
-    private let typeAccountView = UIView.makeGreyButton(textLabel: "Type of account", 
+    private let typeAccountView = UIView.makeGreyButton(textLabel: "Type of account",
+                                                        textColor: .customDarkGray,
+                                                        nameMarker: "chevron.forward",
+                                                        colorMarker: .customDarkGray)
+    
+    private let termsView = UIView.makeGreyButton(textLabel: "Terms & Conditions",
                                                   textColor: .customDarkGray,
-                                                  nameMarker: "chevron.forward", 
+                                                  nameMarker: "chevron.forward",
                                                   colorMarker: .customDarkGray)
     
-    private let termsView = UIView.makeGreyButton(textLabel: "Terms & Conditions", 
-                                            textColor: .customDarkGray,
-                                            nameMarker: "chevron.forward",
-                                            colorMarker: .customDarkGray)
-    
     private let signoutView = UIView.makeGreyButton(textLabel: "Sign Out",
-                                              textColor: .customDarkGray,
-                                              nameMarker: "arrow.forward.to.line.square", 
-                                              colorMarker: .customDarkGray)
+                                                    textColor: .customDarkGray,
+                                                    nameMarker: "arrow.forward.to.line.square",
+                                                    colorMarker: .customDarkGray)
     
     // MARK: Life Cycle
     override func viewDidLoad() {
@@ -78,6 +85,8 @@ final class ProfileVC: UIViewController {
         setupViews()
         setupConstraints()
         fetchUserProfile()
+        presenter = ProfilePresenter(view: self)
+        presenter.fetchProfileData()
     }
     
     //MARK: Private Methods
@@ -86,7 +95,7 @@ final class ProfileVC: UIViewController {
         view.backgroundColor = .white
         
         view.hideKeyboard() // это нужно для реализации функции по изменению логина и почты
-     
+        
         [profileTitle, settingsProfileButton, profileImage, profileName, profileEmail, changePhotoProfileButton, typeAccountView, termsView, signoutView].forEach { view.addSubview($0) }
         
         //добавляем рекогнайзер на кнопки(вью)
@@ -103,6 +112,19 @@ final class ProfileVC: UIViewController {
         let signoutTapGesture = UITapGestureRecognizer(target: self, action: #selector(signoutViewTapped))
         signoutView.addGestureRecognizer(signoutTapGesture)
         
+    }
+    
+    private func loadImage(from url: URL) {
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil, let image = UIImage(data: data) else {
+                print("Failed to load image from URL: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            DispatchQueue.main.async {
+                print("Image successfully loaded from URL")
+                self.profileImage.image = image
+            }
+        }.resume()
     }
     
     private func fetchUserProfile() {
@@ -127,9 +149,19 @@ final class ProfileVC: UIViewController {
             self.profileName.text = userData?["login"] as? String ?? "Name not available"
             self.profileEmail.text = userData?["email"] as? String ?? "Email not available"
             
-//            if let imageUrl = userData?["profileImageUrl"] as? String {
-//                self.loadImage(from: imageUrl)
-//            }
+            if let imageUrlString = userData?["profileImageUrl"] as? String {
+                print("Image URL String: \(imageUrlString)")
+                if let imageUrl = URL(string: imageUrlString) {
+                    print("Loading image from URL: \(imageUrl)")
+                    self.loadImage(from: imageUrl)
+                } else {
+                    print("Invalid URL string for image")
+                    self.profileImage.image = UIImage(named: "profilePhoto") // Загрузка изображения по умолчанию, если URL недоступен
+                }
+            } else {
+                print("No image URL found")
+                self.profileImage.image = UIImage(named: "defaultProfilePhoto")
+            }
         }
     }
     
@@ -158,7 +190,7 @@ final class ProfileVC: UIViewController {
     }
     
     @objc private func signoutViewTapped() {
-        print("signout button tapped")
+        presenter.signOut()
     }
 }
 
@@ -209,6 +241,35 @@ private extension ProfileVC {
             signoutView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
             signoutView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -124)
         ])
+    }
+}
+
+extension ProfileVC: ProfileViewProtocol {
+    
+    func showSignOutError(_ error: any Error) {
+        print(error.localizedDescription)
+    }
+    
+    func navigateToLoginScreen() {
+        //        RootRouter.shared.showLoginNavigationController()
+    }
+    
+    func updateProfile(with name: String, email: String, imageUrl: String?) {
+        profileName.text = name
+        profileEmail.text = email
+        if let imageUrl = imageUrl, let url = URL(string: imageUrl) {
+            loadImage(from: url)
+        } else {
+            profileImage.image = UIImage(named: "profilePhoto")
+        }
+    }
+    func updateProfileImage(_ image: UIImage) {
+        DispatchQueue.main.async {
+            self.profileImage.image = image
+        }
+    }
+    func imageUploadCompleted() {
+        presenter.fetchProfileData() // Refetch profile data after image upload completion
     }
 }
 
