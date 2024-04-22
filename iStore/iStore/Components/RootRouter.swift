@@ -23,13 +23,13 @@ final class RootRouter {
 
 
         /// логика показа экрана LoginVC с проверкой, авторизован ли пользователь
-        func isUserLoggedIn() -> Bool {
-            return false
-        }
-        
-        if !isUserLoggedIn() {
-            showLoginNavigationController()
-        }
+//        func isUserLoggedIn() -> Bool {
+//            return false
+//        }
+//        
+//        if !isUserLoggedIn() {
+//            showLoginNavigationController()
+//        }
     }
     
     func showMainTabBar() -> UITabBarController {
