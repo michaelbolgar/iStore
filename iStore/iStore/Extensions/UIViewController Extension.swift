@@ -22,5 +22,9 @@ extension UIViewController {
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
+    func hideLeftNavigationItem() {
+        navigationItem.setHidesBackButton(true, animated: false)
+    }
 
 }
