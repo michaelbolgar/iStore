@@ -1,20 +1,10 @@
 import UIKit
 
-struct UserDefaultManager {
-    private let userDefaults = UserDefaults.standard
-    
-    // Чтение и установка статуса аккаунта менеджера
-    var isManagerAccount: Bool {
-        get { userDefaults.bool(forKey: UserDefaults.Keys.isManagerAccount) }
-        set { userDefaults.set(newValue, forKey: UserDefaults.Keys.isManagerAccount) }
-    }
-}
-
 final class RootRouter {
     
     private let window: UIWindow?
     private let factory: AppFactory
-    private let userDefaults = UserDefaults()
+    private let userDefaults = UserDefaultsManager()
     
     init(window: UIWindow?, builder: AppFactory) {
         self.window = window
@@ -22,7 +12,7 @@ final class RootRouter {
     }
     
     func start() {
-        //resetOnboardingStatus()
+        // resetOnboardingStatus()
         
         // insert here code for dark/light mode if needed
         
@@ -88,63 +78,3 @@ final class RootRouter {
         print("Прохождение онбординга сброшено")
     }
 }
-
-extension UserDefaults {
-    struct Keys {
-        static let onboardingCompleted = "isLaunchedBefore"
-        static let isManagerAccount = "isManagerAccount"
-        static let searchHistory = "searchHistory"
-    }
-    
-    // Чтение и установка состояния онбординга
-    var onboardingCompleted: Bool {
-        get { return bool(forKey: Keys.onboardingCompleted) }
-        set { set(newValue, forKey: Keys.onboardingCompleted) }
-    }
-    
-    // Получение и установка истории поиска
-    var searchHistory: [String] {
-        get { return stringArray(forKey: Keys.searchHistory) ?? [] }
-        set { set(newValue, forKey: Keys.searchHistory) }
-    }
-}
-
-
-//extension UserDefaults {
-//    
-//    struct Keys {
-//        static let onboardingCompleted = "isLaunchedBefore"
-//        static let isManagerAccount = "isManagerAccount"
-//        static let searchHistory = "searchHistory"
-//    }
-//    
-//    // Функция для чтения состояния онбординга
-//    func getOnboardingCompleted() -> Bool {
-//        return bool(forKey: Keys.onboardingCompleted)
-//    }
-//    
-//    // Функция для установки состояния онбординга
-//    func setOnboardingCompleted(_ completed: Bool) {
-//        set(completed, forKey: Keys.onboardingCompleted)
-//    }
-//    
-//    // Функция для чтения статуса аккаунта менеджера
-//    func getIsManagerAccount() -> Bool {
-//        return bool(forKey: Keys.isManagerAccount)
-//    }
-//    
-//    // Функция для установки статуса аккаунта менеджера
-//    func setIsManagerAccount(_ isManager: Bool) {
-//        set(isManager, forKey: Keys.isManagerAccount)
-//    }
-//    
-//    // Функция для получения истории поиска
-//    func getSearchHistory() -> [String] {
-//        return stringArray(forKey: Keys.searchHistory) ?? []
-//    }
-//    
-//    // Функция для установки истории поиска
-//    func setSearchHistory(_ history: [String]) {
-//        set(history, forKey: Keys.searchHistory)
-//    }
-//}
