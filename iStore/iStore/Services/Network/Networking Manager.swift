@@ -53,6 +53,10 @@ struct NetworkingManager {
             parameters ["offset"] = "0"
             parameters ["limit"] = "15"
             parameters ["title"] = "\(request)"
+        
+        case .setCategoty (name: let name, image: let image):
+            parameters ["name"] = "\(name)"
+            parameters ["image"] = "\(image)"
         }
 
         return parameters
@@ -113,20 +117,31 @@ struct NetworkingManager {
     }
 
     /// Get products by category
-    func getProductsByCategory(for id: Int, completion: @escaping(Result<[SingleProduct], NetworkError>) -> Void) {
+    func getProductsByCategory(for id: Int, 
+                               completion: @escaping(Result<[SingleProduct], NetworkError>) -> Void) {
         guard let url = createURL(for: .getProductsByCategory(id: id)) else { return }
         makeTask(for: url, completion: completion)
     }
 
     /// Get products by category
-    func getProduct(for id: Int, completion: @escaping(Result<SingleProduct, NetworkError>) -> Void) {
+    func getProduct(for id: Int, 
+                    completion: @escaping(Result<SingleProduct, NetworkError>) -> Void) {
         guard let url = createURL(for: .getProduct(id: id)) else { return }
         makeTask(for: url, completion: completion)
     }
 
     /// search by title
-    func doSearch(for request: String, completion: @escaping(Result<[SingleProduct], NetworkError>) -> Void) {
+    func doSearch(for request: String, 
+                  completion: @escaping(Result<[SingleProduct], NetworkError>) -> Void) {
         guard let url = createURL(for: .doSearch(request: request)) else { return }
         makeTask(for: url, completion: completion)
     }
+
+    /// create a new category name
+//    func createCategory(name: String, 
+//                        image: URL,
+//                        completion: @escaping(Result<Category, NetworkError>) -> Void) {
+//        guard let url = createURL(for: .setCategoty(name: name, image: image)) else { return }
+//        makeTask(for: url, completion: completion)
+//    }
 }

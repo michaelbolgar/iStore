@@ -17,6 +17,18 @@ class ViewController: UIViewController {
 
     // MARK: Network methods
 
+    /// создать категорию
+//    private func createCategory() {
+//        NetworkingManager.shared.createCategory(name: <#T##String#>, image: <#T##URL#>) { result in
+//            switch result {
+//            case .success(let categories):
+//                print("Current collections: \(categories)")
+//            case .failure(let error):
+//                print("Error fetching collections: \(error)")
+//            }
+//        }
+//    }
+
     /// получить все (пять) категорий
     private func getCategories() {
         NetworkingManager.shared.getCategories { result in
