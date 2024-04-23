@@ -1,6 +1,8 @@
 import UIKit
 
-final class ManagerViewController: UIViewController {
+final class ManagerVC: UIViewController {
+    
+    var presenter: ManagerPresenterProtocol!
     
     // MARK: - UI Elements
     private let managerTitle = UILabel.makeLabel(text: "Manager Screen",
@@ -63,7 +65,7 @@ final class ManagerViewController: UIViewController {
 }
 
 // MARK: - Setup Constraints
-private extension ManagerViewController {
+private extension ManagerVC {
     
     func setupConstraints() {
         // Определение константы для удобства

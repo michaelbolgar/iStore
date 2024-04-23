@@ -64,7 +64,7 @@ final class ChangeProfileViewController: UIViewController {
     }
 
     @objc private func managerViewTapped() {
-        let termsVC = ManagerViewController()
+        let termsVC = ManagerVC()
         termsVC.modalTransitionStyle = .coverVertical
         present(termsVC, animated: true, completion: nil)
     }
