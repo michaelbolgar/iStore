@@ -7,7 +7,7 @@ protocol HomeRouterProtocol: BaseRouter {
     func showSearchVC(searchText: String)
     func showCartVC()
     func showDetailsVC()
-    func initialViewController()
+//    func initialViewController()
 }
 
 // MARK: HomeRouter
@@ -26,14 +26,16 @@ final class HomeRouter: HomeRouterProtocol {
         self.factory = factory
     }
 
-    func initialViewController() {
+//    func initialViewController() {
+//        if let homeVC = moduleBuilder?.createHomeModule(router: self) {
+//            navigationController.viewControllers = [homeVC]
+//        }
+//    }
+
+    func start() {
         if let homeVC = moduleBuilder?.createHomeModule(router: self) {
             navigationController.viewControllers = [homeVC]
         }
-    }
-
-    func start() {
-        navigationController.viewControllers = [factory.makeHomeVC()]
     }
 
     func showSearchVC(searchText: String) {

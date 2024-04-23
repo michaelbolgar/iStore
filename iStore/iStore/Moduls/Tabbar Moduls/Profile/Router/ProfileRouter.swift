@@ -4,7 +4,7 @@ import UIKit
 
 protocol ProfileRouterProtocol: BaseRouter {
     func start()
-    func initialViewController()
+//    func initialViewController()
     // добавить функции для навигации
 }
 
@@ -24,13 +24,15 @@ final class ProfileRouter: ProfileRouterProtocol {
         self.factory = factory
     }
 
-    func initialViewController() {
+//    func initialViewController() {
+//        if let profileVC = moduleBuilder?.createProfileModule(router: self) {
+//            navigationController.viewControllers = [profileVC]
+//        }
+//    }
+
+    func start() {
         if let profileVC = moduleBuilder?.createProfileModule(router: self) {
             navigationController.viewControllers = [profileVC]
         }
-    }
-
-    func start() {
-        navigationController.viewControllers = [factory.makeProfileVC()]
     }
 }

@@ -62,7 +62,7 @@ final class ManagerVC: UIViewController {
     }
     
     @objc private func categoryViewTapped() {
-        presenter.showCategoryManagerVC()
+        presenter?.showCategoryManagerVC()
     }
 }
 

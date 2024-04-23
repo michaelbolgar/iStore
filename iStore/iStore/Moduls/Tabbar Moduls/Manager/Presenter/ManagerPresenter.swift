@@ -8,10 +8,11 @@ protocol ManagerPresenterProtocol {
 
 final class ManagerPresenter: ManagerPresenterProtocol {
     
-    private weak var view: ManagerVCProtocol?
+    public weak var view: ManagerVCProtocol?
     private var router: ManagerRouterProtocol
 
-    init(view: ManagerVCProtocol, router: ManagerRouterProtocol) {
+    init(view: ManagerVCProtocol, 
+         router: ManagerRouterProtocol) {
         self.view = view
         self.router = router
     }
