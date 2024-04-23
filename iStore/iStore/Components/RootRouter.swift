@@ -12,7 +12,7 @@ final class RootRouter {
     }
     
     func start() {
-        // resetOnboardingStatus()
+         resetOnboardingStatus()
         
         // insert here code for dark/light mode if needed
         

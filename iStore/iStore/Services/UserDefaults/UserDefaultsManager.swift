@@ -21,6 +21,25 @@ class UserDefaultsManager {
         get { userDefaults.stringArray(forKey: Keys.searchHistory) ?? [] }
         set { userDefaults.set(newValue, forKey: Keys.searchHistory) }
     }
+    
+    // Добавление результатов поиска
+    func addSearchQuery(_ query: String) {
+        var history = searchHistory
+        if !history.contains(query) {
+            history.append(query)
+            searchHistory = history
+        }
+    }
+    
+    // Удаление истории поиска
+    func clearSearchHistory() {
+        searchHistory = []
+    }
+    
+    // Тест
+    func printSearchHistory() {
+        print("История поиска: \(searchHistory)")
+    }
 }
 
 extension UserDefaultsManager {
@@ -30,5 +49,3 @@ extension UserDefaultsManager {
         static let searchHistory = "searchHistory"
     }
 }
-
-
