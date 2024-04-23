@@ -10,7 +10,9 @@ import Foundation
 import UIKit
 
 final class ProductViewCell: UICollectionViewCell {
+
     //MARK: - Private Properties
+
     private let productImageView: UIImageView = {
         let element = UIImageView()
         element.contentMode = .scaleAspectFill
@@ -19,6 +21,7 @@ final class ProductViewCell: UICollectionViewCell {
         element.layer.masksToBounds = true
         return element
     }()
+
     private let titleLabel: UILabel = {
         let element = UILabel()
         element.textColor = .black
@@ -27,6 +30,7 @@ final class ProductViewCell: UICollectionViewCell {
         element.backgroundColor = .clear
         return element
     }()
+
     private let priceLabel: UILabel = {
         let element = UILabel()
         element.textColor = .black
@@ -35,13 +39,14 @@ final class ProductViewCell: UICollectionViewCell {
         element.backgroundColor = .clear
         return element
     }()
+
     private lazy var addToCartButton: UIButton = {
         let element = UIButton()
         element.tintColor = .white
         element.setTitle("Add to cart", for: .normal)
         element.titleLabel?.font = UIFont(name: "Inter-Regular", size: 13)
         element.layer.cornerRadius = 8
-        element.backgroundColor = .systemBlue
+        element.backgroundColor = .lightGreen
         element.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
         return element
     }()

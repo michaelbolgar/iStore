@@ -4,70 +4,63 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    // MARK: UI Elements
-    
-    let label = UILabel.makeLabel(text: "Hello, world!",
-                                  font: UIFont.InterSemiBold(ofSize: 16),
-                                  textColor: .black,
-                                  numberOfLines: 1,
-                                  alignment: nil)
-
-    let button = UIButton.makeButton(text: "Click",
-                                          buttonColor: .green,
-                                          titleColor: .white,
-                                          titleSize: 16,
-                                          width: 300,
-                                          height: 50)
-
-    let textField = UITextField.makeTextField(placeholder: "Write anything",
-                                              backgroundColor: .violet,
-                                              textColor: .black,
-                                              font: UIFont.systemFont(ofSize: 16),
-                                              height: 50,
-                                              showHideButton: false)
-
     // MARK: Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        view.addSubview(label)
-        view.addSubview(button)
-        view.addSubview(textField)
-//        label.backgroundColor = .red
-        setConstraints()
-        setButton()
-        view.hideKeyboard()
+        view.backgroundColor = .systemCyan
+//        getCategories()
+//        getProductsByCategory(for: 1)
+//        getProduct(for: 51)
+        deSearch(for: "shoes")
     }
 
-    // MARK: Private Methods
+    // MARK: Network methods
 
-    private func setConstraints() {
-
-        NSLayoutConstraint.activate([
-
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-//            label.widthAnchor.constraint(equalToConstant: 200)
-
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
-
-            textField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            textField.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: -100),
-            textField.widthAnchor.constraint(equalToConstant: 300)
-
-        ])
-
+    /// получить все (пять) категорий
+    private func getCategories() {
+        NetworkingManager.shared.getCategories { result in
+            switch result {
+            case .success(let categories):
+                print("Current collections: \(categories)")
+            case .failure(let error):
+                print("Error fetching collections: \(error)")
+            }
+        }
     }
 
-    private func setButton() {
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    /// получить товары по категории,
+    private func getProductsByCategory(for id: Int) {
+        NetworkingManager.shared.getProductsByCategory(for: id) { result in
+            switch result {
+            case .success(let categories):
+                print("Products in category: \(categories)")
+            case .failure(let error):
+                print("Error fetching: \(error)")
+            }
+        }
     }
 
-    // MARK: Selector Methods
+    /// получить инфу по конкретному товару
+    private func getProduct(for id: Int) {
+        NetworkingManager.shared.getProduct(for: id) { result in
+            switch result {
+            case .success(let product):
+                print("Info about product: \(product)")
+            case .failure(let error):
+                print("Error fetching collections: \(error)")
+            }
+        }
+    }
 
-    @objc private func buttonTapped() {
-        print ("click")
+    private func deSearch(for request: String) {
+        NetworkingManager.shared.doSearch(for: request) { result in
+            switch result {
+            case .success(let product):
+                print("Info about product: \(product)")
+            case .failure(let error):
+                print("Error fetching collections: \(error)")
+            }
+        }
     }
 }
