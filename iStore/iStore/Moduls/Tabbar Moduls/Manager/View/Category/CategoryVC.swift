@@ -1,6 +1,6 @@
 import UIKit
 
-final class CategoryViewController: UIViewController {
+final class CategoryVC: UIViewController {
     
     // MARK: - UI Elements
     private var categories = ["Phone", "Monitor", "Mouse", "Earphone"]
@@ -86,7 +86,7 @@ final class CategoryViewController: UIViewController {
 }
 
 // MARK: - Setup Constraints
-private extension CategoryViewController {
+private extension CategoryVC {
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -108,7 +108,7 @@ private extension CategoryViewController {
     }
 }
 
-extension CategoryViewController: UITableViewDelegate, UITableViewDataSource {
+extension CategoryVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
     }

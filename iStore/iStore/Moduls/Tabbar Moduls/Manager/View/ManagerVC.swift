@@ -1,5 +1,9 @@
 import UIKit
 
+protocol ManagerVCProtocol: AnyObject {
+
+}
+
 final class ManagerVC: UIViewController {
     
     var presenter: ManagerPresenterProtocol!
@@ -50,17 +54,15 @@ final class ManagerVC: UIViewController {
     
     // MARK: Selector Methods
     @objc private func productViewTapped() {
-        print("product button tapped")
-//        let changePhotoVC = ChangeProfileViewController()
-//        changePhotoVC.modalPresentationStyle = .automatic
-//        present(changePhotoVC, animated: true, completion: nil)
+        guard let presenter = presenter else {
+                print("Error: Presenter is nil")
+                return
+            }
+            presenter.showProductManagerVC()
     }
     
     @objc private func categoryViewTapped() {
-        print("category button tapped")
-//        let termsVC = TermsViewController()
-//        termsVC.modalTransitionStyle = .coverVertical
-//        present(termsVC, animated: true, completion: nil)
+        presenter.showCategoryManagerVC()
     }
 }
 
@@ -86,4 +88,8 @@ private extension ManagerVC {
 
         ])
     }
+}
+
+extension ManagerVC: ManagerVCProtocol {
+
 }

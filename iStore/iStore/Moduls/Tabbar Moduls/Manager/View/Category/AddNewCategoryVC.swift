@@ -1,6 +1,6 @@
 import UIKit
 
-final class AddNewProductVC: UIViewController {
+final class AddNewCategoryVC: UIViewController {
     
     // MARK: - UI Elements
     private let addNewProductTitle = UILabel.makeLabel(text: "Add new product",
@@ -90,7 +90,7 @@ final class AddNewProductVC: UIViewController {
 }
 
 // MARK: - Setup Constraints
-private extension AddNewProductVC {
+private extension AddNewCategoryVC {
     
     func setupConstraints() {
         // Определение константы для удобства
@@ -172,7 +172,7 @@ extension UITextView {
     }
 }
 
-extension AddNewProductVC: UITextViewDelegate {
+extension AddNewCategoryVC: UITextViewDelegate {
     //чтобы в прайс можно было ввести только цифры
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // Проверяем, является ли вводимый текст числом
@@ -183,7 +183,7 @@ extension AddNewProductVC: UITextViewDelegate {
     
 }
 
-extension AddNewProductVC: UIPickerViewDelegate, UIPickerViewDataSource {
+extension AddNewCategoryVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         print("numberOfComponents")
         return 1
@@ -205,7 +205,7 @@ extension AddNewProductVC: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
-extension AddNewProductVC: UITextFieldDelegate {
+extension AddNewCategoryVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == categoryTextField {
             textField.inputView = categoryPicker

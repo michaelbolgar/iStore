@@ -13,7 +13,7 @@ protocol ManagerRouterProtocol: BaseRouter {
 
 final class ManagerRouter: ManagerRouterProtocol {
 
-    let navigationController: UINavigationController
+    var navigationController: UINavigationController
     var moduleBuilder: (any ManagerBuilderProtocol)?
     private let factory: AppFactory
 
@@ -32,14 +32,17 @@ final class ManagerRouter: ManagerRouterProtocol {
     }
 
     func start() {
-        navigationController.viewControllers = [factory.makeManagerVC()]
+        guard let managerVC = moduleBuilder?.createManagerModule(router: self) else { return }
+                navigationController.viewControllers = [managerVC]
     }
 
     func showProductManagerVC() {
-        // code
+        guard let productVC = moduleBuilder?.createProductManagerVC() else { return }
+        navigationController.pushViewController(productVC, animated: true)
     }
 
     func showCategoryManagerVC() {
-        // code
+        guard let categoryVC = moduleBuilder?.createCategoryManagerVC() else { return }
+        navigationController.pushViewController(categoryVC, animated: true)
     }
 }
