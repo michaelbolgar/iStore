@@ -1,23 +1,37 @@
 import UIKit
 
 final class RootRouter {
-
+    
     private let window: UIWindow?
     private let factory: AppFactory
-
+    
     init(window: UIWindow?, builder: AppFactory) {
         self.window = window
         self.factory = builder
     }
-
+    
     func start() {
-
+        
         // insert here code for dark/light mode if needed
-
+        
         window?.rootViewController = showMainTabBar()
         window?.makeKeyAndVisible()
-    }
 
+        /// логика показа Onboarding с проверкой, был ли уже пройден онбординг
+        // сделать проверку через UserDefaults
+//        showOnboarding()
+
+
+        /// логика показа экрана LoginVC с проверкой, авторизован ли пользователь
+//        func isUserLoggedIn() -> Bool {
+//            return false
+//        }
+//        
+//        if !isUserLoggedIn() {
+//            showLoginNavigationController()
+//        }
+    }
+    
     func showMainTabBar() -> UITabBarController {
         return factory.makeTabBar(
             factory.makeHomeRouter().navigationController,
@@ -26,11 +40,20 @@ final class RootRouter {
             factory.makeProfileRouter().navigationController
         )
     }
-
-//    func showOnboarding() {
+    
+    func showOnboarding() {
 //        UserDefaults.standard.set(true, forKey: "isLaunchedBefore")
-//        let onboardingVC = OnboardingVC()
-//        window?.rootViewController?.present(onboardingVC, animated: true, completion: nil)
-//    }
-
+        let onboardingVC = OnboardingVC()
+        onboardingVC.modalPresentationStyle = .fullScreen
+        onboardingVC.isModalInPresentation = true
+        window?.rootViewController?.present(onboardingVC, animated: true, completion: nil)
+    }
+    
+    func showLoginNavigationController() {
+        let loginVC = LoginVC()
+        let navigationController = UINavigationController(rootViewController: loginVC)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.isModalInPresentation = true
+        window?.rootViewController?.present(navigationController, animated: true, completion: nil)
+    }
 }

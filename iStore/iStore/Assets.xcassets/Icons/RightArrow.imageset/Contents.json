@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Heart.svg",
+      "filename" : "RightArrow.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "RightArrow 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "RightArrow 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

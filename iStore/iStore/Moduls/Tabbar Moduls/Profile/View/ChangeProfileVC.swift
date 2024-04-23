@@ -1,6 +1,11 @@
 import UIKit
 
+protocol ChangeProfileViewControllerDelegate: AnyObject {
+    func didSelectAccountType(_ type: String)
+}
+
 final class ChangeProfileViewController: UIViewController {
+    weak var delegate: ChangeProfileViewControllerDelegate?
     
     // MARK: - UI Element
     private lazy var containerView: UIView = {
@@ -19,12 +24,12 @@ final class ChangeProfileViewController: UIViewController {
         return element
     }()
   
-    private let userView = UIView.makeView(textLabel: "User",
+    private let userView = UIView.makeGreyButton(textLabel: "User",
                                                 textColor: .customDarkGray,
                                                 nameMarker: "person.fill",
                                                 colorMarker: .deepGreen)
     
-    private let managerView = UIView.makeView(textLabel: "Manager",
+    private let managerView = UIView.makeGreyButton(textLabel: "Manager",
                                                      textColor: .customDarkGray,
                                                      nameMarker: "person.badge.key.fill",
                                                      colorMarker: .customYellow)
@@ -60,13 +65,13 @@ final class ChangeProfileViewController: UIViewController {
     
     // MARK: - Selector Methods
     @objc private func userViewTapped() {
-        print("takePhotoButton Tapped")
+        delegate?.didSelectAccountType("User")
+        dismiss(animated: true, completion: nil)
     }
-
+    
     @objc private func managerViewTapped() {
-        let termsVC = ManagerVC()
-        termsVC.modalTransitionStyle = .coverVertical
-        present(termsVC, animated: true, completion: nil)
+        delegate?.didSelectAccountType("Manager")
+        dismiss(animated: true, completion: nil)
     }
 }
 
