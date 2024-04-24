@@ -56,6 +56,15 @@ extension UIButton {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }
+    
+    // Bouncing animation for tapping button
+    func tappingAnimation() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
+            self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
+                self.transform = CGAffineTransform.identity
+            }, completion: nil)
+        })
+    }
 }
-
-
