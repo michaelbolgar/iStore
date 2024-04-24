@@ -52,6 +52,7 @@ extension WishlistPresenter: WishCollectionCellDelegate {
         guard let userId = Auth.auth().currentUser?.uid,
               products.indices.contains(index),
               let productId = products[index].id else { return }
+        products[index].isFavourite?.toggle()
         
         let docRef = db.collection("users").document(userId).collection("favorites").document(productId.description)
         
