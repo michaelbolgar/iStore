@@ -18,14 +18,13 @@ final class CategoryViewCell: UICollectionViewCell {
         return element
     }()
     
-    private lazy var categoryName: UILabel = {
-        let element = UILabel()
-        element.font = UIFont(name: "Inter-Regular", size: 12)
-        element.textAlignment = .center
-        return element
-    }()
+    private lazy var categoryName = UILabel.makeLabel(text: nil,
+                                                      font: UIFont.InterRegular(ofSize: 12),
+                                                      textColor: UIColor.darkGray,
+                                                      numberOfLines: 1,
+                                                      alignment: .center)
     
-    // MARK: - Initialisation
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setViews()
@@ -36,19 +35,22 @@ final class CategoryViewCell: UICollectionViewCell {
     }
     
     //MARK: - Methods
-        func configureCell(image: String, category: String) {
-            categoryIcon.image = UIImage(named: image)
-            categoryName.text = category
-        }
+    func configureCell(image: String, category: String) {
+        categoryIcon.image = UIImage(named: image)
+        categoryName.text = category
+    }
     
     private func setViews() {
         addSubview(categoryIcon)
         addSubview(categoryName)
     }
 }
+
+    //MARK: - Extensions
+
 extension CategoryViewCell{
     private func setupConstraints() {
-
+        
         categoryIcon.translatesAutoresizingMaskIntoConstraints = false
         categoryName.translatesAutoresizingMaskIntoConstraints = false
         
@@ -58,7 +60,7 @@ extension CategoryViewCell{
             categoryIcon.widthAnchor.constraint(equalToConstant: 40),
             categoryIcon.heightAnchor.constraint(equalToConstant: 40)
         ])
-
+        
         NSLayoutConstraint.activate([
             categoryName.topAnchor.constraint(equalTo: categoryIcon.bottomAnchor, constant: 6),
             categoryName.leadingAnchor.constraint(equalTo: self.leadingAnchor),
