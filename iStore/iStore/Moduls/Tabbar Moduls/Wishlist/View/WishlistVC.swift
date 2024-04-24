@@ -39,6 +39,7 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
         setupUI()
         hideLeftNavigationItem()
         setupSearchBar()
+        checkCollectionState()
     }
     
     // MARK: Private Methods
@@ -148,5 +149,40 @@ extension WishlistVC: SearchBarViewDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
         print(searchText)
+    }
+}
+
+// Screen state if the collection View is empty
+#warning ("Check with working DB. Move to Presenter?")
+extension WishlistVC {
+    func checkCollectionState() {
+        // Check if the collection view is empty
+        let emptyImageView = UIImageView(image: UIImage(named: "bookmark"))
+        let emptyCollectionLabel = UILabel.makeLabel(text: "No saved items yet", font: UIFont.InterMedium(ofSize: 20), textColor: .black, numberOfLines: 2, alignment: .center)
+        
+        if collectionView.numberOfItems(inSection: 0) == 0 {
+            // Collection view is empty, show the image in the center
+            emptyImageView.contentMode = .scaleAspectFit
+            emptyImageView.translatesAutoresizingMaskIntoConstraints = false
+            emptyCollectionLabel.translatesAutoresizingMaskIntoConstraints = false
+            
+            view.addSubview(emptyImageView)
+            view.addSubview(emptyCollectionLabel)
+            
+            NSLayoutConstraint.activate([
+                emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                emptyImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                emptyImageView.heightAnchor.constraint(equalToConstant: 200),
+                emptyImageView.widthAnchor.constraint(equalToConstant: 200),
+                
+                emptyCollectionLabel.topAnchor.constraint(equalTo: emptyImageView.bottomAnchor, constant: 10),
+                emptyCollectionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            ])
+        } else {
+            // Collection view has data, hide the image if previously shown
+            emptyImageView.removeFromSuperview()
+            emptyCollectionLabel.removeFromSuperview()
+            collectionView.reloadData()
+        }
     }
 }
