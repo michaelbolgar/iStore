@@ -60,7 +60,10 @@ final class Factory: AppFactory {
     }
     
     func makeProfileVC() -> UIViewController {
-        ProfileVC()
+        let profileVC = ProfileVC()
+        let presenter = ProfilePresenter(view: profileVC)
+        profileVC.presenter = presenter
+        return profileVC
     }
     
     /// making Routers

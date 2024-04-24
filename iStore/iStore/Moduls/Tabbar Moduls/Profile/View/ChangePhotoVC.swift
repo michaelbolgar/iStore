@@ -49,7 +49,7 @@ final class ChangePhotoViewController: UIViewController, UIImagePickerController
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        presenter = ChangePhotoPresenter(view: self)
+        presenter = ChangePhotoPresenter()
     }
     
     // MARK: - Private Methods

@@ -9,50 +9,11 @@ protocol ProfilePresenterProtocol: AnyObject {
     func updateProfileImage(_ image: UIImage)
     func imageUrlUpdated(_ url: String)
     func signOut()
+//    init(view: ProfileViewProtocol)
 }
 
 protocol ChangePhotoPresenterProtocol: AnyObject {
     func uploadImage(_ image: UIImage)
-}
-
-class ChangePhotoPresenter: ChangePhotoPresenterProtocol {
-    weak var view: ChangePhotoViewProtocol?
-    var profilePresenter: ProfilePresenterProtocol?
-    private let storage = Storage.storage().reference()
-    
-    init(view: ChangePhotoViewProtocol) {
-        self.view = view
-    }
-    
-    func uploadImage(_ image: UIImage) {
-        guard let imageData = image.jpegData(compressionQuality: 0.4),
-              let userId = Auth.auth().currentUser?.uid else { return }
-        
-        let storageRef = storage.child("profile_images/\(userId).jpg")
-        storageRef.putData(imageData, metadata: nil) { [weak self] metadata, error in
-            guard let _ = metadata else {
-                self?.view?.imageUploadFailed(with: error ?? NSError())
-                return
-            }
-            storageRef.downloadURL { [weak self] url, error in
-                guard let downloadURL = url else {
-                    self?.view?.imageUploadFailed(with: error ?? NSError())
-                    return
-                }
-                
-                // Обновление URL изображения в Firestore
-                let db = Firestore.firestore()
-                db.collection("users").document(userId).updateData(["profileImageUrl": downloadURL.absoluteString]) { error in
-                    if let error = error {
-                        print("Error updating document: \(error.localizedDescription)")
-                    } else {
-                        print("Document successfully updated")
-                        self?.view?.imageUploadCompleted()
-                    }
-                }
-            }
-        }
-    }
 }
 
 class ProfilePresenter: ProfilePresenterProtocol {
@@ -62,13 +23,14 @@ class ProfilePresenter: ProfilePresenterProtocol {
     private let storage = Storage.storage().reference()
     private let auth = Auth.auth()
     
-    init(view: ProfileViewProtocol) {
-        self.view = view
-    }
+   init(view: ProfileViewProtocol) {
+            self.view = view
+        }
     
     func fetchProfileData() {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("User not logged in")
+            self.view?.navigateToLoginScreen()
             return
         }
         
@@ -81,6 +43,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
                 self?.view?.updateProfile(with: name, email: email, imageUrl: imageUrl)
             } else {
                 print("Document does not exist")
+                self?.view?.navigateToLoginScreen()
             }
         }
     }
@@ -130,3 +93,35 @@ class ProfilePresenter: ProfilePresenterProtocol {
         }
     }
 }
+
+//extension ProfilePresenter: ChangePhotoPresenterProtocol {
+//    func uploadImage(_ image: UIImage) {
+//        guard let imageData = image.jpegData(compressionQuality: 0.4),
+//              let userId = Auth.auth().currentUser?.uid else { return }
+//
+//        let storageRef = Storage.storage().reference().child("profile_images/\(userId).jpg")
+//        storageRef.putData(imageData, metadata: nil) { [weak self] metadata, error in
+//            guard let _ = metadata else {
+//                self?.view?.imageUploadFailed(error ?? NSError())
+//                return
+//            }
+//            storageRef.downloadURL { [weak self] url, error in
+//                guard let downloadURL = url else {
+//                    self?.view?.imageUploadFailed(error ?? NSError())
+//                    return
+//                }
+//
+//                // Обновление URL изображения в Firestore
+//                let db = Firestore.firestore()
+//                db.collection("users").document(userId).updateData(["profileImageUrl": downloadURL.absoluteString]) { error in
+//                    if let error = error {
+//                        print("Error updating document: \(error.localizedDescription)")
+//                    } else {
+//                        print("Document successfully updated")
+//                        self?.view?.imageUploadCompleted()
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
