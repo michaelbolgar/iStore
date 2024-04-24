@@ -6,5 +6,6 @@ extension UINavigationController {
         self.tabBarItem.image = UIImage(named: image)
         self.tabBarItem.selectedImage = UIImage(named: "selected\(image)")?.withRenderingMode(.alwaysOriginal)
         self.view.backgroundColor = .white
+        self.isNavigationBarHidden = true
     }
 }
