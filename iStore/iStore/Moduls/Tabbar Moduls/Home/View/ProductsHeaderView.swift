@@ -9,24 +9,25 @@ import UIKit
 
 final class ProductsHeaderView: UICollectionReusableView {
 
-    //MARK: -> Properties
+    //MARK: UI Elements
 
     private let titleLabel = UILabel.makeLabel(text: "Products",
                                        font: UIFont(name: "Inter-Medium", size: 14),
                                        textColor: UIColor.black,
                                                numberOfLines: nil, alignment: .left)
+    
+    private let filterImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "FilterImage")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
 
     private let filtersButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Filters", for: .normal)
-        button.setTitleColor(UIColor.black, for: .normal)
-        button.setImage(UIImage(systemName: "line.horizontal.3.decrease"), for: .normal)
-        button.titleLabel?.font = UIFont(name: "Inter-Regular", size: 12)
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.layer.borderWidth = 1.0
-        button.layer.cornerRadius = 8
+        button.backgroundColor = .clear
         button.addTarget(self, action: #selector(filtersButtonTapped), for: .touchUpInside)
-
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -38,12 +39,8 @@ final class ProductsHeaderView: UICollectionReusableView {
         return stack
     }()
     
-    //MARK: - Action
-     @objc private func filtersButtonTapped() {
-         print("нажата - Filters")
-     }
 
-    //MARK: -> init
+    //MARK: Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setViews()
@@ -54,17 +51,25 @@ final class ProductsHeaderView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    //MARK: -> Methods
-    
+    //MARK: - Methods
+
     func configureHeader(labelName: String) {
         titleLabel.text = labelName
         }
     private func setViews() {
         addSubview(headerStack)
+        addSubview(filterImageView)
         headerStack.addSubview(titleLabel)
         headerStack.addSubview(filtersButton)
     }
+    
+    //MARK: - Private Methods
+    @objc private func filtersButtonTapped() {
+        print("нажата - Filters")
+    }
 }
+
+//MARK: - Extensions
 
 extension ProductsHeaderView{
     private func setupConstraints() {
@@ -87,6 +92,13 @@ extension ProductsHeaderView{
             filtersButton.widthAnchor.constraint(equalToConstant: 76),
             filtersButton.heightAnchor.constraint(equalToConstant: 27)
         ])
+        
+        NSLayoutConstraint.activate([
+              filterImageView.topAnchor.constraint(equalTo: filtersButton.topAnchor),
+              filterImageView.centerXAnchor.constraint(equalTo: filtersButton.centerXAnchor),
+              filterImageView.widthAnchor.constraint(equalTo: filtersButton.widthAnchor),
+              filterImageView.heightAnchor.constraint(equalTo: filtersButton.heightAnchor)
+          ])
     }
 }
 

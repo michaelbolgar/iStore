@@ -8,8 +8,14 @@
 import UIKit
 
 final class SearchFieldView: UICollectionViewCell {
-    
-    //MARK: - Private Properties
+
+    // MARK: Properties
+
+    #warning ("сделать так же по всем ячейкам - см. setupViews() в HomeVC")
+    static let identifier = String(describing: SearchFieldView.self)
+
+    //MARK: - UI Elements
+
     private let mainView: UIView = {
         let element = UIView()
         element.backgroundColor = .white
@@ -19,14 +25,14 @@ final class SearchFieldView: UICollectionViewCell {
         element.layer.borderColor = UIColor.gray.withAlphaComponent(0.5).cgColor
         return element
     }()
-    
+
     private let searchButton: UIButton = {
         let element = UIButton(type: .system)
         element.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         element.tintColor = .systemGray
         return element
     }()
-    
+
     lazy var searchTextField: UITextField = {
         let element = UITextField()
         element.placeholder = NSLocalizedString("Search here ...", comment: "")
@@ -37,25 +43,28 @@ final class SearchFieldView: UICollectionViewCell {
         element.returnKeyType = .search
         return element
     }()
-    
+
     //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         setConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    //MARK: - Methods
+    //MARK: - Private Methods
     private func setupView() {
         addSubview(mainView)
         mainView.addSubview(searchButton)
         mainView.addSubview(searchTextField)
     }
+}
 
-    private func setConstraints() {
+private extension SearchFieldView {
+
+     func setConstraints() {
 
         mainView.translatesAutoresizingMaskIntoConstraints = false
         searchButton.translatesAutoresizingMaskIntoConstraints = false

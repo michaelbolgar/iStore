@@ -1,16 +1,17 @@
 import UIKit
+import Firebase
 
 class LoginVC: UIViewController {
     
     // MARK: UI Elements
     
-    private lazy var loginLabel = UILabel.makeLabel(text: "Login", 
-                                                    font: UIFont.InterRegular(ofSize: 14), 
+    private lazy var loginLabel = UILabel.makeLabel(text: "Email",
+                                                    font: UIFont.InterRegular(ofSize: 14),
                                                     textColor: .customLightGray, 
                                                     numberOfLines: 0, 
                                                     alignment: .left)
     
-    private lazy var loginTextField = UITextField.makeTextField(placeholder: "Enter your login", 
+    private lazy var loginTextField = UITextField.makeTextField(placeholder: "Enter your email", 
                                                                 backgroundColor: .violet, 
                                                                 textColor: .customLightGray, 
                                                                 font: UIFont.InterRegular(ofSize: 16), 
@@ -124,7 +125,15 @@ class LoginVC: UIViewController {
     }
     
     @objc private func loginButtonTapped() {
-        
+        guard let login = loginTextField.text, let password = passwordTextField.text else { return }
+        Auth.auth().signIn(withEmail: login, password: password) { [weak self] authResult, error in
+            if let error = error {
+                print("Login error: \(error.localizedDescription)")
+                // Обработка ошибок, например, показать сообщение пользователю
+            } else {
+                print("User logged in successfully")
+            }
+        }
     }
     
     @objc private func signUpButtonTapped() {
@@ -164,7 +173,8 @@ extension LoginVC {
     }
 }
 
-//Layouts
+// MARK: Layout
+
 extension LoginVC {
     
     private func setupLayout() {
@@ -192,7 +202,7 @@ extension LoginVC {
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: standardSpacing),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -standardSpacing),
             
-            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: standardSpacing),
+            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: standardSpacing + 10),
             loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: standardSpacing),
             loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -standardSpacing),
             loginButton.heightAnchor.constraint(equalToConstant: elementHeight),
