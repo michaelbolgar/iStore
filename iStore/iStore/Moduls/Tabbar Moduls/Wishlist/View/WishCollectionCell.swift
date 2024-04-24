@@ -54,7 +54,8 @@ final class WishCollectionCell: UICollectionViewCell {
     }()
     
     
-    private let backView = UIView.makeGreyView(cornerRadius: 6)
+//    private let backView = UIView.makeGreyView(cornerRadius: 6)
+    private let backView = UIView.makeLightView(cornerRadius: 6) // color changed in order to comply with Figma
 
     //MARK: - Life Cycle
     override init(frame: CGRect) {
@@ -87,6 +88,8 @@ final class WishCollectionCell: UICollectionViewCell {
     //MARK: - Private Methods
     private func configure() {
         contentView.addSubview(backView)
+        backView.makeCellShadow()
+        
         [productImage, productLabel, heartButton, buyButton, priceLabel].forEach { backView.addSubview($0)}
     }
     
@@ -98,6 +101,7 @@ final class WishCollectionCell: UICollectionViewCell {
     //MARK: - Selector Methods
     @objc func buyButtonTapped() {
         delegate?.buyButtonPressed()
+        buyButton.tappingAnimation()
     }
     
     @objc func heartButtonTapped() {
@@ -113,9 +117,9 @@ final class WishCollectionCell: UICollectionViewCell {
 //MARK: - Cell's Constraints
 private extension WishCollectionCell {
     func setupConstraints() {
-        backView.translatesAutoresizingMaskIntoConstraints = false
-        productImage.translatesAutoresizingMaskIntoConstraints = false
-        buyButton.translatesAutoresizingMaskIntoConstraints = false
+        [backView, productImage, buyButton].forEach { view in
+            view.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         NSLayoutConstraint.activate([
             backView.topAnchor.constraint(equalTo: contentView.topAnchor),

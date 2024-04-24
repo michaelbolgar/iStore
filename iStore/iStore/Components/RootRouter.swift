@@ -1,10 +1,10 @@
 import UIKit
-import Firebase
 
 final class RootRouter {
     
     private let window: UIWindow?
     private let factory: AppFactory
+    private let userDefaults = UserDefaultsManager()
     
     init(window: UIWindow?, builder: AppFactory) {
         self.window = window
@@ -12,6 +12,7 @@ final class RootRouter {
     }
     
     func start() {
+         resetOnboardingStatus()
         
         // insert here code for dark/light mode if needed
         
@@ -42,7 +43,10 @@ final class RootRouter {
         let onboardingVC = OnboardingVC()
         onboardingVC.modalPresentationStyle = .fullScreen
         onboardingVC.isModalInPresentation = true
-        window?.rootViewController?.present(onboardingVC, animated: true, completion: nil)
+        window?.rootViewController?.present(onboardingVC, animated: true) {
+            self.userDefaults.onboardingCompleted = true
+            print("Онбординг завершен, статус сохранен")
+        }
     }
     
     func showLoginNavigationController() {
@@ -50,6 +54,14 @@ final class RootRouter {
         let navigationController = UINavigationController(rootViewController: loginVC)
         navigationController.modalPresentationStyle = .fullScreen
         navigationController.isModalInPresentation = true
-        window?.rootViewController?.present(navigationController, animated: true, completion: nil)
+        window?.rootViewController?.present(navigationController, animated: true) {
+            self.userDefaults.onboardingCompleted = true
+        }
+    }
+    
+    //Метод проверки для сброса прохождения Онбординга (установлен и закомментирован в начале start())
+    func resetOnboardingStatus() {
+        userDefaults.onboardingCompleted = false
+        print("Прохождение онбординга сброшено")
     }
 }

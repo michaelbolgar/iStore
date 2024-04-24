@@ -6,12 +6,11 @@
 //
 
 import Foundation
-
 import UIKit
 
 final class ProductViewCell: UICollectionViewCell {
 
-    //MARK: - Private Properties
+    // MARK: - UI Elements
 
     private let productImageView: UIImageView = {
         let element = UIImageView()
@@ -25,7 +24,7 @@ final class ProductViewCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let element = UILabel()
         element.textColor = .black
-        element.font = UIFont(name: "Inter-Regular", size: 12)
+        element.font = UIFont.InterRegular(ofSize: 12)
         element.textAlignment = .left
         element.backgroundColor = .clear
         return element
@@ -34,7 +33,7 @@ final class ProductViewCell: UICollectionViewCell {
     private let priceLabel: UILabel = {
         let element = UILabel()
         element.textColor = .black
-        element.font = UIFont(name: "Inter-Regular", size: 14)
+        element.font = UIFont.InterRegular(ofSize: 14)
         element.textAlignment = .left
         element.backgroundColor = .clear
         return element
@@ -44,47 +43,53 @@ final class ProductViewCell: UICollectionViewCell {
         let element = UIButton()
         element.tintColor = .white
         element.setTitle("Add to cart", for: .normal)
-        element.titleLabel?.font = UIFont(name: "Inter-Regular", size: 13)
+        element.titleLabel?.font = UIFont.InterRegular(ofSize: 13)
         element.layer.cornerRadius = 8
         element.backgroundColor = .lightGreen
         element.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
         return element
     }()
 
-    //MARK: - Action
-    @objc private func addToCart() {
-        
-        print("нажата - addToCart")
-    }
-    
     //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        backgroundColor = .white
+        //        backgroundColor = .white
         backgroundColor = UIColor.gray.withAlphaComponent(0.1)
         layer.cornerRadius = 12
         setupView()
         setupConstraints()
 
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    //MARK: - Methods
+
+    // MARK: Methods
     func configureCell(image: String, title: String, price: String) {
         productImageView.image = UIImage(named: image)
         titleLabel.text = title
         priceLabel.text = price
     }
-    
+
     private func setupView() {
         addSubview(productImageView)
         addSubview(titleLabel)
         addSubview(priceLabel)
         addSubview(addToCartButton)
     }
-    private func setupConstraints() {
+
+    // MARK: - Selector Methods
+    @objc private func addToCart() {
+        print("нажата - addToCart")
+    }
+}
+
+    // MARK: Layout
+
+private extension ProductViewCell {
+
+    func setupConstraints() {
         // Disable autoresizing masks for each element to use Auto Layout
         productImageView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -121,5 +126,4 @@ final class ProductViewCell: UICollectionViewCell {
             addToCartButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
         ])
     }
-
 }
