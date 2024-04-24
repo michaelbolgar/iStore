@@ -96,6 +96,8 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         grayCircle.layer.cornerRadius = grayCircle.frame.size.width / 2
+        addButton.layer.cornerRadius = 4
+        buyButton.layer.cornerRadius = 4
     }
 
     // MARK: Private Methods
