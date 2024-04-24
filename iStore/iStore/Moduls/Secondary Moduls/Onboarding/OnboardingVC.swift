@@ -54,6 +54,7 @@ final class OnboardingVC: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupLayouts()
+        TestUD() // Тест Удалить
     }
     
     override func viewDidLayoutSubviews() {
@@ -154,5 +155,17 @@ extension OnboardingVC {
             pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -edgePadding + 5),
             pageControl.centerYAnchor.constraint(equalTo: nextButtonImageView.centerYAnchor)
         ])
+    }
+    
+    //Тест Удалить
+    private func TestUD() {
+        let defaultsManager = UserDefaultsManager()
+        
+        defaultsManager.addSearchQuery("Я")
+        defaultsManager.addSearchQuery("люблю")
+        defaultsManager.addSearchQuery("пиво")
+        defaultsManager.printSearchHistory()
+        defaultsManager.clearSearchHistory()
+        defaultsManager.printSearchHistory()
     }
 }
