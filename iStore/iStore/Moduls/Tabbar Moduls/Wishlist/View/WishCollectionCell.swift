@@ -10,6 +10,7 @@ import UIKit
 protocol WishCollectionCellDelegate: AnyObject {
     func buyButtonPressed()
     func heartButtonPressed(at index: Int)
+//    func heartButtonPressed(productId: String, isFavourite: Bool)
 }
 
 final class WishCollectionCell: UICollectionViewCell {
@@ -101,7 +102,10 @@ final class WishCollectionCell: UICollectionViewCell {
     
     @objc func heartButtonTapped() {
         if let index = index {
-            delegate?.heartButtonPressed(at: index)
+                        delegate?.heartButtonPressed(at: index)
+//            if let index = index, let productId = product?.id {
+//                delegate?.heartButtonPressed(productId: productId, isFavourite: product?.isFavourite ?? false)
+//            }
         }
     }
 }
