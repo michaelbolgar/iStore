@@ -9,7 +9,7 @@ import UIKit
 
 final class ProductsHeaderView: UICollectionReusableView {
 
-    //MARK: -> UI Elements
+    //MARK: UI Elements
 
     private let titleLabel = UILabel.makeLabel(text: "Products",
                                        font: UIFont(name: "Inter-Medium", size: 14),
@@ -40,7 +40,7 @@ final class ProductsHeaderView: UICollectionReusableView {
     }()
     
 
-    //MARK: -> init
+    //MARK: Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setViews()
@@ -52,7 +52,7 @@ final class ProductsHeaderView: UICollectionReusableView {
     }
 
     //MARK: - Methods
-    
+
     func configureHeader(labelName: String) {
         titleLabel.text = labelName
         }

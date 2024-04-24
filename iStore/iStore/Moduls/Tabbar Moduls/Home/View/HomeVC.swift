@@ -45,7 +45,7 @@ final class HomeVC: UIViewController {
     
     //MARK: - Private Methods
     private func setupViews() {
-        collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: "SearchFieldView")
+        collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)
         collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: "CategoryViewCell")
         collectionView.register(ProductViewCell.self, forCellWithReuseIdentifier: "ProductViewCell")
         collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderNavBarMenuView")
@@ -74,7 +74,7 @@ extension HomeVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch sections[indexPath.section] {
         case .searchField(_):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchFieldView", for: indexPath) as?
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchFieldView.identifier, for: indexPath) as?
                     SearchFieldView else { return UICollectionViewCell() }
             return cell
         case .categories(let categories):
@@ -120,12 +120,14 @@ extension HomeVC: UICollectionViewDataSource {
     }
 }
 
-//MARK: - UICollectionViewDelegate
+    //MARK: - UICollectionViewDelegate
+
 extension HomeVC: UICollectionViewDelegate {
     
 }
 
-//MARK: - Extensions
+    //MARK: - Setup View
+
 extension HomeVC {
     private func addViews() {
         view.addSubview(collectionView)
@@ -143,6 +145,8 @@ extension HomeVC {
         ])
     }
 }
+
+    // MARK: - Setup tables
 
 extension HomeVC {
     private func createLayout() -> UICollectionViewCompositionalLayout {

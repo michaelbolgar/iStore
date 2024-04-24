@@ -48,9 +48,10 @@ final class CategoryViewCell: UICollectionViewCell {
 
     //MARK: - Extensions
 
-extension CategoryViewCell{
-    private func setupConstraints() {
-        
+private extension CategoryViewCell{
+    
+    func setupConstraints() {
+
         categoryIcon.translatesAutoresizingMaskIntoConstraints = false
         categoryName.translatesAutoresizingMaskIntoConstraints = false
         
