@@ -186,7 +186,7 @@ class SignUpVC: UIViewController {
               let login = loginTextField.text,
               let email = emailTextField.text,
               let accountType = selectedAccountType else {
-            print("Not all fields are filled")
+            AlertService.shared.showAlert(title: "Error", message: "Not all fields are filled")
             return
         }
         let db = Firestore.firestore()
@@ -196,8 +196,7 @@ class SignUpVC: UIViewController {
             "typeOfAccount": accountType
         ]) { error in
             if let error = error {
-                print("Error saving user data: \(error.localizedDescription)")
-                // Обработка ошибок
+                AlertService.shared.showAlert(title: "Error", message: error.localizedDescription)
             } else {
                 print("User data saved successfully")
                 self.navigationController?.dismiss(animated: true, completion: nil)
@@ -222,8 +221,7 @@ class SignUpVC: UIViewController {
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
-                print("Error creating user: \(error.localizedDescription)")
-                // Обработка ошибок
+                AlertService.shared.showAlert(title: "Error", message: error.localizedDescription)
             } else {
                 self.saveUserData()
             }
