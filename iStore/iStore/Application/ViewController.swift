@@ -19,7 +19,11 @@ class ViewController: UIViewController {
 
     /// создать категорию
 //    private func createCategory() {
-//        NetworkingManager.shared.createCategory(name: <#T##String#>, image: <#T##URL#>) { result in
+//
+//        let link = URL(string: "https://api.lorem.space/image/shoes?w=640&h=480&r=4508")
+//        let secondLink = URL(string: "")
+//
+//        NetworkingManager.shared.createCategory(name: "Test", image: link) { result in
 //            switch result {
 //            case .success(let categories):
 //                print("Current collections: \(categories)")

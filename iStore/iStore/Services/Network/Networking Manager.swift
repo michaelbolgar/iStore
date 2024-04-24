@@ -137,11 +137,12 @@ struct NetworkingManager {
         makeTask(for: url, completion: completion)
     }
 
-    /// create a new category name
-//    func createCategory(name: String, 
-//                        image: URL,
-//                        completion: @escaping(Result<Category, NetworkError>) -> Void) {
-//        guard let url = createURL(for: .setCategoty(name: name, image: image)) else { return }
-//        makeTask(for: url, completion: completion)
-//    }
+    /// create a new category
+    // нужно создавать новую ссылку под image?
+    func createCategory(name: String,
+                        image: URL,
+                        completion: @escaping(Result<Category, NetworkError>) -> Void) {
+        guard let url = createURL(for: .setCategoty(name: name, image: image)) else { return }
+        makeTask(for: url, completion: completion)
+    }
 }
