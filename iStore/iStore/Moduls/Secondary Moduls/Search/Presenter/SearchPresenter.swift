@@ -1,5 +1,9 @@
 import Foundation
 
+struct LastSearchData {
+    let enteredWord: String?
+}
+
 protocol SearchPresenterProtocol: AnyObject {
     func getData()
     var productCount: Int { get }
@@ -7,8 +11,18 @@ protocol SearchPresenterProtocol: AnyObject {
 }
 
 final class SearchPresenter: SearchPresenterProtocol {
-       weak var view: SearchVCProtocol?
+    weak var view: SearchVCProtocol?
     var products: [Product] = []
+    var emptyQuery: [LastSearchData] = []
+    var showSection1 = false
+
+    var queryCount: Int {
+        return emptyQuery.count
+    }
+
+    func getQuery(at index: Int) -> LastSearchData {
+        return emptyQuery[index]
+    }
 
     init(viewController: SearchVC? = nil) {
         self.view = viewController
@@ -28,5 +42,9 @@ final class SearchPresenter: SearchPresenterProtocol {
             Product(picture: "imgProduct", description: "Earphones for monitor", price: 100),
             Product(picture: "imgProduct", description: "Earphones for monitor", price: 100)
 ]
+        emptyQuery = [LastSearchData(enteredWord: "Iphone 12 pro max"),
+                 LastSearchData(enteredWord: "Iphone 12 pro max"),
+                 LastSearchData(enteredWord: "Iphone 12 pro max")
+        ]
     }
 }

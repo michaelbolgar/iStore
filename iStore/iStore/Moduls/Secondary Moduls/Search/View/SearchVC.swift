@@ -11,12 +11,16 @@ final class SearchVC: UIViewController, SearchVCProtocol {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout:
-                                                UICollectionFlowLayout.createTwoColFlowLayout(in: view))
-        collectionView.backgroundColor = .white
+        layout.itemSize = CGSize(width: presenter.showSection1 ? 170 : UIScreen.main.bounds.width,
+                                         height: presenter.showSection1 ? 217 : 25)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let padding: CGFloat = 10
+        layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         return collectionView
     }()
+
     private let searchBar = SearchBarView()
+
     private let searchlabel = UILabel.makeLabel(text: "Search result for Earphones",
                                                 font: UIFont.InterRegular(ofSize: 14),
                                                 textColor: UIColor.customDarkGray,
@@ -29,11 +33,13 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         view.layer.borderColor = UIColor.veryLightGray.cgColor
         return view
     }()
+
     private let filterlabel = UILabel.makeLabel(text: "Filters",
                                                 font: UIFont.InterRegular(ofSize: 12),
                                                 textColor: UIColor.customDarkGray,
                                                 numberOfLines: 1,
                                                 alignment: .left)
+    
     private let imageFilter: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "Filter")
@@ -71,6 +77,9 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         collectionView.dataSource = self
         collectionView.register(SearchCollectionCell.self,
                                 forCellWithReuseIdentifier: SearchCollectionCell.identifier)
+        collectionView.register(EmptySearchCell.self,
+                                forCellWithReuseIdentifier: EmptySearchCell.identifier)
+        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
     }
 
 
@@ -125,15 +134,47 @@ extension SearchVC {
 }
 
 extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return presenter.productCount
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return presenter.showSection1 ? 1 : 2
     }
 
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if presenter.showSection1 {
+            return presenter.productCount
+            } else {
+                return section == 0 ? 0 : presenter.queryCount
+            }
+        }
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if presenter.showSection1  {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionCell.identifier, for: indexPath) as! SearchCollectionCell
-        let product = presenter.getProduct(at: indexPath.item)
-        cell.set(info: product)
-        return cell
+            let product = presenter.getProduct(at: indexPath.item)
+            cell.set(info: product)
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptySearchCell.identifier, for: indexPath) as! EmptySearchCell
+            let product = presenter.getQuery(at: indexPath.row)
+            cell.set(info: product)
+            return cell
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if presenter.showSection1 || section == 0 {
+            return .zero
+        } else {
+            return CGSize(width: collectionView.frame.width, height: 20)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+
+        if kind == UICollectionView.elementKindSectionHeader  {
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderView", for: indexPath) as! HeaderView
+                return headerView
+        }
+        fatalError("Unexpected element kind")
     }
 }
 
@@ -143,9 +184,22 @@ extension SearchVC: SearchBarViewDelegate {
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        print(searchText)
+        guard let searchText = searchBar.text else { return }
+
+        if searchText.isEmpty {
+            presenter.showSection1 = false
+            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.itemSize = CGSize(width: collectionView.frame.width, height: 25)
+            }
+        } else {
+            presenter.showSection1 = true
+            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.itemSize = CGSize(width: 170, height: 217)
+            }
+        }
+        collectionView.reloadData()
     }
+
 }
 
 
@@ -156,6 +210,6 @@ enum UICollectionFlowLayout {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         flowLayout.itemSize = CGSize(width: 170, height: 217)
-return flowLayout
+        return flowLayout
     }
 }
