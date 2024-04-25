@@ -101,7 +101,7 @@ final class ProfileVC: UIViewController {
         setupViews()
         setupConstraints()
         fetchUserProfile()
-        presenter = ProfilePresenter(view: self)
+//        presenter = ProfilePresenter(view: self)
         presenter.fetchProfileData()
     }
     

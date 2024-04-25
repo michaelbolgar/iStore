@@ -31,7 +31,7 @@ protocol AppFactory: AnyObject {
     func makeHomeRouter() -> BaseRouter
     func makeWishlistRouter() -> BaseRouter
     func makeManagerRouter() -> ManagerRouter
-    func makeProfileRouter() -> BaseRouter
+    func makeProfileRouter() -> ProfileRouter
 }
 
 final class Factory: AppFactory {
@@ -60,10 +60,9 @@ final class Factory: AppFactory {
     }
     
     func makeProfileVC() -> UIViewController {
-//        ProfileVC()
         let profileVC = ProfileVC()
-        let presenter = ProfilePresenter(view: profileVC)
-        profileVC.presenter = presenter
+//        let presenter = ProfilePresenter(view: profileVC)
+//        profileVC.presenter = presenter
         return profileVC
     }
     
@@ -73,7 +72,6 @@ final class Factory: AppFactory {
         navController.configureTabBarItem("Home", image: "home")
         let moduleBuilder = HomeBuilder()
         let router = HomeRouter(navigationController: navController, factory: self, builder: moduleBuilder)
-//        router.initialViewController()
         router.start()
         return router
     }
@@ -83,7 +81,6 @@ final class Factory: AppFactory {
         navController.configureTabBarItem("Wishlist", image: "heart")
         let moduleBuilder = WishlistBuilder()
         let router = WishlistRouter(navigationController: navController, factory: self, builder: moduleBuilder)
-//        router.initialViewController()
         router.start()
         return router
     }
@@ -93,17 +90,15 @@ final class Factory: AppFactory {
         navController.configureTabBarItem("Manager", image: "paper")
         let moduleBuilder = ManagerBuilder()
         let router = ManagerRouter(navigationController: navController, factory: self, builder: moduleBuilder)
-//        router.initialViewController()
         router.start()
         return router
     }
     
-    func makeProfileRouter() -> BaseRouter {
+    func makeProfileRouter() -> ProfileRouter {
         let navController = UINavigationController()
         navController.configureTabBarItem("Profile", image: "profile")
         let moduleBuilder = ProfileBuilder()
         let router = ProfileRouter(navigationController: navController, factory: self, builder: moduleBuilder)
-//        router.initialViewController()
         router.start()
         return router
     }

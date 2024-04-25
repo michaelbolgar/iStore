@@ -49,8 +49,8 @@ final class ChangePhotoViewController: UIViewController, UIImagePickerController
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-//        presenter = ChangePhotoPresenter(view: self)
-        presenter = ChangePhotoPresenter()
+        #warning("почему этот презентер не давал обновлять фотку в режиме реального времени?")
+//        presenter = ChangePhotoPresenter()
     }
     
     // MARK: - Private Methods

@@ -4,7 +4,6 @@ import UIKit
 
 protocol ProfileBuilderProtocol {
     func createProfileModule(router: ProfileRouterProtocol) -> UIViewController
-    // добавить функции для навигации по экранам
 }
 
 // MARK: ProfileBuilder
@@ -13,8 +12,8 @@ final class ProfileBuilder: ProfileBuilderProtocol {
 
     func createProfileModule(router: ProfileRouterProtocol) -> UIViewController {
         let view = ProfileVC()
-        let presenter = ProfilePresenter.self
-        view.presenter = presenter as? ProfilePresenterProtocol
+        let presenter = ProfilePresenter(view: view, router: router)
+        view.presenter = presenter
         return view
     }
 }

@@ -10,6 +10,10 @@ import Firebase
 import FirebaseAuth
 import FirebaseStorage
 
+protocol ChangePhotoPresenterProtocol: AnyObject {
+    func uploadImage(_ image: UIImage)
+}
+
 protocol ChangePhotoPresenterDelegate: AnyObject {
     func imageDidUpdate(url: String)
 }
@@ -20,6 +24,9 @@ class ChangePhotoPresenter: ChangePhotoPresenterProtocol {
     weak var delegate: ChangePhotoPresenterDelegate?
 
     func uploadImage(_ image: UIImage) {
+
+        print("check: ChangePhotoPresenter works")
+
         guard let imageData = image.jpegData(compressionQuality: 0.4),
               let userId = Auth.auth().currentUser?.uid else { return }
 
@@ -40,8 +47,8 @@ class ChangePhotoPresenter: ChangePhotoPresenterProtocol {
                     if let error = error {
                         self?.view?.imageUploadFailed(with: error)
                     } else {
-                        self?.view?.imageUploadCompleted()
                         self?.delegate?.imageDidUpdate(url: downloadURL.absoluteString)
+                        self?.view?.imageUploadCompleted()
                     }
                 }
             }
