@@ -5,11 +5,15 @@ protocol DetailsVCProtocol:AnyObject {
 }
 
 final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, UIScrollViewDelegate {
+   
+    // MARK: Properties
+
     var presenter: DetailsPresenter!
 
-    //MARK: -> Properties
+    // MARK: UI Elements
+
     private let priceLabel = UILabel.makeLabel(text: "",
-                                               font: UIFont.InterMedium(ofSize: 16),
+                                               font: UIFont.InterBold(ofSize: 16),
                                                textColor: UIColor.darkGray,
                                                numberOfLines: 1,
                                                alignment: .left)
@@ -36,15 +40,17 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         image.contentMode = .scaleAspectFill
         return image
     }()
-    private let titleLabel = UILabel.makeLabel(text: "", 
-                                               font: UIFont.InterMedium(ofSize: 16),
+
+    private let productNameLabel = UILabel.makeLabel(text: "",
+                                               font: UIFont.InterMedium(ofSize: 18),
                                                textColor: UIColor.darkGray,
                                                numberOfLines: 1,
                                                alignment: .left)
 
-    private let contentTextView: UITextView = {
+    #warning("переделать под лейбл")
+    private let descriptionTextView: UITextView = {
         let textView = UITextView()
-        textView.font = UIFont.InterRegular(ofSize: 12)
+        textView.font = UIFont.InterRegular(ofSize: 14)
         textView.textColor = UIColor.darkGray
         textView.isEditable = false
         textView.isScrollEnabled = false
@@ -59,6 +65,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         return view
     }()
 
+    #warning("украсть с экрана Wishlist кнопку (через экстеншн)")
     private let heartButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Heart"), for: .normal)
@@ -81,6 +88,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
                                                 height: 45)
 
     // MARK: Life cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -101,15 +109,17 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
     }
 
     // MARK: Private Methods
+
     private func setupViews() {
-        [contentImage, titleLabel, contentTextView, priceLabel, descriptionProductlabel, grayCircle ].forEach {contentView.addSubview($0) }
+        [contentImage, productNameLabel, descriptionTextView, priceLabel, descriptionProductlabel, grayCircle ].forEach {contentView.addSubview($0) }
+
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         grayCircle.addSubview(heartButton)
         [addButton, buyButton].forEach{view.addSubview($0)}
     }
     private func configureController() {
-        contentTextView.delegate = self
+        descriptionTextView.delegate = self
         scrollView.contentInsetAdjustmentBehavior = .never
         heartButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
     }
@@ -118,8 +128,8 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
           priceLabel.text = "$ \(product.priceLabel)"
 
         contentImage.image = UIImage(named: product.productImage)
-        titleLabel.text = product.productLabel
-        contentTextView.text = product.descriptionProduct
+        productNameLabel.text = product.productLabel
+        descriptionTextView.text = product.descriptionProduct
     }
     private func addBorder(y: CGFloat) {
          let borderLayer = CALayer()
@@ -128,13 +138,22 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         view.layer.addSublayer(borderLayer)
      }
 
+    // MARK: Selector Methods
+
+    @objc func heartButtonTapped() {
+        heartButton.isSelected = !heartButton.isSelected
+    }
+}
+
+    // MARK: Layout
+
+private extension DetailsVC {
+
     private func setupConstraints() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentImage.translatesAutoresizingMaskIntoConstraints = false
-        contentTextView.translatesAutoresizingMaskIntoConstraints = false
-        grayCircle.translatesAutoresizingMaskIntoConstraints = false
-        heartButton.translatesAutoresizingMaskIntoConstraints = false
+
+        [scrollView, contentView, contentImage, descriptionTextView, grayCircle, heartButton].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -153,22 +172,20 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
             contentImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             contentImage.heightAnchor.constraint(equalToConstant: 286),
 
-            titleLabel.topAnchor.constraint(equalTo: contentImage.bottomAnchor, constant: 9),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            productNameLabel.topAnchor.constraint(equalTo: contentImage.bottomAnchor, constant: 15),
+            productNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            productNameLabel.trailingAnchor.constraint(equalTo: heartButton.leadingAnchor, constant: -60),
 
-            priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
+            priceLabel.topAnchor.constraint(equalTo: productNameLabel.bottomAnchor, constant: 6),
             priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            priceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
 
             descriptionProductlabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 15),
             descriptionProductlabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            descriptionProductlabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            contentTextView.topAnchor.constraint(equalTo: descriptionProductlabel.bottomAnchor, constant: 6),
-            contentTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            contentTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            contentTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100),
+            descriptionTextView.topAnchor.constraint(equalTo: descriptionProductlabel.bottomAnchor, constant: 6),
+            descriptionTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            descriptionTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            descriptionTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100),
 
             grayCircle.heightAnchor.constraint(equalToConstant: 46),
             grayCircle.widthAnchor.constraint(equalToConstant: 46),
@@ -187,10 +204,4 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
             buyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -21),
         ])
     }
-
-    // MARK: Selector Methods
-    @objc func heartButtonTapped() {
-        heartButton.isSelected = !heartButton.isSelected
-    }
-
 }

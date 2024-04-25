@@ -1,9 +1,11 @@
 import UIKit
+import FirebaseAuth
 
 final class RootRouter {
     
     private let window: UIWindow?
     private let factory: AppFactory
+    private let userDefaults = UserDefaultsManager()
     
     init(window: UIWindow?, builder: AppFactory) {
         self.window = window
@@ -11,25 +13,29 @@ final class RootRouter {
     }
     
     func start() {
-        
+
         // insert here code for dark/light mode if needed
-        
+
         window?.rootViewController = showMainTabBar()
         window?.makeKeyAndVisible()
 
-        /// логика показа Onboarding с проверкой, был ли уже пройден онбординг
-        // сделать проверку через UserDefaults
-//        showOnboarding()
+        // resetOnboardingStatus()
 
+        /// показ Onboarding'a с проверкой, был ли уже пройден онбординг
+        if userDefaults.onboardingCompleted {
+            print("Онбординг пройден")
+        } else {
+            print("Онбординг не пройден")
+            showOnboarding()
+        }
 
-        /// логика показа экрана LoginVC с проверкой, авторизован ли пользователь
-//        func isUserLoggedIn() -> Bool {
-//            return false
-//        }
-//        
-//        if !isUserLoggedIn() {
-//            showLoginNavigationController()
-//        }
+        /// проверка, авторизован ли пользователь; если нет - показать LoginVC()
+        if Auth.auth().currentUser != nil {
+            print ("пользователь авторизован")
+        } else {
+            // Пользователь не авторизован
+            showLoginScreen()
+        }
     }
     
     func showMainTabBar() -> UITabBarController {
@@ -42,18 +48,29 @@ final class RootRouter {
     }
     
     func showOnboarding() {
-//        UserDefaults.standard.set(true, forKey: "isLaunchedBefore")
         let onboardingVC = OnboardingVC()
-        onboardingVC.modalPresentationStyle = .fullScreen
-        onboardingVC.isModalInPresentation = true
-        window?.rootViewController?.present(onboardingVC, animated: true, completion: nil)
+        let navigationController = UINavigationController(rootViewController: onboardingVC)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.isModalInPresentation = true
+        window?.rootViewController?.present(navigationController, animated: true) {
+            self.userDefaults.onboardingCompleted = true
+            print("Онбординг завершен, статус сохранен")
+        }
     }
     
-    func showLoginNavigationController() {
+    func showLoginScreen() {
         let loginVC = LoginVC()
         let navigationController = UINavigationController(rootViewController: loginVC)
         navigationController.modalPresentationStyle = .fullScreen
         navigationController.isModalInPresentation = true
-        window?.rootViewController?.present(navigationController, animated: true, completion: nil)
+        window?.rootViewController?.present(navigationController, animated: true) {
+            self.userDefaults.onboardingCompleted = true
+        }
+    }
+    
+    /// метод проверки для сброса прохождения Онбординга (установлен и закомментирован в начале start())
+    func resetOnboardingStatus() {
+        userDefaults.onboardingCompleted = false
+        print("Прохождение онбординга сброшено")
     }
 }

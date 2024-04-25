@@ -18,12 +18,13 @@ final class HomeVC: UIViewController {
   
    var presenter: HomePresenterProtocol!
     
-    //MARK: - Properties
+    //MARK: - UI Elements
     
     private let sections = MockData.shared.pageData
     
     lazy var collectionView: UICollectionView = {
-        let collectViewLayout = UICollectionViewLayout()
+//        let collectViewLayout = UICollectionViewLayout()
+        let collectViewLayout =  UICollectionViewFlowLayout.createTwoColumnFlowLayout(in: view)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectViewLayout)
         collectionView.backgroundColor = .none
         collectionView.showsVerticalScrollIndicator = false
@@ -31,7 +32,8 @@ final class HomeVC: UIViewController {
         return collectionView
     }()
     
-    //MARK: - Init
+    private let searchBar = SearchBarView()
+    //MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,9 +43,9 @@ final class HomeVC: UIViewController {
         setDelegates()
     }
     
-    //MARK: - Private methods
+    //MARK: - Private Methods
     private func setupViews() {
-        collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: "SearchFieldView")
+        collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)
         collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: "CategoryViewCell")
         collectionView.register(ProductViewCell.self, forCellWithReuseIdentifier: "ProductViewCell")
         collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderNavBarMenuView")
@@ -72,7 +74,7 @@ extension HomeVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch sections[indexPath.section] {
         case .searchField(_):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchFieldView", for: indexPath) as?
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchFieldView.identifier, for: indexPath) as?
                     SearchFieldView else { return UICollectionViewCell() }
             return cell
         case .categories(let categories):
@@ -118,12 +120,14 @@ extension HomeVC: UICollectionViewDataSource {
     }
 }
 
-//MARK: - UICollectionViewDelegate
+    //MARK: - UICollectionViewDelegate
+
 extension HomeVC: UICollectionViewDelegate {
     
 }
 
-//MARK: - AddViews
+    //MARK: - Setup View
+
 extension HomeVC {
     private func addViews() {
         view.addSubview(collectionView)
@@ -141,7 +145,9 @@ extension HomeVC {
         ])
     }
 }
-//MARK: - Create Layout
+
+    // MARK: - Setup tables
+
 extension HomeVC {
     private func createLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
@@ -204,8 +210,8 @@ extension HomeVC {
     private func createProductSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5),
                                                             heightDimension: .fractionalHeight(1)))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(349),
-                                                                         heightDimension: .absolute(217)),
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                                         heightDimension: .fractionalHeight(0.35)),
                                                        subitems: [item])
         group.interItemSpacing = .fixed(16)
         let section = NSCollectionLayoutSection(group: group)
