@@ -25,10 +25,8 @@ final class ProductPresenter: ProductPresenterProtocol {
     }
     
     func viewDidLoad() {
-        products = [Product(picture: "imgProduct", description: "Earphones for monitor", price: 100, isFavourite: false),
-                    Product(picture: "imgProduct", description: "Earphones for monitor, but cheaper", price: 99.99, isFavourite: false),
-                    Product(picture: "imgProduct", description: "Earphones for great look on the street", price: 100, isFavourite: true),
-                    Product(picture: "imgProduct", description: "Earphones for monitor with great sound and quality", price: 100, isFavourite: false),
+        products = [Product(id: 123, picture: "imgProduct", description: "Earphones for monitor", price: 100, isFavourite: false),
+                    Product(id: 1234, picture: "imgProduct", description: "Earphones for monitor, but cheaper", price: 99.99, isFavourite: false)
         ]
     }
 }
