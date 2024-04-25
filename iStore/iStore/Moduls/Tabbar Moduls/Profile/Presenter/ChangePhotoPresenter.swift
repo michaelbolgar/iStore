@@ -22,10 +22,13 @@ class ChangePhotoPresenter: ChangePhotoPresenterProtocol {
     weak var view: ChangePhotoViewProtocol?
     private let storage = Storage.storage().reference()
     weak var delegate: ChangePhotoPresenterDelegate?
+    
+//    init(view: ChangePhotoViewProtocol, delegate: ChangePhotoPresenterDelegate) {
+//        self.view = view
+//        self.delegate = delegate
+//    }
 
     func uploadImage(_ image: UIImage) {
-
-        print("check: ChangePhotoPresenter works")
 
         guard let imageData = image.jpegData(compressionQuality: 0.4),
               let userId = Auth.auth().currentUser?.uid else { return }

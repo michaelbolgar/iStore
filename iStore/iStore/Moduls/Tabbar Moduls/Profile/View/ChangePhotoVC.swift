@@ -49,8 +49,8 @@ final class ChangePhotoViewController: UIViewController, UIImagePickerController
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        #warning("почему этот презентер не давал обновлять фотку в режиме реального времени?")
-//        presenter = ChangePhotoPresenter()
+#warning("почему этот презентер не давал обновлять фотку в режиме реального времени?")
+//                presenter = ChangePhotoPresenter()
     }
     
     // MARK: - Private Methods
@@ -122,34 +122,10 @@ final class ChangePhotoViewController: UIViewController, UIImagePickerController
     
     internal func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true) {
-                    self.delegate?.imageUploadCompleted() // Notify the delegate
-                }
-    }
-    
-    
-    // MARK: - Image Handling
-    private func updateProfileImage(_ image: UIImage) {
-        guard let imageData = image.jpegData(compressionQuality: 0.4),
-              let userId = Auth.auth().currentUser?.uid else {
-            return
-        }
-        
-        let storageRef = Storage.storage().reference().child("profile_images/\(userId).jpg")
-        storageRef.putData(imageData, metadata: nil) { metadata, error in
-            guard let _ = metadata else {
-                print("Failed to upload image: \(error?.localizedDescription ?? "no error info")")
-                return
-            }
-            storageRef.downloadURL { url, error in
-                guard let downloadURL = url else {
-                    print("Download URL not found")
-                    return
-                }
-                print("Image uploaded and URL updated in Firestore: \(downloadURL)")
-                // Update Firestore or send URL back to delegate
-            }
+            self.delegate?.imageUploadCompleted() // Notify the delegate
         }
     }
+    
     
     // MARK: - Setup Constraints
     func setupConstraints() {

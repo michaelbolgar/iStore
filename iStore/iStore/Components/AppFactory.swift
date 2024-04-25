@@ -8,26 +8,26 @@ protocol BaseRouter: AnyObject {
 }
 
 extension BaseRouter {
-
+    
     func back() {
         navigationController.popViewController(animated: true)
     }
-
+    
     func popToRoot() {
         navigationController.popToRootViewController(animated: true)
     }
 }
 
 protocol AppFactory: AnyObject {
-
+    
     func makeRootRouter(_ window: UIWindow?) -> RootRouter
     func makeTabBar(_ viewControllers: UIViewController...) -> UITabBarController
-
+    
     func makeHomeVC() -> UIViewController
     func makeWishlistVC() -> UIViewController
     func makeManagerVC() -> UIViewController
     func makeProfileVC() -> UIViewController
-
+    
     func makeHomeRouter() -> BaseRouter
     func makeWishlistRouter() -> BaseRouter
     func makeManagerRouter() -> ManagerRouter
@@ -35,17 +35,17 @@ protocol AppFactory: AnyObject {
 }
 
 final class Factory: AppFactory {
-
+    
     func makeRootRouter(_ window: UIWindow?) -> RootRouter {
         RootRouter(window: window, builder: self)
     }
-
+    
     func makeTabBar(_ viewControllers: UIViewController...) -> UITabBarController {
         let tabBar = MainTabBarController()
         tabBar.viewControllers = viewControllers
         return tabBar
     }
-
+    
     /// making ViewControllers
     func makeHomeVC() -> UIViewController {
         HomeVC()
@@ -60,10 +60,12 @@ final class Factory: AppFactory {
     }
     
     func makeProfileVC() -> UIViewController {
-        let profileVC = ProfileVC()
-//        let presenter = ProfilePresenter(view: profileVC)
-//        profileVC.presenter = presenter
-        return profileVC
+        let navController = UINavigationController()
+        navController.configureTabBarItem("Profile", image: "profile")
+        let builder = ProfileBuilder()
+        let router = ProfileRouter(navigationController: navController, factory: self, builder: builder)
+        router.start()
+        return navController
     }
     
     /// making Routers

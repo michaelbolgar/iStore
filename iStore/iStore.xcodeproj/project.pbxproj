@@ -32,6 +32,8 @@
 		E0364B632BD6AD9300CACBCC /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E0364B622BD6AD9300CACBCC /* FirebaseFirestoreSwift */; };
 		E0364B652BD6D65C00CACBCC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E0364B642BD6D65C00CACBCC /* FirebaseStorage */; };
 		E078DFC02BD9D5B600FE8FF9 /* SearchCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E078DFBF2BD9D5B600FE8FF9 /* SearchCollectionCell.swift */; };
+		E078DFC22BDA9FC100FE8FF9 /* ProfileDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E078DFC12BDA9FC100FE8FF9 /* ProfileDataService.swift */; };
+		E078DFC42BDAA04F00FE8FF9 /* UserProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E078DFC32BDAA04F00FE8FF9 /* UserProfileModel.swift */; };
 		E0D9E8FF2BD9CE9900F47A18 /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D9E8FE2BD9CE9900F47A18 /* AlertService.swift */; };
 		F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763922BCEFF5600EBB86D /* AppDelegate.swift */; };
 		F41763952BCEFF5600EBB86D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41763942BCEFF5600EBB86D /* SceneDelegate.swift */; };
@@ -116,6 +118,8 @@
 		D0DCD97D2BD9BF0100E10BAA /* EmptySearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptySearchCell.swift; sourceTree = "<group>"; };
 		E0364B5B2BD6AD5300CACBCC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E078DFBF2BD9D5B600FE8FF9 /* SearchCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCollectionCell.swift; sourceTree = "<group>"; };
+		E078DFC12BDA9FC100FE8FF9 /* ProfileDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataService.swift; sourceTree = "<group>"; };
+		E078DFC32BDAA04F00FE8FF9 /* UserProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileModel.swift; sourceTree = "<group>"; };
 		E0D9E8FE2BD9CE9900F47A18 /* AlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
 		F417638F2BCEFF5600EBB86D /* iStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41763922BCEFF5600EBB86D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -531,6 +535,8 @@
 			isa = PBXGroup;
 			children = (
 				5144524A2BD0EB170093B9D5 /* ProfileVС.swift */,
+				E078DFC32BDAA04F00FE8FF9 /* UserProfileModel.swift */,
+				E078DFC12BDA9FC100FE8FF9 /* ProfileDataService.swift */,
 				514452502BD10DCB0093B9D5 /* ChangePhotoVC.swift */,
 				514452582BD23CAD0093B9D5 /* ChangeProfileVC.swift */,
 				514452512BD10DCB0093B9D5 /* TermsVC.swift */,
@@ -844,6 +850,7 @@
 				F41763FB2BCF4AD100EBB86D /* CartPresenter.swift in Sources */,
 				F41763AB2BCF2A1100EBB86D /* UILabel Extension.swift in Sources */,
 				514452532BD10DCB0093B9D5 /* TermsVC.swift in Sources */,
+				E078DFC22BDA9FC100FE8FF9 /* ProfileDataService.swift in Sources */,
 				F41763BF2BCF32C400EBB86D /* UIButton Extension.swift in Sources */,
 				37EF426E2BD3AC0100AEB339 /* UISearchBar Extension.swift in Sources */,
 				37EF426C2BD3AAE100AEB339 /* WishListCellModel.swift in Sources */,
@@ -853,6 +860,7 @@
 				F41763B92BCF2FB300EBB86D /* UIView Extension.swift in Sources */,
 				F420B3A12BD711F80088BA23 /* API.swift in Sources */,
 				F41764112BCF4C4F00EBB86D /* LoginPresenter.swift in Sources */,
+				E078DFC42BDAA04F00FE8FF9 /* UserProfileModel.swift in Sources */,
 				F4900BA42BD0495C009BB675 /* MainTabBarController.swift in Sources */,
 				F41763F42BCF4A3200EBB86D /* DetailsVC.swift in Sources */,
 				F41764052BCF4B6C00EBB86D /* WishlistPresenter.swift in Sources */,

@@ -101,11 +101,6 @@ final class ProfileVC: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-
-#warning("сравнить эти функции, удалить лишнюю (в том числе тело)")
-
-//        fetchUserProfile()
-//        presenter = ProfilePresenter(view: self)
         presenter.fetchProfileData()
     }
     
@@ -135,54 +130,17 @@ final class ProfileVC: UIViewController {
     }
     
     private func loadImage(from url: URL) {
-        URLSession.shared.dataTask(with: url) { data, _, error in
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
             guard let data = data, error == nil, let image = UIImage(data: data) else {
-                print("Failed to load image from URL: \(error?.localizedDescription ?? "Unknown error")")
+                DispatchQueue.main.async {
+                    self?.profileImage.image = UIImage(named: "defaultProfilePhoto") // Загрузка стандартного изображения в случае ошибки
+                }
                 return
             }
             DispatchQueue.main.async {
-                print("Image successfully loaded from URL")
-                self.profileImage.image = image
+                self?.profileImage.image = image
             }
         }.resume()
-    }
-    
-    private func fetchUserProfile() {
-        guard let userId = Auth.auth().currentUser?.uid else {
-            print("User not logged in")
-            return
-        }
-        let db = Firestore.firestore()
-        db.collection("users").document(userId).getDocument { (document, error) in
-            if let document = document, document.exists {
-                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                print("Document data: \(dataDescription)")
-                self.updateUI(with: document.data())
-            } else {
-                print("Document does not exist")
-            }
-        }
-    }
-    
-    func updateUI(with userData: [String: Any]?) {
-        DispatchQueue.main.async {
-            self.profileName.text = userData?["login"] as? String ?? "Name not available"
-            self.profileEmail.text = userData?["email"] as? String ?? "Email not available"
-            
-            if let imageUrlString = userData?["profileImageUrl"] as? String {
-                print("Image URL String: \(imageUrlString)")
-                if let imageUrl = URL(string: imageUrlString) {
-                    print("Loading image from URL: \(imageUrl)")
-                    self.loadImage(from: imageUrl)
-                } else {
-                    print("Invalid URL string for image")
-                    self.profileImage.image = UIImage(named: "profilePhoto") // Загрузка изображения по умолчанию, если URL недоступен
-                }
-            } else {
-                print("No image URL found")
-                self.profileImage.image = UIImage(named: "defaultProfilePhoto")
-            }
-        }
     }
     
     // MARK: Selector Methods
@@ -191,23 +149,10 @@ final class ProfileVC: UIViewController {
     }
     
     @objc private func changePhotoProfileButtonTapped() {
-            let changePhotoVC = ChangePhotoViewController()
-
-            // Используйте существующий экземпляр presenter или создайте новый, если он еще не создан.
-            if self.changePhotoPresenter == nil {
-                self.changePhotoPresenter = ChangePhotoPresenter()
-            }
-
-            // Устанавливаем свойства presenter'а
-            self.changePhotoPresenter?.view = changePhotoVC
-            self.changePhotoPresenter?.delegate = self // Установка делегата
-
-            // Устанавливаем presenter для changePhotoVC
-            changePhotoVC.presenter = self.changePhotoPresenter
-
-            // Показываем changePhotoVC
-            changePhotoVC.modalPresentationStyle = .automatic
-            present(changePhotoVC, animated: true, completion: nil)
+        let profileBuilder = ProfileBuilder()
+        let changePhotoVC = profileBuilder.createChangePhotoModule(delegate: self)
+        changePhotoVC.modalPresentationStyle = .automatic
+        present(changePhotoVC, animated: true, completion: nil)
         }
 
     @objc private func typeAccountViewTapped() {
