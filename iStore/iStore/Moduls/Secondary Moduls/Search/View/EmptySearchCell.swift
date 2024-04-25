@@ -7,8 +7,11 @@
 import UIKit
 
 class EmptySearchCell: UICollectionViewCell {
-    //MARK: -> Properties
+
+    // MARK: Properties
     static var identifier: String {"\(Self.self)"}
+
+    // MARK: UI Elements
 
     private let timeCircle: UIImageView = {
         let view = UIImageView()
@@ -39,7 +42,7 @@ class EmptySearchCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    //MARK: -> Functions
+    //MARK: Methods
     func set(info: LastSearchData) {
         searchLabel.text = info.enteredWord
     }

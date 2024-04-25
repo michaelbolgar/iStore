@@ -5,9 +5,11 @@ protocol SearchVCProtocol: AnyObject {
 }
 
 final class SearchVC: UIViewController, SearchVCProtocol {
+
     var presenter: SearchPresenter!
 
     // MARK: UI Elements
+
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -26,6 +28,7 @@ final class SearchVC: UIViewController, SearchVCProtocol {
                                                 textColor: UIColor.customDarkGray,
                                                 numberOfLines: 1,
                                                 alignment: .left)
+    
     private let filterView: UIView = {
         let view = UIView()
         view.layer.borderWidth = 1
