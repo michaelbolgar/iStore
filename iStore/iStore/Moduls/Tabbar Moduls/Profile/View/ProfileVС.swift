@@ -67,6 +67,7 @@ final class ProfileVC: UIViewController {
         return element
     }()
     
+    /// buttons on the underside
     private let typeAccountView = UIView.makeGreyButton(textLabel: "Type of account",
                                                         textColor: .customDarkGray,
                                                         nameMarker: "chevron.forward",
@@ -90,17 +91,20 @@ final class ProfileVC: UIViewController {
             fatalError("init(coder:) has not been implemented")
         }
 
-        override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            presenter?.fetchProfileData()
-        }
+//        override func viewWillAppear(_ animated: Bool) {
+//            super.viewWillAppear(animated)
+//            presenter?.fetchProfileData()
+//        }
 
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        fetchUserProfile()
+
+#warning("сравнить эти функции, удалить лишнюю (в том числе тело)")
+
+//        fetchUserProfile()
 //        presenter = ProfilePresenter(view: self)
         presenter.fetchProfileData()
     }

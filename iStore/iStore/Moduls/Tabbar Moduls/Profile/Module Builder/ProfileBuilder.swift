@@ -4,6 +4,7 @@ import UIKit
 
 protocol ProfileBuilderProtocol {
     func createProfileModule(router: ProfileRouterProtocol) -> UIViewController
+    
 }
 
 // MARK: ProfileBuilder

@@ -6,7 +6,7 @@ import FirebaseAuth
 
 protocol ProfilePresenterProtocol: AnyObject {
     func fetchProfileData()
-    func updateProfileImage(_ image: UIImage)
+//    func updateProfileImage(_ image: UIImage)
     func imageUrlUpdated(_ url: String)
     func signOut()
 }
@@ -50,27 +50,29 @@ class ProfilePresenter: ProfilePresenterProtocol {
         }
     }
     
-    func updateProfileImage(_ image: UIImage) {
-        guard let imageData = image.jpegData(compressionQuality: 0.4),
-              let userId = Auth.auth().currentUser?.uid else { return }
-        
-        let storageRef = storage.child("profile_images/\(userId).jpg")
-        storageRef.putData(imageData, metadata: nil) { [weak self] metadata, error in
-            guard metadata != nil else {
-                print("Failed to upload image: \(error?.localizedDescription ?? "no error info")")
-                return
-            }
-            storageRef.downloadURL { url, error in
-                guard let downloadURL = url else {
-                    AlertService.shared.showAlert(title: "Error", message: "Download URL not found")
-                    return
-                }
-                print("фото обновлено")
-                self?.view?.updateProfileImage(image)
-                self?.imageUrlUpdated(downloadURL.absoluteString)
-            }
-        }
-    }
+    // dead code x_x 
+
+//    func updateProfileImage(_ image: UIImage) {
+//        guard let imageData = image.jpegData(compressionQuality: 0.4),
+//              let userId = Auth.auth().currentUser?.uid else { return }
+//        
+//        let storageRef = storage.child("profile_images/\(userId).jpg")
+//        storageRef.putData(imageData, metadata: nil) { [weak self] metadata, error in
+//            guard metadata != nil else {
+//                print("Failed to upload image: \(error?.localizedDescription ?? "no error info")")
+//                return
+//            }
+//            storageRef.downloadURL { url, error in
+//                guard let downloadURL = url else {
+//                    AlertService.shared.showAlert(title: "Error", message: "Download URL not found")
+//                    return
+//                }
+//                print("фото обновлено")
+//                self?.view?.updateProfileImage(image)
+//                self?.imageUrlUpdated(downloadURL.absoluteString)
+//            }
+//        }
+//    }
     
     func imageUrlUpdated(_ url: String) {
         guard let userId = Auth.auth().currentUser?.uid else { return }
