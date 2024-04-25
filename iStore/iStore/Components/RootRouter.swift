@@ -17,9 +17,30 @@ final class RootRouter {
         
         // insert here code for dark/light mode if needed
         
-        
         window?.rootViewController = showMainTabBar()
         window?.makeKeyAndVisible()
+        
+        /// логика показа Onboarding с проверкой, был ли уже пройден онбординг
+        // сделать проверку через UserDefaults
+        //        showOnboarding()
+        
+        
+        /// логика показа экрана LoginVC с проверкой, авторизован ли пользователь
+        //        func isUserLoggedIn() -> Bool {
+        //            return false
+        //        }
+        //        
+        //        if !isUserLoggedIn() {
+        //            showLoginNavigationController()
+        //        }
+        
+//         if userDefaults.onboardingCompleted {
+//             window?.rootViewController = showMainTabBar()
+//             print("Онбординг пройден")
+//         } else {
+//             showOnboarding()
+//             print("Онбординг не пройден")
+//         }
         // Проверяем, авторизован ли пользователь
         if Auth.auth().currentUser != nil {
             // Пользователь авторизован
@@ -27,7 +48,6 @@ final class RootRouter {
             // Пользователь не авторизован
             showLoginNavigationController()
         }
-        
     }
     
     func showMainTabBar() -> UITabBarController {

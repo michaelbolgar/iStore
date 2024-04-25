@@ -26,4 +26,5 @@ extension UIViewController {
     func hideLeftNavigationItem() {
         navigationItem.setHidesBackButton(true, animated: false)
     }
+
 }

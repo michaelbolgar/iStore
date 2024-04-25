@@ -186,7 +186,7 @@ class SignUpVC: UIViewController {
               let login = loginTextField.text,
               let email = emailTextField.text,
               let accountType = selectedAccountType else {
-            AlertService.shared.showAlert(title: "Error", message: "Not all fields are filled")
+              AlertService.shared.showAlert(title: "Error", message: "Not all fields are filled")
             return
         }
         let db = Firestore.firestore()
