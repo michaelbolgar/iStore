@@ -5,11 +5,11 @@
 //  Created by Kate Kashko on 18.04.2024.
 //
 
-import Foundation
 import UIKit
 
 final class ProductViewCell: UICollectionViewCell {
 
+    static let identifier = String(describing: ProductViewCell.self)
     // MARK: - UI Elements
 
     private let productImageView: UIImageView = {

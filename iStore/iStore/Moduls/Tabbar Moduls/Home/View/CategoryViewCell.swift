@@ -9,6 +9,8 @@ import UIKit
 
 final class CategoryViewCell: UICollectionViewCell {
     
+    static let identifier = String(describing: CategoryViewCell.self)
+    
     // MARK: - Properties
     private lazy var categoryIcon: UIImageView = {
         let element = UIImageView()
