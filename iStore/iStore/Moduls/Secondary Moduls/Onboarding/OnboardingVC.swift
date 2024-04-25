@@ -54,7 +54,7 @@ final class OnboardingVC: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupLayouts()
-        TestUD() // Тест Удалить
+//        TestUD()
     }
     
     override func viewDidLayoutSubviews() {
@@ -157,7 +157,7 @@ extension OnboardingVC {
         ])
     }
     
-    //Тест Удалить
+    /// test сохранения истории поиска
     private func TestUD() {
         let defaultsManager = UserDefaultsManager()
         
