@@ -35,12 +35,12 @@ final class SearchPresenter: SearchPresenterProtocol {
         return products[index]
     }
     func getData() {
-     products = [Product(picture: "imgProduct", description: "Earphones for monitor", price: 100),
-            Product(picture: "imgProduct", description: "Earphones for monitor", price: 100),
-            Product(picture: "imgProduct", description: "Earphones for monitor", price: 100),
-            Product(picture: "imgProduct", description: "Earphones for monitor", price: 100),
-            Product(picture: "imgProduct", description: "Earphones for monitor", price: 100),
-            Product(picture: "imgProduct", description: "Earphones for monitor", price: 100)
+        products = [Product(id: 1, picture: "imgProduct", description: "Earphones for monitor", price: 100),
+                    Product(id: 1, picture: "imgProduct", description: "Earphones for monitor", price: 100),
+                    Product(id: 1, picture: "imgProduct", description: "Earphones for monitor", price: 100),
+                    Product(id: 1, picture: "imgProduct", description: "Earphones for monitor", price: 100),
+                    Product(id: 1, picture: "imgProduct", description: "Earphones for monitor", price: 100),
+                    Product(id: 1, picture: "imgProduct", description: "Earphones for monitor", price: 100)
 ]
         emptyQuery = [LastSearchData(enteredWord: "Iphone 12 pro max"),
                  LastSearchData(enteredWord: "Iphone 12 pro max"),
