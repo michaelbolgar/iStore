@@ -8,9 +8,12 @@ protocol ProfileViewProtocol: AnyObject {
     func navigateToLoginScreen()
     func showSignOutError(_ error: Error)
     func imageUploadCompleted()
+    func imageUploadFailed(_ error: Error)
 }
 
 final class ProfileVC: UIViewController {
+
+    var changePhotoPresenter: ChangePhotoPresenter?
     var presenter: ProfilePresenterProtocol!
     
     // MARK: - UI Elements
@@ -79,6 +82,19 @@ final class ProfileVC: UIViewController {
                                                     nameMarker: "arrow.forward.to.line.square",
                                                     colorMarker: .customDarkGray)
     
+    init() {
+            super.init(nibName: nil, bundle: nil)
+        }
+
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            presenter?.fetchProfileData()
+        }
+
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,11 +187,25 @@ final class ProfileVC: UIViewController {
     }
     
     @objc private func changePhotoProfileButtonTapped() {
-        let changePhotoVC = ChangePhotoViewController()
-        changePhotoVC.modalPresentationStyle = .automatic
-        present(changePhotoVC, animated: true, completion: nil)
-    }
-    
+            let changePhotoVC = ChangePhotoViewController()
+
+            // Используйте существующий экземпляр presenter или создайте новый, если он еще не создан.
+            if self.changePhotoPresenter == nil {
+                self.changePhotoPresenter = ChangePhotoPresenter()
+            }
+
+            // Устанавливаем свойства presenter'а
+            self.changePhotoPresenter?.view = changePhotoVC
+            self.changePhotoPresenter?.delegate = self // Установка делегата
+
+            // Устанавливаем presenter для changePhotoVC
+            changePhotoVC.presenter = self.changePhotoPresenter
+
+            // Показываем changePhotoVC
+            changePhotoVC.modalPresentationStyle = .automatic
+            present(changePhotoVC, animated: true, completion: nil)
+        }
+
     @objc private func typeAccountViewTapped() {
         let changePhotoVC = ChangeProfileViewController()
         changePhotoVC.modalPresentationStyle = .automatic
@@ -192,13 +222,17 @@ final class ProfileVC: UIViewController {
     @objc private func signoutViewTapped() {
         presenter.signOut()
     }
+
+    deinit {
+            print("ProfileVC deinited")
+        }
 }
 
 // MARK: - Setup Constraints
 private extension ProfileVC {
     
     func setupConstraints() {
-        // Определение константы для удобства
+
         let inset: CGFloat = 20
         
         NSLayoutConstraint.activate([
@@ -245,7 +279,11 @@ private extension ProfileVC {
 }
 
 extension ProfileVC: ProfileViewProtocol {
-    
+
+    func imageUploadFailed(_ error: any Error) {
+        print(error.localizedDescription)
+    }
+
     func showSignOutError(_ error: any Error) {
         print(error.localizedDescription)
     }
@@ -273,3 +311,10 @@ extension ProfileVC: ProfileViewProtocol {
     }
 }
 
+extension ProfileVC: ChangePhotoPresenterDelegate {
+    func imageDidUpdate(url: String) {
+        if let imageUrl = URL(string: url) {
+            loadImage(from: imageUrl)
+        }
+    }
+}

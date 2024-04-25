@@ -91,6 +91,7 @@
 		F4900BAC2BD04F83009BB675 /* HomeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BAB2BD04F83009BB675 /* HomeBuilder.swift */; };
 		F4900BB02BD05356009BB675 /* WishlistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BAF2BD05356009BB675 /* WishlistRouter.swift */; };
 		F4900BB22BD05379009BB675 /* WishlistBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4900BB12BD05379009BB675 /* WishlistBuilder.swift */; };
+		F4F0F1B52BDA7BFE00D38CDB /* ChangePhotoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F0F1B42BDA7BFE00D38CDB /* ChangePhotoPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -176,6 +177,7 @@
 		F4900BAB2BD04F83009BB675 /* HomeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBuilder.swift; sourceTree = "<group>"; };
 		F4900BAF2BD05356009BB675 /* WishlistRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistRouter.swift; sourceTree = "<group>"; };
 		F4900BB12BD05379009BB675 /* WishlistBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistBuilder.swift; sourceTree = "<group>"; };
+		F4F0F1B42BDA7BFE00D38CDB /* ChangePhotoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePhotoPresenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -520,6 +522,7 @@
 			isa = PBXGroup;
 			children = (
 				F41763FE2BCF4B2000EBB86D /* ProfilePresenter.swift */,
+				F4F0F1B42BDA7BFE00D38CDB /* ChangePhotoPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -846,6 +849,7 @@
 				37EF426C2BD3AAE100AEB339 /* WishListCellModel.swift in Sources */,
 				F41763EF2BCF49C700EBB86D /* CartVC.swift in Sources */,
 				F41763AD2BCF2D7500EBB86D /* UIFont Extension.swift in Sources */,
+				F4F0F1B52BDA7BFE00D38CDB /* ChangePhotoPresenter.swift in Sources */,
 				F41763B92BCF2FB300EBB86D /* UIView Extension.swift in Sources */,
 				F420B3A12BD711F80088BA23 /* API.swift in Sources */,
 				F41764112BCF4C4F00EBB86D /* LoginPresenter.swift in Sources */,
