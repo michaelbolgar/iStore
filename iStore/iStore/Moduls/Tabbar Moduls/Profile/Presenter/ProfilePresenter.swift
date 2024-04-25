@@ -97,7 +97,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
             }
             storageRef.downloadURL { url, error in
                 guard let downloadURL = url else {
-                    print("Download URL not found")
+                    AlertService.shared.showAlert(title: "Error", message: "Download URL not found")
                     return
                 }
                 self?.view?.updateProfileImage(image)
