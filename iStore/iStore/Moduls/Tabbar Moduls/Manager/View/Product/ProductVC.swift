@@ -7,6 +7,17 @@ protocol ProductVCProtocol: AnyObject {
 final class ProductVC: UIViewController, ProductVCProtocol {
     
     var presenter: ProductPresenter!
+    var presenterManager: ManagerPresenterProtocol!
+    
+//    init(presenterManager: ManagerPresenterProtocol) {
+//        self.presenterManager = presenterManager
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+    
 
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
@@ -26,10 +37,12 @@ final class ProductVC: UIViewController, ProductVCProtocol {
         setPresenter()
         configureCollectionView()
         setupViews()
-        setupConstraints()
+        
         hideLeftNavigationItem()
         setupSearchBar()
+        setupConstraints()
     }
+    
     
     // MARK: - Private Methods
     
@@ -37,17 +50,30 @@ final class ProductVC: UIViewController, ProductVCProtocol {
         view.backgroundColor = .white
         view.hideKeyboard()
     
+        setNavigationBar(title: "Product")
+        navigationController?.isNavigationBarHidden = false
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+    
+        
         view.addSubview(collectionView)
+        view.addSubview(searchBar)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.add,
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                                             style: .plain, target: self,
-                                                            action: #selector(goToCategoryVCButtonPressed))
+                                                            action: #selector(addNewProduct))
+        navigationItem.leftBarButtonItem?.tintColor = .customDarkGray
         navigationController?.navigationBar.tintColor = UIColor.black
     }
     
     private func setPresenter() {
         presenter = ProductPresenter(viewController: self)
+        presenter.viewDidLoad()
+    }
+    
+    private func setManagerPresenter() {
+        presenter = ManagerPresenter(view: <#T##ManagerVCProtocol#>, router: <#T##ManagerRouterProtocol#>) 
         presenter.viewDidLoad()
     }
 
@@ -57,9 +83,9 @@ final class ProductVC: UIViewController, ProductVCProtocol {
         let titleView = UIView(frame: frame)
         searchBar.frame = frame
         titleView.addSubview(searchBar)
-        navigationItem.titleView = titleView
+        view.addSubview(titleView)
         searchBar.delegate = self
-    }
+}
     
     private func configureCollectionView() {
         collectionView.delegate = self
@@ -75,8 +101,13 @@ final class ProductVC: UIViewController, ProductVCProtocol {
     }
     
     // MARK: - Selector Methods
-    @objc func goToCategoryVCButtonPressed() {
-        // go to cart screen
+    @objc func addNewProduct() {
+        guard let presenterManager = presenterManager else {
+                print("Error: Presenter is nil")
+                return
+            }
+            
+        presenterManager.showAddNewCategoryManagerVC()
     }
 }
 
@@ -113,7 +144,11 @@ extension ProductVC {
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)

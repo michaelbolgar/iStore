@@ -9,12 +9,6 @@ final class ManagerVC: UIViewController {
     var presenter: ManagerPresenterProtocol!
     
     // MARK: - UI Elements
-    private let managerTitle = UILabel.makeLabel(text: "Manager Screen",
-                                                 font: .InterBold(ofSize: 24),
-                                                 textColor: .customDarkGray,
-                                                 numberOfLines: nil,
-                                                 alignment: .center)
-    
     private let productView = UIView.makeView(textLabel: "Product",
                                                   textColor: .customDarkGray,
                                                   nameMarker: "chevron.forward",
@@ -37,10 +31,15 @@ final class ManagerVC: UIViewController {
         
         view.backgroundColor = .white
      
-        [managerTitle, productView, categoryView].forEach { view.addSubview($0) }
+        [productView, categoryView].forEach { view.addSubview($0) }
+        
+        setNavigationBar(title: "Manager Screen")
+        navigationController?.isNavigationBarHidden = false
+    
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
         
         //добавляем рекогнайзер на кнопки(вью)
-        managerTitle.isUserInteractionEnabled = true
+       // managerTitle.isUserInteractionEnabled = true
         productView.isUserInteractionEnabled = true
         categoryView.isUserInteractionEnabled = true
         
@@ -49,7 +48,6 @@ final class ManagerVC: UIViewController {
         
         let termsTapGesture = UITapGestureRecognizer(target: self, action: #selector(categoryViewTapped))
         categoryView.addGestureRecognizer(termsTapGesture)
-        
     }
     
     // MARK: Selector Methods
@@ -74,13 +72,10 @@ private extension ManagerVC {
         let inset: CGFloat = 20
         
         NSLayoutConstraint.activate([
-            
-            managerTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            managerTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
+           
             productView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: inset),
             productView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
-            productView.topAnchor.constraint(equalTo: managerTitle.bottomAnchor, constant: 50),
+            productView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
             
             categoryView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: inset),
             categoryView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),

@@ -15,6 +15,7 @@ final class ProductPresenter: ProductPresenterProtocol {
     
     init(viewController: ProductVC? = nil) {
         self.view = viewController
+        
     }
     var productCount: Int {
         return products.count
@@ -34,7 +35,7 @@ final class ProductPresenter: ProductPresenterProtocol {
 //MARK: - WishCollectionCellDelegate
 extension ProductPresenter: ProductCollectionCellDelegate {
     func deleteButtonPressed() {
-        print("Buy pressed")
+        print("delete pressed")
     }
     
     func updateButtonPressed() {

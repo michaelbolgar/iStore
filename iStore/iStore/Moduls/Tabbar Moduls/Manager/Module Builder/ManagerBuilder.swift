@@ -6,6 +6,7 @@ protocol ManagerBuilderProtocol {
     func createManagerModule(router: ManagerRouterProtocol) -> UIViewController
     func createProductManagerVC() -> UIViewController
     func createCategoryManagerVC() -> UIViewController
+    func createAddNewCategoryManagerVC() -> UIViewController
 }
 
 // MARK: ManagerBuilder
@@ -27,5 +28,9 @@ final class ManagerBuilder: ManagerBuilderProtocol {
     
     func createCategoryManagerVC() -> UIViewController {
         CategoryVC()
+    }
+    
+    func createAddNewCategoryManagerVC() -> UIViewController {
+        AddNewCategoryVC()
     }
 }

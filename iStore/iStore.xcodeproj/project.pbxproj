@@ -212,8 +212,8 @@
 		519BD3C82BDA582A00B905C1 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				519BD3C92BDA582A00B905C1 /* AddNewCategoryVC.swift */,
 				519BD3CA2BDA582A00B905C1 /* CategoryVC.swift */,
+				519BD3C92BDA582A00B905C1 /* AddNewCategoryVC.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -510,8 +510,8 @@
 			isa = PBXGroup;
 			children = (
 				519BD3CF2BDA582B00B905C1 /* ManagerVC.swift */,
-				519BD3C82BDA582A00B905C1 /* Category */,
 				519BD3CB2BDA582A00B905C1 /* Product */,
+				519BD3C82BDA582A00B905C1 /* Category */,
 			);
 			path = View;
 			sourceTree = "<group>";

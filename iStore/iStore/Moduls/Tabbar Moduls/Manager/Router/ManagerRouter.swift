@@ -11,6 +11,7 @@ protocol ManagerRouterProtocol: RouterProtocol {
     func start()
     func showProductManagerVC()
     func showCategoryManagerVC()
+    func showAddNewCategoryVC()
 //    func initialViewController()
 }
 
@@ -44,11 +45,17 @@ final class ManagerRouter: ManagerRouterProtocol {
 
     func showProductManagerVC() {
         guard let productVC = moduleBuilder?.createProductManagerVC() else { return }
+        navigationController?.navigationBar.topItem?.title = "Manager"
         navigationController?.pushViewController(productVC, animated: true)
     }
 
     func showCategoryManagerVC() {
         guard let categoryVC = moduleBuilder?.createCategoryManagerVC() else { return }
         navigationController?.pushViewController(categoryVC, animated: true)
+    }
+    
+    func showAddNewCategoryVC() {
+        guard let addNewCategoryVC = moduleBuilder?.createCategoryManagerVC() else { return }
+        navigationController?.pushViewController(addNewCategoryVC, animated: true)
     }
 }
