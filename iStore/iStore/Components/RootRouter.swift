@@ -1,4 +1,5 @@
 import UIKit
+import FirebaseAuth
 
 final class RootRouter {
     
@@ -33,12 +34,19 @@ final class RootRouter {
         //            showLoginNavigationController()
         //        }
         
-        if userDefaults.onboardingCompleted {
-            window?.rootViewController = showMainTabBar()
-            print("Онбординг пройден")
+//         if userDefaults.onboardingCompleted {
+//             window?.rootViewController = showMainTabBar()
+//             print("Онбординг пройден")
+//         } else {
+//             showOnboarding()
+//             print("Онбординг не пройден")
+//         }
+        // Проверяем, авторизован ли пользователь
+        if Auth.auth().currentUser != nil {
+            // Пользователь авторизован
         } else {
-            showOnboarding()
-            print("Онбординг не пройден")
+            // Пользователь не авторизован
+            showLoginNavigationController()
         }
     }
     

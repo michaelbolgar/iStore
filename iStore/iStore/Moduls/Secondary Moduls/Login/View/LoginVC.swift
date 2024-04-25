@@ -128,10 +128,10 @@ class LoginVC: UIViewController {
         guard let login = loginTextField.text, let password = passwordTextField.text else { return }
         Auth.auth().signIn(withEmail: login, password: password) { [weak self] authResult, error in
             if let error = error {
-                print("Login error: \(error.localizedDescription)")
-                // Обработка ошибок, например, показать сообщение пользователю
+                AlertService.shared.showAlert(title: "Error", message: error.localizedDescription)
             } else {
                 print("User logged in successfully")
+                self?.navigationController?.dismiss(animated: true, completion: nil)
             }
         }
     }
