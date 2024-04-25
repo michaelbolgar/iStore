@@ -6,17 +6,17 @@ import FirebaseAuth
 
 protocol ProfilePresenterProtocol: AnyObject {
     func fetchProfileData()
-//    func updateProfileImage(_ image: UIImage)
     func imageUrlUpdated(_ url: String)
     func signOut()
+    func showChangePhotoVC()
 }
 
-class ProfilePresenter: ProfilePresenterProtocol {
+class ProfilePresenter {
 
     // MARK: Properties
 
     weak var view: ProfileViewProtocol?
-    private var router: ProfileRouterProtocol
+    internal var router: ProfileRouterProtocol
 
     private let db = Firestore.firestore()
     private let storage = Storage.storage().reference()
@@ -27,6 +27,13 @@ class ProfilePresenter: ProfilePresenterProtocol {
     init(view: ProfileViewProtocol, router: ProfileRouterProtocol) {
         self.view = view
         self.router = router
+    }
+}
+
+// MARK: Extension ProfilePresenterProtocol
+extension ProfilePresenter: ProfilePresenterProtocol {
+    func showChangePhotoVC() {
+        router.showChangePhotoVC()
     }
     
     func fetchProfileData() {

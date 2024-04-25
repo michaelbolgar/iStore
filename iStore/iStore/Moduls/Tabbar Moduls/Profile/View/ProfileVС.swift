@@ -4,15 +4,13 @@ import Firebase
 
 protocol ProfileViewProtocol: AnyObject {
     func updateProfile(with name: String, email: String, imageUrl: String?)
-    func updateProfileImage(_ image: UIImage)
     func navigateToLoginScreen()
     func showSignOutError(_ error: Error)
     func imageUploadCompleted()
-    func imageUploadFailed(_ error: Error)
 }
 
 final class ProfileVC: UIViewController {
-
+    
     var changePhotoPresenter: ChangePhotoPresenter?
     var presenter: ProfilePresenterProtocol!
     
@@ -83,19 +81,15 @@ final class ProfileVC: UIViewController {
                                                     nameMarker: "arrow.forward.to.line.square",
                                                     colorMarker: .customDarkGray)
     
+    // MARK: init
     init() {
-            super.init(nibName: nil, bundle: nil)
-        }
-
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-
-//        override func viewWillAppear(_ animated: Bool) {
-//            super.viewWillAppear(animated)
-//            presenter?.fetchProfileData()
-//        }
-
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,12 +143,13 @@ final class ProfileVC: UIViewController {
     }
     
     @objc private func changePhotoProfileButtonTapped() {
+//        presenter.showChangePhotoVC()
         let profileBuilder = ProfileBuilder()
         let changePhotoVC = profileBuilder.createChangePhotoModule(delegate: self)
         changePhotoVC.modalPresentationStyle = .automatic
         present(changePhotoVC, animated: true, completion: nil)
-        }
-
+    }
+    
     @objc private func typeAccountViewTapped() {
         let changePhotoVC = ChangeProfileViewController()
         changePhotoVC.modalPresentationStyle = .automatic
@@ -171,17 +166,17 @@ final class ProfileVC: UIViewController {
     @objc private func signoutViewTapped() {
         presenter.signOut()
     }
-
+    
     deinit {
-            print("ProfileVC deinited")
-        }
+        print("ProfileVC deinited")
+    }
 }
 
 // MARK: - Setup Constraints
 private extension ProfileVC {
     
     func setupConstraints() {
-
+        
         let inset: CGFloat = 20
         
         NSLayoutConstraint.activate([
@@ -227,12 +222,13 @@ private extension ProfileVC {
     }
 }
 
+// MARK: - Extension ProfileViewProtocol
 extension ProfileVC: ProfileViewProtocol {
-
+    
     func imageUploadFailed(_ error: any Error) {
         print(error.localizedDescription)
     }
-
+    
     func showSignOutError(_ error: any Error) {
         print(error.localizedDescription)
     }
@@ -260,6 +256,7 @@ extension ProfileVC: ProfileViewProtocol {
     }
 }
 
+// MARK: - Extension ChangePhotoPresenterDelegate
 extension ProfileVC: ChangePhotoPresenterDelegate {
     func imageDidUpdate(url: String) {
         if let imageUrl = URL(string: url) {

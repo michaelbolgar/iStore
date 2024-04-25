@@ -153,6 +153,7 @@ final class ChangePhotoViewController: UIViewController, UIImagePickerController
     }
 }
 
+// MARK: - Extension ChangePhotoViewProtocol
 extension ChangePhotoViewController: ChangePhotoViewProtocol {
     func imageUploadCompleted() {
         dismiss(animated: true, completion: nil)
