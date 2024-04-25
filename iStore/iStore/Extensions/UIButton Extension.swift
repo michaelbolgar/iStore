@@ -67,4 +67,17 @@ extension UIButton {
             }, completion: nil)
         })
     }
+
+    static func makeImageButton(imageForNormal: UIImage, 
+                                imageForSelected: UIImage,
+                                color: UIColor
+    ) -> UIButton {
+
+        let button = UIButton()
+        button.setImage(imageForNormal, for: .normal)
+        button.setImage(imageForSelected, for: .selected)
+        button.tintColor = color
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }
 }
