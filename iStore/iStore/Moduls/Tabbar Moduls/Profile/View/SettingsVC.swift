@@ -137,7 +137,9 @@ class SettingsVC: UIViewController {
     }
     
     @objc private func updateButtonTapped() {
-        let alertController = UIAlertController(title: "Confirm Password", message: "Please enter your password to update your profile", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Confirm Password", 
+                                                message: "Please enter your password to update your profile",
+                                                preferredStyle: .alert)
         
         alertController.addTextField { textField in
             textField.isSecureTextEntry = true
@@ -172,7 +174,8 @@ class SettingsVC: UIViewController {
     
     private func confirmPasswordAndUpdateData(password: String) {
         guard let user = Auth.auth().currentUser, let email = user.email else {
-            showAlertWith(title: "Error", message: "Could not fetch user data.")
+            AlertService.shared.showAlert(title: "Error",
+                                          message: "Could not fetch user data.")
             return
         }
         
@@ -180,12 +183,14 @@ class SettingsVC: UIViewController {
         let credential = EmailAuthProvider.credential(withEmail: email, password: password)
         user.reauthenticate(with: credential) { [weak self] _, error in
             if let error = error {
-                self?.showAlertWith(title: "Reauthentication Failed", message: error.localizedDescription)
+                AlertService.shared.showAlert(title: "Reauthentication Failed",
+                                              message: error.localizedDescription)
             } else {
                 if let newPassword = self?.passwordTextField.text, !newPassword.isEmpty {
                     user.updatePassword(to: newPassword) { error in
                         if let error = error {
-                            self?.showAlertWith(title: "Password Update Failed", message: error.localizedDescription)
+                            AlertService.shared.showAlert(title: "Password Update Failed",
+                                                          message: error.localizedDescription)
                         } else {
                             self?.dismiss(animated: true)
                         }
@@ -202,7 +207,8 @@ class SettingsVC: UIViewController {
         
         user.reauthenticate(with: credential) { [weak self] result, error in
             guard let self = self, error == nil else {
-                self?.showAlertWith(title: "Authentication Failed", message: "Failed to authenticate with provided credentials.")
+                AlertService.shared.showAlert(title: "Authentication Failed", 
+                                              message: "Failed to authenticate with provided credentials.")
                 return
             }
             self.updateUserProfile()
@@ -228,7 +234,8 @@ class SettingsVC: UIViewController {
         // Perform updates
         db.collection("users").document(userID).updateData(updateData) { error in
             if let error = error {
-                self.showAlertWith(title: "Database Update Failed", message: error.localizedDescription)
+                AlertService.shared.showAlert(title: "Database Update Failed",
+                                              message: error.localizedDescription)
             } else {
                 // Authentication updates
                 self.performAuthUpdates(newName: newName, newEmail: newEmail)
@@ -245,25 +252,21 @@ class SettingsVC: UIViewController {
         }
         changeRequest?.commitChanges { error in
             if let error = error {
-                self.showAlertWith(title: "Update Failed", message: "Failed to update name: \(error.localizedDescription)")
+                AlertService.shared.showAlert(title: "Update Failed",
+                                              message: "Failed to update name: \(error.localizedDescription)")
             }
         }
         
         if let newEmail = newEmail, !newEmail.isEmpty {
             Auth.auth().currentUser?.updateEmail(to: newEmail) { error in
                 if let error = error {
-                    self.showAlertWith(title: "Update Failed", message: "Failed to update email: \(error.localizedDescription)")
+                    AlertService.shared.showAlert(title: "Update Failed",
+                                                  message: "Failed to update name: \(error.localizedDescription)")
                 } else {
                     self.delegate?.didUpdateEmail(newEmail)
                 }
             }
         }
-    }
-    
-    private func showAlertWith(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
     
     private func setupLayout() {
