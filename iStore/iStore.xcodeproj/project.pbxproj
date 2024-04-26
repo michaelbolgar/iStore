@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		047E0F6E2BD3BDB20096E150 /* PagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E0F6D2BD3BDB20096E150 /* PagesView.swift */; };
+		047E0F732BD982F80096E150 /* PaymentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E0F722BD982F80096E150 /* PaymentVC.swift */; };
+		047E0F772BDAB8DB0096E150 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E0F762BDAB8DB0096E150 /* CardView.swift */; };
+		047E0F792BDC08C90096E150 /* SuccessPaymentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E0F782BDC08C90096E150 /* SuccessPaymentVC.swift */; };
+		047E0F7B2BDC0FCC0096E150 /* HalfScreenPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E0F7A2BDC0FCC0096E150 /* HalfScreenPresentationController.swift */; };
 		047E0F712BD81D160096E150 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E0F702BD81D160096E150 /* UserDefaultsManager.swift */; };
 		37EF42692BD1B92900AEB339 /* WishCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EF42682BD1B92900AEB339 /* WishCollectionCell.swift */; };
 		37EF426C2BD3AAE100AEB339 /* WishListCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EF426B2BD3AAE100AEB339 /* WishListCellModel.swift */; };
@@ -99,6 +103,10 @@
 
 /* Begin PBXFileReference section */
 		047E0F6D2BD3BDB20096E150 /* PagesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagesView.swift; sourceTree = "<group>"; };
+		047E0F722BD982F80096E150 /* PaymentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentVC.swift; sourceTree = "<group>"; };
+		047E0F762BDAB8DB0096E150 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		047E0F782BDC08C90096E150 /* SuccessPaymentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessPaymentVC.swift; sourceTree = "<group>"; };
+		047E0F7A2BDC0FCC0096E150 /* HalfScreenPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfScreenPresentationController.swift; sourceTree = "<group>"; };
 		047E0F702BD81D160096E150 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		37EF42682BD1B92900AEB339 /* WishCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishCollectionCell.swift; sourceTree = "<group>"; };
 		37EF426B2BD3AAE100AEB339 /* WishListCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListCellModel.swift; sourceTree = "<group>"; };
@@ -584,6 +592,10 @@
 			children = (
 				F43014BE2BDC5D7B00E0AC21 /* Cell */,
 				F41763EE2BCF49C700EBB86D /* CartVC.swift */,
+				047E0F722BD982F80096E150 /* PaymentVC.swift */,
+				047E0F762BDAB8DB0096E150 /* CardView.swift */,
+				047E0F782BDC08C90096E150 /* SuccessPaymentVC.swift */,
+				047E0F7A2BDC0FCC0096E150 /* HalfScreenPresentationController.swift */,
 				F43014BC2BDC5B8500E0AC21 /* CartHeaderView.swift */,
 			);
 			path = View;
@@ -833,6 +845,7 @@
 				F41763E12BCF48D200EBB86D /* HomeVC.swift in Sources */,
 				047E0F6E2BD3BDB20096E150 /* PagesView.swift in Sources */,
 				514452552BD140F90093B9D5 /* TermsModel.swift in Sources */,
+				047E0F7B2BDC0FCC0096E150 /* HalfScreenPresentationController.swift in Sources */,
 				047E0F712BD81D160096E150 /* UserDefaultsManager.swift in Sources */,
 				F426C4092BD54F87003683DE /* ProfileBuilder.swift in Sources */,
 				519BD3D02BDA582B00B905C1 /* AddNewCategoryVC.swift in Sources */,
@@ -869,6 +882,8 @@
 				F41763BF2BCF32C400EBB86D /* UIButton Extension.swift in Sources */,
 				37EF426E2BD3AC0100AEB339 /* UISearchBar Extension.swift in Sources */,
 				37EF426C2BD3AAE100AEB339 /* WishListCellModel.swift in Sources */,
+				047E0F792BDC08C90096E150 /* SuccessPaymentVC.swift in Sources */,
+				047E0F732BD982F80096E150 /* PaymentVC.swift in Sources */,
 				F41763EF2BCF49C700EBB86D /* CartVC.swift in Sources */,
 				F41763AD2BCF2D7500EBB86D /* UIFont Extension.swift in Sources */,
 				F41763B92BCF2FB300EBB86D /* UIView Extension.swift in Sources */,
@@ -895,6 +910,7 @@
 				F41763EB2BCF499900EBB86D /* SearchVC.swift in Sources */,
 				F426C4012BD54D7F003683DE /* ManagerRouter.swift in Sources */,
 				F41763932BCEFF5600EBB86D /* AppDelegate.swift in Sources */,
+				047E0F772BDAB8DB0096E150 /* CardView.swift in Sources */,
 				D0DCD97E2BD9BF0200E10BAA /* EmptySearchCell.swift in Sources */,
 				D0DCD97C2BD9BEF500E10BAA /* HeaderView.swift in Sources */,
 				F41763BD2BCF30A700EBB86D /* UIViewController Extension.swift in Sources */,
