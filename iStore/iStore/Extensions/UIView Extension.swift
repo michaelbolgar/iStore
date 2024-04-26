@@ -17,6 +17,24 @@ extension UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }
+    
+    static func makeLightView(cornerRadius: CGFloat?) -> UIView {
+        let view = UIView()
+        view.backgroundColor = UIColor(red: 0.980, green: 0.980, blue: 0.988, alpha: 1)
+        view.layer.cornerRadius = cornerRadius ?? 0
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }
+    
+    /// Shadow for the collectionViewCell
+    func makeCellShadow() {
+        self.layer.cornerRadius = 6
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowOpacity = 0.2
+        self.layer.shadowRadius = 4
+        self.layer.masksToBounds = false
+    }
 
       /// grey button
     static func makeGreyButton(textLabel: String, 
@@ -60,4 +78,12 @@ extension UIView {
         ])
         return view
     }
+
+    /// for CartVC
+    func addBorder(y: CGFloat) {
+       let borderLayer = CALayer()
+       borderLayer.frame = CGRect(x: 0, y: y, width: bounds.width, height: 1.0)
+       borderLayer.backgroundColor = UIColor.lightGray.cgColor
+       layer.addSublayer(borderLayer)
+   }
 }

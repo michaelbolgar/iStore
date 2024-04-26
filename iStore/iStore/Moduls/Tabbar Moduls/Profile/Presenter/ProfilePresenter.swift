@@ -97,7 +97,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
             }
             storageRef.downloadURL { url, error in
                 guard let downloadURL = url else {
-                    print("Download URL not found")
+                    AlertService.shared.showAlert(title: "Error", message: "Download URL not found")
                     return
                 }
                 self?.view?.updateProfileImage(image)
@@ -123,6 +123,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
             try auth.signOut()
             if Auth.auth().currentUser == nil {
                 print("SignOut")
+                
             }
             view?.navigateToLoginScreen()
         } catch let signOutError {
