@@ -10,37 +10,41 @@ import UIKit
  */
 
 protocol HomeVCProtocol: AnyObject {
-//    func reloadCollectionView(section: Int)
-    func show(category: [Category])
-    func show(product: [SingleProduct])
+    func reloadCollectionView(section: Int)
+    func updateCollectionView(with results: [SingleProduct])
+    func show(category: [Category]) 
 }
 
 final class HomeVC: UIViewController, HomeVCProtocol {
-    
-    var presenter: HomePresenterProtocol?
 
-    // move to presenter
-    private var service = NetworkingManager.shared
-    
-    private var category: [Category] = []
-    private var products: [SingleProduct] = []
-    
-    // move to presenter
+    var presenter: HomePresenterProtocol?
+//    var categories: [Category] = []
+//    private var service = NetworkingManager.shared
+
     private let sections = MockData.shared.pageData
+    
+    func reloadCollectionView(section: Int) {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    func updateCollectionView(with results: [SingleProduct]) {
+        collectionView.reloadData()
+    }
     
     func show(category: [Category]) {
         DispatchQueue.main.async {
-            self.category = category
-            self.collectionView.reloadData()
-            
-        }
-    }
-    func show(product: [SingleProduct]) {
-        DispatchQueue.main.async {
-            self.products = product
+            self.categories = category
             self.collectionView.reloadData()
         }
     }
+//    func show(product: [SingleProduct]) {
+//        DispatchQueue.main.async {
+//            self.products = product
+//            self.collectionView.reloadData()
+//        }
+//    }
     
     //MARK: - UI Elements
     
@@ -61,6 +65,8 @@ final class HomeVC: UIViewController, HomeVCProtocol {
         super.viewDidLoad()
         presenter?.viewDidLoad()
         view.backgroundColor = .white // to setup
+        presenter = HomePresenter(viewController: self)
+        presenter?.getData()
         addViews()
         setupViews()
         setDelegates()
@@ -72,12 +78,13 @@ final class HomeVC: UIViewController, HomeVCProtocol {
         
 
     }
+
     
     //MARK: - Private Methods
     private func setupViews() {
         collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)
         collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: "CategoryViewCell")
-        collectionView.register(ProductViewCell.self, forCellWithReuseIdentifier: "ProductViewCell")
+        collectionView.register(SearchCollectionCell.self, forCellWithReuseIdentifier: SearchCollectionCell.identifier)
         collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderNavBarMenuView")
         collectionView.register(ProductsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ProductsHeaderView")
         collectionView.collectionViewLayout = createLayout()
@@ -111,18 +118,22 @@ extension HomeVC: UICollectionViewDataSource {
         case .categories(let categories):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryViewCell", for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
 
-            if indexPath.item < category.count {
-                let categoryItem = category[indexPath.item]
+            if indexPath.item < presenter.category.count {
+                let categoryItem = presenter.category[indexPath.item]
                 cell.configure(name: categoryItem.name ?? "") //добавить картинку
             }
             return cell
             
         case .products(let products):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductViewCell", for: indexPath) as?
-                    ProductViewCell else { return UICollectionViewCell() }
-            if indexPath.item < category.count {
-                let product = products[indexPath.item]
-                cell.configure()
+//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductViewCell", for: indexPath) as?
+//                    SearchCollectionCell else { return UICollectionViewCell() }
+//            if indexPath.item < category.count {
+//                let product = products[indexPath.item]
+//                cell.configure()
+         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionCell.identifier, for: indexPath) as! SearchCollectionCell
+                let product = presenter.getProduct(at: indexPath.item)
+                cell.set(info: product)
+                return cell
             
         }
     }

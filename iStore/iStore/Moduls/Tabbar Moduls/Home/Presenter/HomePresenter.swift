@@ -1,26 +1,37 @@
 import Foundation
 
-protocol HomePresenterProtocol {
+protocol HomePresenterProtocol: AnyObject {
     func viewDidLoad()
+    func getData()
+    func getProduct(at index: Int) -> SingleProduct
 }
 
 final class HomePresenter: HomePresenterProtocol {
 
     //    weak var view: HomeVCProtocol?
-
     weak var viewController:  HomeVCProtocol?
     private var service = NetworkingManager.shared
+    var products: [SingleProduct] = []
+    var categories: [Category] = []
 
     init(viewController: HomeVCProtocol) {
         self.viewController = viewController
     }
     
-    // MARK: - HomePresenterProtocol
-    
     func viewDidLoad() {
-       // do something
         getCategories()
-        getProduct(for: 1)
+
+    }
+    
+    var productCount: Int {
+        return products.count
+    }
+
+    func getProduct(at index: Int) -> SingleProduct {
+        return products[index]
+    }
+    func getData() {
+
     }
     
     private func getCategories() {
@@ -34,15 +45,21 @@ final class HomePresenter: HomePresenterProtocol {
         }
     }
     
-    private func getProduct(for id: Int) {
-        service.getProduct(for: id) { [weak self]  result in
+    func searchData(searchText: String) {
+        service.doSearch(for: searchText) { [ weak self ] result in
+            guard let self = self else { return }
             switch result {
-            case let .success(resultRequest):
-                self?.viewController?.show(category: resultRequest)
-            case let .failure(error):
-                print(error.localizedDescription)
+            case .success(let searchResults):
+                DispatchQueue.main.async {
+                    self.products = searchResults
+                    self.viewController?.updateCollectionView(with: searchResults)
+                    print(self.products)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    print(error)
+                }
             }
         }
     }
-    
 }
