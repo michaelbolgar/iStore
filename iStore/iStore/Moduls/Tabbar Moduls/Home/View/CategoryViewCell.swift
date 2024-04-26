@@ -10,6 +10,8 @@ import UIKit
 final class CategoryViewCell: UICollectionViewCell {
     
     // MARK: - Properties
+    private let networkManager = NetworkingManager.shared
+    
     private lazy var categoryIcon: UIImageView = {
         let element = UIImageView()
         element.contentMode = .center
@@ -35,9 +37,14 @@ final class CategoryViewCell: UICollectionViewCell {
     }
     
     //MARK: - Methods
-    func configureCell(image: String, category: String) {
-        categoryIcon.image = UIImage(named: image)
-        categoryName.text = category
+//    func configureCell(image: String, category: String) {
+//        categoryIcon.image = UIImage(named: image)
+//        categoryName.text = category
+//    }
+    
+    func configure(name: String) {
+//        categoryIcon.image = UIImage(named: image)
+        categoryName.text = name
     }
     
     private func setViews() {

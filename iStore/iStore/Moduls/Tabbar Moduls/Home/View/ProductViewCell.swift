@@ -9,7 +9,10 @@ import Foundation
 import UIKit
 
 final class ProductViewCell: UICollectionViewCell {
-
+    
+    private let networkManager = NetworkingManager.shared
+    private var imageUrl: URL?
+    
     // MARK: - UI Elements
 
     private let productImageView: UIImageView = {
@@ -66,10 +69,21 @@ final class ProductViewCell: UICollectionViewCell {
     }
 
     // MARK: Methods
-    func configureCell(image: String, title: String, price: String) {
-        productImageView.image = UIImage(named: image)
-        titleLabel.text = title
-        priceLabel.text = price
+    func configure(with model: SingleProduct) {
+        titleLabel.text =  model.title
+        priceLabel.text = model.price
+        
+        guard let urlString = model.images?.url, let url =  URL(string: urlString) else {
+            productImageView.image = nil
+            return
+        }
+        
+//        if let cachedImage = ImageCache.shared.image(forKey: urlString) {
+//            productImageView.image = cachedImage
+//            activityIndicator.stopAnimating()
+//            return
+//        }
+        
     }
 
     private func setupView() {
@@ -83,6 +97,7 @@ final class ProductViewCell: UICollectionViewCell {
     @objc private func addToCart() {
         print("нажата - addToCart")
     }
+
 }
 
     // MARK: Layout

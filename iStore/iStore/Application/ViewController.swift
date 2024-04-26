@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     // MARK: Network methods
 
     /// получить все (пять) категорий
-    private func getCategories() {
+    func getCategories() {
         NetworkingManager.shared.getCategories { result in
             switch result {
             case .success(let categories):

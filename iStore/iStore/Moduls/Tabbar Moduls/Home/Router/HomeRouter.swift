@@ -33,9 +33,8 @@ final class HomeRouter: HomeRouterProtocol {
 //    }
 
     func start() {
-        if let homeVC = moduleBuilder?.createHomeModule(router: self) {
-            navigationController.viewControllers = [homeVC]
-        }
+        guard let viewController = moduleBuilder?.createHomeModule(router: self) else { return }
+        navigationController.viewControllers = [viewController]
     }
 
     func showSearchVC(searchText: String) {
@@ -44,10 +43,17 @@ final class HomeRouter: HomeRouterProtocol {
     }
 
     func showCartVC() {
-        // code
+        guard let cartVC = moduleBuilder?.createCartVC() else { return }
+        navigationController.pushViewController(cartVC, animated: true)
     }
 
     func showDetailsVC() {
-        // code
+        guard let detailsVC = moduleBuilder?.createDetailsVC() else { return }
+        navigationController.pushViewController(detailsVC, animated: true)
     }
+    
+//    func createFilterVC() {
+//        guard let filterVC = moduleBuilder?.createDetailsVC() else { return }
+//        navigationController?.pushViewController(filterVC, animated: true)
+//    }
 }

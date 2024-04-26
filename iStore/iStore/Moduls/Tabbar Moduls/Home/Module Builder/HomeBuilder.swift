@@ -7,6 +7,7 @@ protocol HomeBuilderProtocol {
     func createSearchVC(searchText: String) -> UIViewController
     func createCartVC() -> UIViewController
     func createDetailsVC() -> UIViewController
+//    func createFilterVC() -> UIViewController
 }
 
 // MARK: HomeBuilder
@@ -14,10 +15,12 @@ protocol HomeBuilderProtocol {
 final class HomeBuilder: HomeBuilderProtocol {
 
     func createHomeModule(router: HomeRouterProtocol) -> UIViewController {
-        let view = HomeVC()
-        let presenter = HomePresenter.self
-        view.presenter = presenter as? HomePresenterProtocol
-        return view
+        // get service a network layer
+        let viewController = HomeVC()
+        let presenter = HomePresenter(viewController: viewController)
+        viewController.presenter = presenter
+        
+        return viewController
     }
 
     func createSearchVC(searchText: String) -> UIViewController {
@@ -31,4 +34,8 @@ final class HomeBuilder: HomeBuilderProtocol {
     func createDetailsVC() -> UIViewController {
         DetailsVC()
     }
+    
+//    func createFilterVC() -> UIViewController {
+//        FilterVC()
+//    }
 }

@@ -1,5 +1,4 @@
 import UIKit
-import SwiftUI
 
 #warning("внести правки:")
 /*
@@ -12,18 +11,41 @@ import SwiftUI
 
 protocol HomeVCProtocol: AnyObject {
 //    func reloadCollectionView(section: Int)
+    func show(category: [Category])
+    func show(product: [SingleProduct])
 }
 
-final class HomeVC: UIViewController {
-  
-   var presenter: HomePresenterProtocol!
+final class HomeVC: UIViewController, HomeVCProtocol {
+    
+    var presenter: HomePresenterProtocol?
+
+    // move to presenter
+    private var service = NetworkingManager.shared
+    
+    private var category: [Category] = []
+    private var products: [SingleProduct] = []
+    
+    // move to presenter
+    private let sections = MockData.shared.pageData
+    
+    func show(category: [Category]) {
+        DispatchQueue.main.async {
+            self.category = category
+            self.collectionView.reloadData()
+            
+        }
+    }
+    func show(product: [SingleProduct]) {
+        DispatchQueue.main.async {
+            self.products = product
+            self.collectionView.reloadData()
+        }
+    }
     
     //MARK: - UI Elements
     
-    private let sections = MockData.shared.pageData
-    
     lazy var collectionView: UICollectionView = {
-//        let collectViewLayout = UICollectionViewLayout()
+        //        let collectViewLayout = UICollectionViewLayout()
         let collectViewLayout =  UICollectionViewFlowLayout.createTwoColumnFlowLayout(in: view)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectViewLayout)
         collectionView.backgroundColor = .none
@@ -34,13 +56,21 @@ final class HomeVC: UIViewController {
     
     private let searchBar = SearchBarView()
     //MARK: - Life Cycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        presenter?.viewDidLoad()
+        view.backgroundColor = .white // to setup
         addViews()
         setupViews()
         setDelegates()
+//        fetchFunc.getCategories() // delete
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+
     }
     
     //MARK: - Private Methods
@@ -58,8 +88,8 @@ final class HomeVC: UIViewController {
         collectionView.dataSource = self
     }
     
-    
 }
+    
 //MARK: - UICollectionViewDataSource
 extension HomeVC: UICollectionViewDataSource {
     
@@ -72,23 +102,27 @@ extension HomeVC: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch sections[indexPath.section] {
+        let section = sections[indexPath.section]
+        switch section {
         case .searchField(_):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchFieldView.identifier, for: indexPath) as?
                     SearchFieldView else { return UICollectionViewCell() }
             return cell
         case .categories(let categories):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryViewCell", for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
-            
-            cell.configureCell(image: categories[indexPath.row].image, category: categories[indexPath.row].categories)
+
+            if indexPath.item < category.count {
+                let categoryItem = category[indexPath.item]
+                cell.configure(name: categoryItem.name ?? "") //добавить картинку
+            }
             return cell
             
         case .products(let products):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductViewCell", for: indexPath) as?
                     ProductViewCell else { return UICollectionViewCell() }
-            
-            cell.configureCell(image: products[indexPath.row].image, title: products[indexPath.row].title, price: products[indexPath.row].price)
-            return cell
+            if indexPath.item < category.count {
+                let product = products[indexPath.item]
+                cell.configure()
             
         }
     }
