@@ -38,7 +38,8 @@ final class RootRouter {
             showLoginScreen()
         }
     }
-    
+
+
     func showMainTabBar() -> UITabBarController {
         return factory.makeTabBar(
             factory.makeHomeRouter().navigationController,
@@ -64,9 +65,7 @@ final class RootRouter {
         let navigationController = UINavigationController(rootViewController: loginVC)
         navigationController.modalPresentationStyle = .fullScreen
         navigationController.isModalInPresentation = true
-        window?.rootViewController?.present(navigationController, animated: true) {
-            self.userDefaults.onboardingCompleted = true
-        }
+        window?.rootViewController?.present(navigationController, animated: true)
     }
     
     /// метод проверки для сброса прохождения Онбординга (установлен и закомментирован в начале start())

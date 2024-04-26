@@ -11,11 +11,11 @@ extension UIViewController {
 
         navigationItem.hidesBackButton = true
         navigationItem.title = title
-        backButton.tintColor = .white
+        backButton.tintColor = .black
         navigationItem.leftBarButtonItem = backButton
 
         navigationController?.navigationBar.titleTextAttributes =
-        [NSAttributedString.Key.foregroundColor: UIColor.white,
+        [NSAttributedString.Key.foregroundColor: UIColor.black,
          NSAttributedString.Key.font: UIFont.InterBold(ofSize: 16) ?? UIFont.systemFont(ofSize: 16, weight: .regular)]
     }
 
