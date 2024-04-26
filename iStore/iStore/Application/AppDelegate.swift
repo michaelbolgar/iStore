@@ -18,7 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FirebaseApp.configure()
         
-        let db = Firestore.firestore()
+        let queue = DispatchQueue.global(qos: .background)
+        
+        queue.async {
+            let db = Firestore.firestore()
+        }
         
         return true
     }

@@ -139,7 +139,9 @@ final class ProfileVC: UIViewController {
     
     // MARK: Selector Methods
     @objc private func settingsProfileButtonTapped() {
-        print("settingsProfile button tapped")
+        let vc = SettingsVC()
+        vc.delegate = self
+        present(vc, animated: true)
     }
     
     @objc private func changePhotoProfileButtonTapped() {
@@ -262,5 +264,15 @@ extension ProfileVC: ChangePhotoPresenterDelegate {
         if let imageUrl = URL(string: url) {
             loadImage(from: imageUrl)
         }
+    }
+}
+
+extension ProfileVC: SettingsVCDelegate {
+    func didUpdateName(_ name: String) {
+        profileName.text = name
+    }
+    
+    func didUpdateEmail(_ email: String) {
+        profileEmail.text = email
     }
 }

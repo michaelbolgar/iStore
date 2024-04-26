@@ -31,6 +31,7 @@
 		E0364B612BD6AD9300CACBCC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = E0364B602BD6AD9300CACBCC /* FirebaseFirestore */; };
 		E0364B632BD6AD9300CACBCC /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E0364B622BD6AD9300CACBCC /* FirebaseFirestoreSwift */; };
 		E0364B652BD6D65C00CACBCC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E0364B642BD6D65C00CACBCC /* FirebaseStorage */; };
+		E05283EF2BDC2ECA00ACB140 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05283EE2BDC2ECA00ACB140 /* SettingsVC.swift */; };
 		E078DFC02BD9D5B600FE8FF9 /* SearchCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E078DFBF2BD9D5B600FE8FF9 /* SearchCollectionCell.swift */; };
 		E078DFC22BDA9FC100FE8FF9 /* ProfileDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E078DFC12BDA9FC100FE8FF9 /* ProfileDataService.swift */; };
 		E078DFC42BDAA04F00FE8FF9 /* UserProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E078DFC32BDAA04F00FE8FF9 /* UserProfileModel.swift */; };
@@ -117,6 +118,7 @@
 		D0DCD97B2BD9BEF500E10BAA /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		D0DCD97D2BD9BF0100E10BAA /* EmptySearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptySearchCell.swift; sourceTree = "<group>"; };
 		E0364B5B2BD6AD5300CACBCC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E05283EE2BDC2ECA00ACB140 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		E078DFBF2BD9D5B600FE8FF9 /* SearchCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCollectionCell.swift; sourceTree = "<group>"; };
 		E078DFC12BDA9FC100FE8FF9 /* ProfileDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataService.swift; sourceTree = "<group>"; };
 		E078DFC32BDAA04F00FE8FF9 /* UserProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileModel.swift; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 			isa = PBXGroup;
 			children = (
 				5144524A2BD0EB170093B9D5 /* ProfileVС.swift */,
+				E05283EE2BDC2ECA00ACB140 /* SettingsVC.swift */,
 				E078DFC32BDAA04F00FE8FF9 /* UserProfileModel.swift */,
 				E078DFC12BDA9FC100FE8FF9 /* ProfileDataService.swift */,
 				514452502BD10DCB0093B9D5 /* ChangePhotoVC.swift */,
@@ -869,6 +872,7 @@
 				F426C40D2BD5CF78003683DE /* Mock.swift in Sources */,
 				37EF42702BD3BC8700AEB339 /* UICollectionView Extension.swift in Sources */,
 				F41763E32BCF492500EBB86D /* WishlistVC.swift in Sources */,
+				E05283EF2BDC2ECA00ACB140 /* SettingsVC.swift in Sources */,
 				519BD3D32BDA582B00B905C1 /* ProductCollectionCell.swift in Sources */,
 				F41763FD2BCF4AFE00EBB86D /* SearchPresenter.swift in Sources */,
 				F41763A92BCF018700EBB86D /* UIColor Extension.swift in Sources */,
