@@ -3,7 +3,7 @@
 import Foundation
 
 protocol ProductPresenterProtocol: AnyObject {
-    func viewDidLoad()
+  //  func viewDidLoad()
     var productCount: Int { get }
     func getProduct(at index: Int) -> Product
 }
@@ -15,7 +15,6 @@ final class ProductPresenter: ProductPresenterProtocol {
     
     init(viewController: ProductVC? = nil) {
         self.view = viewController
-        
     }
     var productCount: Int {
         return products.count
@@ -25,17 +24,30 @@ final class ProductPresenter: ProductPresenterProtocol {
         return products[index]
     }
     
-    func viewDidLoad() {
-        products = [Product(id: 123, picture: "imgProduct", description: "Earphones for monitor", price: 100, isFavourite: false),
-                    Product(id: 1234, picture: "imgProduct", description: "Earphones for monitor, but cheaper", price: 99.99, isFavourite: false)
-        ]
-    }
+//    func fetchProductsByCategory(categoryId: String) {
+//        NetworkingManager.shared.doSearchByTitle(title: categoryId) { [weak self] result in
+//            switch result {
+//            case .success(let products):
+//                // Преобразуйте данные о продуктах в экземпляры Product и сохраните их в вашем презентере
+//                self?.products = products.map { product in
+//                    return Product(id: product.id, picture: product.images.first as! String, description: product.description, price: Double(product.price!), isFavourite: false)
+//                }
+//                // Обновите представление, чтобы отобразить новые продукты
+//                self?.view?.reloadCollectionView()
+//            case .failure(let error):
+//                // Обработайте ошибку
+//                print("Failed to fetch products: \(error)")
+//            }
+//        }
+//    }
+
+
 }
 
 //MARK: - WishCollectionCellDelegate
 extension ProductPresenter: ProductCollectionCellDelegate {
     func deleteButtonPressed() {
-        print("delete pressed")
+        print("Buy pressed")
     }
     
     func updateButtonPressed() {

@@ -8,17 +8,8 @@ final class ProductVC: UIViewController, ProductVCProtocol {
     
     var presenter: ProductPresenter!
     var presenterManager: ManagerPresenterProtocol!
-    
-//    init(presenterManager: ManagerPresenterProtocol) {
-//        self.presenterManager = presenterManager
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
-
+    let shared = NetworkingManager.shared
+   
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout.createTwoColumnFlowLayout(in: view)
@@ -43,22 +34,19 @@ final class ProductVC: UIViewController, ProductVCProtocol {
         setupConstraints()
     }
     
-    
     // MARK: - Private Methods
     
     private func setupViews() {
         view.backgroundColor = .white
         view.hideKeyboard()
-    
+        
         setNavigationBar(title: "Product")
         navigationController?.isNavigationBarHidden = false
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-    
         
         view.addSubview(collectionView)
         view.addSubview(searchBar)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
+    
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                                             style: .plain, target: self,
@@ -69,23 +57,15 @@ final class ProductVC: UIViewController, ProductVCProtocol {
     
     private func setPresenter() {
         presenter = ProductPresenter(viewController: self)
-        presenter.viewDidLoad()
+        //presenter.viewDidLoad()
     }
-    
-    private func setManagerPresenter() {
-        presenter = ManagerPresenter(view: <#T##ManagerVCProtocol#>, router: <#T##ManagerRouterProtocol#>) 
-        presenter.viewDidLoad()
-    }
-
     
     private func setupSearchBar() {
-        let frame = CGRect(x: 0, y: 0, width: 300, height: 40)
-        let titleView = UIView(frame: frame)
-        searchBar.frame = frame
-        titleView.addSubview(searchBar)
-        view.addSubview(titleView)
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.backgroundColor = .white
         searchBar.delegate = self
-}
+
+    }
     
     private func configureCollectionView() {
         collectionView.delegate = self
@@ -103,10 +83,9 @@ final class ProductVC: UIViewController, ProductVCProtocol {
     // MARK: - Selector Methods
     @objc func addNewProduct() {
         guard let presenterManager = presenterManager else {
-                print("Error: Presenter is nil")
-                return
-            }
-            
+            print("Error: Presenter is nil")
+            return
+        }
         presenterManager.showAddNewCategoryManagerVC()
     }
 }
@@ -116,7 +95,7 @@ extension ProductVC: UICollectionViewDelegate, UICollectionViewDataSource, UICol
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return presenter.productCount
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionCell.identifier, for: indexPath) as! ProductCollectionCell
         let product = presenter.getProduct(at: indexPath.item)
@@ -129,9 +108,10 @@ extension ProductVC: UICollectionViewDelegate, UICollectionViewDataSource, UICol
 //MARK: - SearchBarViewDelegate
 extension ProductVC: SearchBarViewDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-      print(searchText)
-    }
-
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        presenter.fetchProductsByCategory(categoryId: searchText)
+        }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
         print(searchText)
