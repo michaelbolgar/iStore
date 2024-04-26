@@ -1,4 +1,5 @@
 import UIKit
+import FirebaseAuth
 
 final class RootRouter {
     
@@ -12,33 +13,28 @@ final class RootRouter {
     }
     
     func start() {
-         resetOnboardingStatus()
-        
+
         // insert here code for dark/light mode if needed
-        
+
         window?.rootViewController = showMainTabBar()
         window?.makeKeyAndVisible()
-        
-        /// логика показа Onboarding с проверкой, был ли уже пройден онбординг
-        // сделать проверку через UserDefaults
-        //        showOnboarding()
-        
-        
-        /// логика показа экрана LoginVC с проверкой, авторизован ли пользователь
-        //        func isUserLoggedIn() -> Bool {
-        //            return false
-        //        }
-        //        
-        //        if !isUserLoggedIn() {
-        //            showLoginNavigationController()
-        //        }
-        
+
+        // resetOnboardingStatus()
+
+        /// показ Onboarding'a с проверкой, был ли уже пройден онбординг
         if userDefaults.onboardingCompleted {
-            window?.rootViewController = showMainTabBar()
             print("Онбординг пройден")
         } else {
-            showOnboarding()
             print("Онбординг не пройден")
+            showOnboarding()
+        }
+
+        /// проверка, авторизован ли пользователь; если нет - показать LoginVC()
+        if Auth.auth().currentUser != nil {
+            print ("пользователь авторизован")
+        } else {
+            // Пользователь не авторизован
+            showLoginScreen()
         }
     }
     
@@ -46,23 +42,23 @@ final class RootRouter {
         return factory.makeTabBar(
             factory.makeHomeRouter().navigationController,
             factory.makeWishlistRouter().navigationController,
-            factory.makeManagerRouter().navigationController,
+            factory.makeManagerRouter().navigationController ?? UIViewController(),
             factory.makeProfileRouter().navigationController
         )
     }
     
     func showOnboarding() {
-        //        UserDefaults.standard.set(true, forKey: "isLaunchedBefore")
         let onboardingVC = OnboardingVC()
-        onboardingVC.modalPresentationStyle = .fullScreen
-        onboardingVC.isModalInPresentation = true
-        window?.rootViewController?.present(onboardingVC, animated: true) {
+        let navigationController = UINavigationController(rootViewController: onboardingVC)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.isModalInPresentation = true
+        window?.rootViewController?.present(navigationController, animated: true) {
             self.userDefaults.onboardingCompleted = true
             print("Онбординг завершен, статус сохранен")
         }
     }
     
-    func showLoginNavigationController() {
+    func showLoginScreen() {
         let loginVC = LoginVC()
         let navigationController = UINavigationController(rootViewController: loginVC)
         navigationController.modalPresentationStyle = .fullScreen
@@ -72,7 +68,7 @@ final class RootRouter {
         }
     }
     
-    //Метод проверки для сброса прохождения Онбординга (установлен и закомментирован в начале start())
+    /// метод проверки для сброса прохождения Онбординга (установлен и закомментирован в начале start())
     func resetOnboardingStatus() {
         userDefaults.onboardingCompleted = false
         print("Прохождение онбординга сброшено")
