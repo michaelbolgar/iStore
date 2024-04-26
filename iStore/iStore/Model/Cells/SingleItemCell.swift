@@ -5,7 +5,7 @@
 
 import UIKit
 
-class SearchCollectionCell: UICollectionViewCell {
+class SingleItemCell: UICollectionViewCell {
 
     // MARK: Properties
 
