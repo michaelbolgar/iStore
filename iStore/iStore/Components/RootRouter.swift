@@ -42,7 +42,7 @@ final class RootRouter {
         return factory.makeTabBar(
             factory.makeHomeRouter().navigationController,
             factory.makeWishlistRouter().navigationController,
-            factory.makeManagerRouter().navigationController,
+            factory.makeManagerRouter().navigationController ?? UIViewController(),
             factory.makeProfileRouter().navigationController
         )
     }

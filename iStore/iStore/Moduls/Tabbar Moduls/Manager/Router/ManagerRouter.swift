@@ -2,18 +2,23 @@ import UIKit
 
 // MARK: - ManagerRouterProtocol
 
-protocol ManagerRouterProtocol: BaseRouter {
+protocol RouterProtocol {
+    var navigationController: UINavigationController? { get set }
+    var moduleBuilder: ManagerBuilderProtocol? { get set }
+}
+
+protocol ManagerRouterProtocol: RouterProtocol {
     func start()
     func showProductManagerVC()
     func showCategoryManagerVC()
-    func initialViewController()
+//    func initialViewController()
 }
 
 // MARK: ManagerRouter
 
 final class ManagerRouter: ManagerRouterProtocol {
 
-    let navigationController: UINavigationController
+    var navigationController: UINavigationController?
     var moduleBuilder: (any ManagerBuilderProtocol)?
     private let factory: AppFactory
 
@@ -25,21 +30,25 @@ final class ManagerRouter: ManagerRouterProtocol {
         self.factory = factory
     }
 
-    func initialViewController() {
+//    func initialViewController() {
+//        if let managerVC = moduleBuilder?.createManagerModule(router: self) {
+//            navigationController?.viewControllers = [managerVC]
+//        }
+//    }
+
+    func start() {
         if let managerVC = moduleBuilder?.createManagerModule(router: self) {
-            navigationController.viewControllers = [managerVC]
+            navigationController?.viewControllers = [managerVC]
         }
     }
 
-    func start() {
-        navigationController.viewControllers = [factory.makeManagerVC()]
-    }
-
     func showProductManagerVC() {
-        // code
+        guard let productVC = moduleBuilder?.createProductManagerVC() else { return }
+        navigationController?.pushViewController(productVC, animated: true)
     }
 
     func showCategoryManagerVC() {
-        // code
+        guard let categoryVC = moduleBuilder?.createCategoryManagerVC() else { return }
+        navigationController?.pushViewController(categoryVC, animated: true)
     }
 }
