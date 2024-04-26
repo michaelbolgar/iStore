@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseAuth
+import Firebase
 
 final class RootRouter {
     
@@ -29,11 +30,11 @@ final class RootRouter {
             showOnboarding()
         }
 
-        /// проверка, авторизован ли пользователь; если нет - показать LoginVC()
+        /// проверяем, авторизован ли пользователь
         if Auth.auth().currentUser != nil {
-            print ("пользователь авторизован")
+            print("пользователь авторизован")
         } else {
-            // Пользователь не авторизован
+            print("Пользователь не авторизован")
             showLoginScreen()
         }
     }
