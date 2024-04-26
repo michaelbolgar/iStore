@@ -19,7 +19,6 @@ enum TextFieldColor {
 extension UITextField {
     
     static func makeTextField(placeholder: String,
-                              keyboardType: UIKeyboardType? = nil,
                               backgroundColor: TextFieldColor,
                               textColor: UIColor,
                               font: UIFont?,
@@ -35,8 +34,6 @@ extension UITextField {
         textField.font = font
         textField.textColor = textColor
         textField.tintColor = .black
-        textField.borderStyle = .roundedRect
-        textField.keyboardType = keyboardType ?? .default
         textField.autocapitalizationType = .none
         textField.translatesAutoresizingMaskIntoConstraints = false
 
