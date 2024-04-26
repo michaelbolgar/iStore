@@ -123,10 +123,18 @@ final class OnboardingVC: UIViewController {
         }
     }
     
+    private func updateContentAndAnimationsForPage(_ pageIndex: Int) {
+        if pageIndex != lastAnimatedPageIndex {
+            slides[pageIndex].animateContentEntrance()
+            lastAnimatedPageIndex = pageIndex
+        }
+    }
+    
     @objc private func pageControlTapped(sender: UIPageControl) {
         let pageWidth = scrollView.frame.width
         let offsetX = CGFloat(sender.currentPage) * pageWidth
         scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
+        updateActivePageIndicator()
     }
 }
 
@@ -138,16 +146,18 @@ extension OnboardingVC: UIScrollViewDelegate {
         let newPageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
         if scrollView.frame.width > 0 && pageControl.currentPage != newPageIndex {
             pageControl.currentPage = newPageIndex
-            updateActivePageIndicator()
+           updateActivePageIndicator()
         }
     }
     
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
+        updateContentAndAnimationsForPage(pageIndex)
+    }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageIndex = Int((scrollView.contentOffset.x + scrollView.frame.size.width / 2) / scrollView.frame.width)
-        if pageIndex < slides.count && lastAnimatedPageIndex != pageIndex {
-            slides[pageIndex].animateContentEntrance()
-            lastAnimatedPageIndex = pageIndex
-        }
+        let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
+        updateContentAndAnimationsForPage(pageIndex)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -190,5 +200,4 @@ private func TestUD() {
     defaultsManager.printSearchHistory()
     defaultsManager.clearSearchHistory()
     defaultsManager.printSearchHistory()
-}
 }
