@@ -2,8 +2,6 @@
 //  SearchCell.swift
 //  iStore
 //
-//  Created by Maryna Bolotska on 17/04/24.
-//
 
 import UIKit
 
@@ -11,20 +9,22 @@ class SearchCollectionCell: UICollectionViewCell {
 
     // MARK: Properties
 
-    static let identifier = "SearchCollectionViewCell"
+    static var identifier: String {"\(Self.self)"}
 
     // MARK: UI Elements
 
     private let productImage: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = 5
+        image.layer.masksToBounds = true
+        image.contentMode = .scaleAspectFill
         return image
     }()
 
     private let productLabel = UILabel.makeLabel(text: nil,
                                                  font: UIFont.InterRegular(ofSize: 12),
                                                  textColor: UIColor.darkGray,
-                                                 numberOfLines: 1,
+                                                 numberOfLines: 2,
                                                  alignment: .left)
 
     private let priceLabel = UILabel.makeLabel(text: nil,
@@ -54,26 +54,23 @@ class SearchCollectionCell: UICollectionViewCell {
         super.init(frame: frame)
         configure()
         setupConstraints()
-        setupShadow()
+        backView.makeCellShadow()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     //MARK: Methods
+    func set(info: SingleProduct) {
+    if let pictureName = info.images.first {
+      if let unwrappedPictureName = pictureName {
+       setImage(pictureName: unwrappedPictureName)
+            }
+        }
+        productLabel.text = info.title
+      priceLabel.text = "$\(info.price ?? 0)"
 
-     func set(info: Product) {
-        let pictureName = info.picture ?? "Buy"
-        productImage.image = UIImage(named: pictureName)
-        productLabel.text = info.description
-        priceLabel.text = "$\(info.price ?? 0)"
-    }
-
-    private func setupShadow() {
-        backView.layer.shadowColor = UIColor.gray.cgColor
-        backView.layer.shadowOpacity = 0.5
-        backView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        backView.layer.shadowRadius = 1
     }
 
     private func configure() {
@@ -84,7 +81,7 @@ class SearchCollectionCell: UICollectionViewCell {
     private func setupConstraints() {
         productImage.translatesAutoresizingMaskIntoConstraints = false
         backView.translatesAutoresizingMaskIntoConstraints = false
-
+        productLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         NSLayoutConstraint.activate([
             backView.heightAnchor.constraint(equalToConstant: 217),
             backView.widthAnchor.constraint(equalToConstant: 170),
@@ -105,9 +102,34 @@ class SearchCollectionCell: UICollectionViewCell {
             priceLabel.topAnchor.constraint(equalTo: productLabel.bottomAnchor, constant: 4),
             priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
 
-            buyButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 11),
+            buyButton.topAnchor.constraint(greaterThanOrEqualTo: priceLabel.bottomAnchor, constant: 3),
+            buyButton.topAnchor.constraint(lessThanOrEqualTo: priceLabel.bottomAnchor, constant: 11),
             buyButton.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
-            buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13)
+            buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),
+
         ])
     }
-}
+
+    func setImage(pictureName: String) {
+        guard let imageURL = URL(string: pictureName) else { return }
+
+            URLSession.shared.dataTask(with: imageURL) { [weak self] data, _, error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("Error downloading image:", error)
+                    return
+                }
+                if let data = data, let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.productImage.image = image
+                    }
+                } else {
+                    print("Invalid image data")
+                }
+            }.resume()
+        }
+
+    }
+
+
+
