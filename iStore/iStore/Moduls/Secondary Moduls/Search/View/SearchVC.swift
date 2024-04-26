@@ -84,8 +84,8 @@ final class SearchVC: UIViewController, SearchVCProtocol {
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(SearchCollectionCell.self,
-                                forCellWithReuseIdentifier: SearchCollectionCell.identifier)
+        collectionView.register(SingleItemCell.self,
+                                forCellWithReuseIdentifier: SingleItemCell.identifier)
         collectionView.register(EmptySearchCell.self,
                                 forCellWithReuseIdentifier: EmptySearchCell.identifier)
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
@@ -157,7 +157,7 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if presenter.showSection1  {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionCell.identifier, for: indexPath) as! SearchCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleItemCell.identifier, for: indexPath) as! SingleItemCell
             let product = presenter.getProduct(at: indexPath.item)
             cell.set(info: product)
             return cell
