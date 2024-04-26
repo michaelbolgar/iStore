@@ -2,8 +2,6 @@
 //  SearchCell.swift
 //  iStore
 //
-//  Created by Maryna Bolotska on 17/04/24.
-//
 
 import UIKit
 
@@ -54,26 +52,19 @@ class SearchCollectionCell: UICollectionViewCell {
         super.init(frame: frame)
         configure()
         setupConstraints()
-        setupShadow()
+        backView.makeCellShadow()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     //MARK: Methods
+    func set(info: SingleProduct) {
+      guard let pictureName = info.category.image else { return }
+      setImage(pictureName: pictureName)
+      productLabel.text = info.description
+      priceLabel.text = "$\(info.price ?? 0)"
 
-     func set(info: Product) {
-        let pictureName = info.picture ?? "Buy"
-        productImage.image = UIImage(named: pictureName)
-        productLabel.text = info.description
-        priceLabel.text = "$\(info.price ?? 0)"
-    }
-
-    private func setupShadow() {
-        backView.layer.shadowColor = UIColor.gray.cgColor
-        backView.layer.shadowOpacity = 0.5
-        backView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        backView.layer.shadowRadius = 1
     }
 
     private func configure() {
@@ -110,4 +101,27 @@ class SearchCollectionCell: UICollectionViewCell {
             buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13)
         ])
     }
-}
+
+    func setImage(pictureName: String) {
+        guard let imageURL = URL(string: pictureName) else { return }
+
+            URLSession.shared.dataTask(with: imageURL) { [weak self] data, _, error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("Error downloading image:", error)
+                    return
+                }
+                if let data = data, let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.productImage.image = image
+                    }
+                } else {
+                    print("Invalid image data")
+                }
+            }.resume()
+        }
+
+    }
+
+
+

@@ -60,9 +60,14 @@ protocol SearchBarViewDelegate: AnyObject {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
 }
 
+protocol SearchBarForSearchVCDelegate: AnyObject {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
+}
+
 
 final class SearchBarView: UIView {
     weak var delegate: SearchBarViewDelegate?
+    weak var secondDelegate: SearchBarForSearchVCDelegate?
     var searchIcon: String = "magnifyingglass"
     
     // MARK: - UI Properties
