@@ -6,9 +6,14 @@
 //
 
 import UIKit
+protocol ProductsHeaderViewDelegate: AnyObject {
+    func didTapFiltersButton()
+}
 
 final class ProductsHeaderView: UICollectionReusableView {
 
+    weak var delegate: ProductsHeaderViewDelegate?
+    static let identifier = String(describing: ProductsHeaderView.self)
     //MARK: UI Elements
 
     private let titleLabel = UILabel.makeLabel(text: "Products",
@@ -65,7 +70,8 @@ final class ProductsHeaderView: UICollectionReusableView {
     
     //MARK: - Private Methods
     @objc private func filtersButtonTapped() {
-        print("нажата - Filters")
+//        print("нажата - Filters")
+        delegate?.didTapFiltersButton()
     }
 }
 
