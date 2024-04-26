@@ -28,7 +28,7 @@ final class SearchVC: UIViewController, SearchVCProtocol {
 
     private let searchBar = SearchBarView()
 
-    private let searchlabel = UILabel.makeLabel(text: "",
+    private let searchlabel = UILabel.makeLabel(text: "Search result for",
                                                 font: UIFont.InterRegular(ofSize: 14),
                                                 textColor: UIColor.customDarkGray,
                                                 numberOfLines: 1,

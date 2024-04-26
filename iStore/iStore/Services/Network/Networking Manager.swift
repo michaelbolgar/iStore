@@ -27,7 +27,7 @@ struct NetworkingManager {
         }
 
         ///print generated url
-        print("URL: \(String(describing: components.url))")
+  //      print("URL: \(String(describing: components.url))")
 
         return components.url
     }

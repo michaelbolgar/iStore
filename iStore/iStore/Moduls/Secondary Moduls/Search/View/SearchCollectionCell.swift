@@ -9,20 +9,22 @@ class SearchCollectionCell: UICollectionViewCell {
 
     // MARK: Properties
 
-    static let identifier = "SearchCollectionViewCell"
+    static var identifier: String {"\(Self.self)"}
 
     // MARK: UI Elements
 
     private let productImage: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = 5
+        image.layer.masksToBounds = true
+        image.contentMode = .scaleAspectFill
         return image
     }()
 
     private let productLabel = UILabel.makeLabel(text: nil,
                                                  font: UIFont.InterRegular(ofSize: 12),
                                                  textColor: UIColor.darkGray,
-                                                 numberOfLines: 1,
+                                                 numberOfLines: 2,
                                                  alignment: .left)
 
     private let priceLabel = UILabel.makeLabel(text: nil,
@@ -58,11 +60,15 @@ class SearchCollectionCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     //MARK: Methods
     func set(info: SingleProduct) {
-      guard let pictureName = info.category.image else { return }
-      setImage(pictureName: pictureName)
-      productLabel.text = info.description
+    if let pictureName = info.images.first {
+      if let unwrappedPictureName = pictureName {
+       setImage(pictureName: unwrappedPictureName)
+            }
+        }
+        productLabel.text = info.title
       priceLabel.text = "$\(info.price ?? 0)"
 
     }
@@ -75,7 +81,7 @@ class SearchCollectionCell: UICollectionViewCell {
     private func setupConstraints() {
         productImage.translatesAutoresizingMaskIntoConstraints = false
         backView.translatesAutoresizingMaskIntoConstraints = false
-
+        productLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         NSLayoutConstraint.activate([
             backView.heightAnchor.constraint(equalToConstant: 217),
             backView.widthAnchor.constraint(equalToConstant: 170),
@@ -96,9 +102,11 @@ class SearchCollectionCell: UICollectionViewCell {
             priceLabel.topAnchor.constraint(equalTo: productLabel.bottomAnchor, constant: 4),
             priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
 
-            buyButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 11),
+            buyButton.topAnchor.constraint(greaterThanOrEqualTo: priceLabel.bottomAnchor, constant: 3),
+            buyButton.topAnchor.constraint(lessThanOrEqualTo: priceLabel.bottomAnchor, constant: 11),
             buyButton.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
-            buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13)
+            buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),
+
         ])
     }
 
