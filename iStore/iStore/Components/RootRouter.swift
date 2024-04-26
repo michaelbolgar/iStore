@@ -29,8 +29,6 @@ final class RootRouter {
             showOnboarding()
         }
 
-        showLoginScreen()
-
         /// проверка, авторизован ли пользователь; если нет - показать LoginVC()
         if Auth.auth().currentUser != nil {
             print ("пользователь авторизован")
