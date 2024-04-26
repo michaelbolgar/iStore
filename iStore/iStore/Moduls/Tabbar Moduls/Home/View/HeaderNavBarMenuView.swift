@@ -11,7 +11,6 @@ final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate,
     
     // MARK: Properties
     
-    static let identifier = String(describing: HeaderNavBarMenuView.self)
     private var dropdownTableView: UITableView!
     private var dropdownOptions = ["Europe - €", "USA - $", "Rus - ₽"]
     

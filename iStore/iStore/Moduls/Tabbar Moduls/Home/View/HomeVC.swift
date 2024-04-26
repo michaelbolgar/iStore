@@ -46,10 +46,10 @@ final class HomeVC: UIViewController {
     //MARK: - Private Methods
     private func setupViews() {
         collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)
-        collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: CategoryViewCell.identifier)
-        collectionView.register(ProductViewCell.self, forCellWithReuseIdentifier: ProductViewCell.identifier)
-        collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderNavBarMenuView.identifier)
-        collectionView.register(ProductsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProductsHeaderView.identifier)
+        collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: "CategoryViewCell")
+        collectionView.register(ProductViewCell.self, forCellWithReuseIdentifier: "ProductViewCell")
+        collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderNavBarMenuView")
+        collectionView.register(ProductsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ProductsHeaderView")
         collectionView.collectionViewLayout = createLayout()
     }
     
@@ -78,13 +78,13 @@ extension HomeVC: UICollectionViewDataSource {
                     SearchFieldView else { return UICollectionViewCell() }
             return cell
         case .categories(let categories):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryViewCell.identifier, for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryViewCell", for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
             
             cell.configureCell(image: categories[indexPath.row].image, category: categories[indexPath.row].categories)
             return cell
             
         case .products(let products):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductViewCell.identifier, for: indexPath) as?
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductViewCell", for: indexPath) as?
                     ProductViewCell else { return UICollectionViewCell() }
             
             cell.configureCell(image: products[indexPath.row].image, title: products[indexPath.row].title, price: products[indexPath.row].price)
@@ -101,18 +101,16 @@ extension HomeVC: UICollectionViewDataSource {
             case .searchField(_):
                 let header = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
-                    withReuseIdentifier: HeaderNavBarMenuView.identifier,
+                    withReuseIdentifier: "HeaderNavBarMenuView",
                     for: indexPath) as! HeaderNavBarMenuView
                 header.configureHeader(labelName: section.title)
                 return header
             case .categories(_):
                 fallthrough
             case .products(_):
-                let header = collectionView.dequeueReusableSupplementaryView(
-                                                                            ofKind: kind,
-                                                                            withReuseIdentifier: ProductViewCell.identifier,
-                                                                            for: indexPath) as! ProductsHeaderView
-                header.delegate = self
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                             withReuseIdentifier: "ProductsHeaderView",
+                                                                             for: indexPath) as! ProductsHeaderView
                 header.configureHeader(labelName: section.title)
                 return header
             }
@@ -232,10 +230,3 @@ extension HomeVC {
     }
 }
 
-extension HomeVC: ProductsHeaderViewDelegate {
-    func didTapFiltersButton() {
-        let filterVC = FilterVC()
-        filterVC.modalPresentationStyle = .popover 
-        present(filterVC, animated: true)
-    }
-}
