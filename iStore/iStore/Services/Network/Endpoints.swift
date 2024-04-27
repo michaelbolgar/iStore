@@ -5,7 +5,7 @@ enum Endpoint {
     case getProductsByCategory(id: Int)
     case getProduct(id: Int)
     case doSearch(request: String)
-  //  case doSearchByTitle(title: String)
+    case updateCategory(id: Int)
 
     var path: String {
         switch self {
@@ -17,9 +17,9 @@ enum Endpoint {
             return "/api/v1/products/\(id)/"
         case .doSearch:
             return "/api/v1/products"
-//        case .doSearchByTitle(title: let title):
-//            return "/api/v1/products/?title=\(title)/"
-
+        case .updateCategory(let id): 
+                    return "/api/v1/categories/\(id)"
+        
         }
     }
 }

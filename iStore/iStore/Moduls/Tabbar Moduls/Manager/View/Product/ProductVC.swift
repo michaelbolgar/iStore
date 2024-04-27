@@ -1,15 +1,20 @@
 import UIKit
 
 protocol ProductVCProtocol: AnyObject {
-    func reloadCollectionView()
+    //func reloadCollectionView()
+    func updateTableView(with results: [SingleProduct])
 }
 
 final class ProductVC: UIViewController, ProductVCProtocol {
     
+    func updateTableView(with results: [SingleProduct]) {
+        collectionView.reloadData()
+    }
+    
     var presenter: ProductPresenter!
     var presenterManager: ManagerPresenterProtocol!
     let shared = NetworkingManager.shared
-   
+    
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout.createTwoColumnFlowLayout(in: view)
@@ -47,7 +52,7 @@ final class ProductVC: UIViewController, ProductVCProtocol {
         view.addSubview(collectionView)
         view.addSubview(searchBar)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-    
+        
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                                             style: .plain, target: self,
@@ -65,7 +70,7 @@ final class ProductVC: UIViewController, ProductVCProtocol {
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.backgroundColor = .white
         searchBar.delegate = self
-
+        
     }
     
     private func configureCollectionView() {
@@ -75,19 +80,15 @@ final class ProductVC: UIViewController, ProductVCProtocol {
                                 forCellWithReuseIdentifier: ProductCollectionCell.identifier)
     }
     
-    func reloadCollectionView() {
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-    }
+    //    func reloadCollectionView() {
+    //        DispatchQueue.main.async {
+    //            self.collectionView.reloadData()
+    //        }
+    //    }
     
     // MARK: - Selector Methods
     @objc func addNewProduct() {
-        guard let presenterManager = presenterManager else {
-            print("Error: Presenter is nil")
-            return
-        }
-        presenterManager.showAddNewCategoryManagerVC()
+        presenter.navToAddCategoryVC()
     }
 }
 
@@ -101,6 +102,8 @@ extension ProductVC: UICollectionViewDelegate, UICollectionViewDataSource, UICol
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionCell.identifier, for: indexPath) as! ProductCollectionCell
         let product = presenter.getProduct(at: indexPath.item)
         cell.set(info: product, at: indexPath.item)
+        cell.presenter = presenter // Устанавливаем делегата ячейке
+        cell.product = product
         cell.delegate = presenter
         return cell
     }
@@ -110,7 +113,7 @@ extension ProductVC: UICollectionViewDelegate, UICollectionViewDataSource, UICol
 extension ProductVC: SearchBarViewDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        presenter.fetchProductsByCategory(categoryId: searchText)
+        presenter.fetchProductsByCategory(searchText: searchText)
         }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

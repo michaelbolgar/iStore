@@ -1,17 +1,17 @@
 
 
-import Foundation
+import UIKit
 
 protocol ProductPresenterProtocol: AnyObject {
   //  func viewDidLoad()
-уы    var productCount: Int { get }
-    func getProduct(at index: Int) -> ProductVCModel
+    var productCount: Int { get }
+    func getProduct(at index: Int) -> SingleProduct
 }
 
 final class ProductPresenter: ProductPresenterProtocol {
     
     weak var view: ProductVCProtocol?
-    var products: [ProductVCModel] = []
+    var products: [SingleProduct] = []
     
     init(viewController: ProductVC? = nil) {
         self.view = viewController
@@ -20,54 +20,58 @@ final class ProductPresenter: ProductPresenterProtocol {
         return products.count
     }
     
-    func getProduct(at index: Int) -> ProductVCModel {
+    func getProduct(at index: Int) -> SingleProduct {
         return products[index]
     }
     
-    func fetchProductsByCategory(categoryId: String) {
-        NetworkingManager.shared.doSearch(for: categoryId) { [weak self] result in
+    func navToAddCategoryVC() {
+        let newScreenVC = AddNewCategoryVC()
+        newScreenVC.setNavigationBar(title: "Add new product")
+        if let currentViewController = view as? UIViewController {
+            currentViewController.navigationController?.pushViewController(newScreenVC, animated: true)
+        }
+    }
+//
+//    func deleteButtonPressed(at index: IndexPath) {
+//        products.remove(at: index.item)
+//    }
+//    
+    func fetchProductsByCategory(searchText: String) {
+        NetworkingManager.shared.doSearch(for: searchText) { [ weak self ] result in
+            guard let self = self else { return }
             switch result {
-            case .success(let products):
-                self?.products = products.map { product in
-                    // Проверяем, что массив images не пустой
-                    if let firstImageString = product.images.first,
-                       let imageData = firstImageString!.data(using: .utf8),
-                       let imageUrls = try? JSONDecoder().decode([String].self, from: imageData),
-                       let firstImageUrlString = imageUrls.first,
-                       let firstImageUrl = URL(string: firstImageUrlString) {
-                        // Создаем экземпляр Product с изображением
-                        return ProductVCModel(id: product.id,
-                                              image: firstImageUrl.absoluteString,
-                                              description: product.description,
-                                              price: Double(product.price ?? 0))
-                    } else {
-                        // Создаем экземпляр Product без изображения
-                        return ProductVCModel(id: product.id,
-                                              image: nil,
-                                              description: product.description,
-                                              price: Double(product.price ?? 0))
-                    }
+            case .success(let searchResults):
+                DispatchQueue.main.async {
+                    self.products = searchResults
+                    self.view?.updateTableView(with: searchResults)
+                    
+                    print(self.products)
                 }
-                // Обновляем представление, чтобы отобразить новые продукты
-                self?.view?.reloadCollectionView()
             case .failure(let error):
-                // Обрабатываем ошибку
-                print("Failed to fetch products: \(error)")
+                DispatchQueue.main.async {
+                    print(error)
+                }
             }
         }
     }
-    
-
-
 }
 
 //MARK: - WishCollectionCellDelegate
 extension ProductPresenter: ProductCollectionCellDelegate {
     func deleteButtonPressed() {
-        print("Delete pressed")
+        
     }
     
-    func updateButtonPressed() {
-        print("update pressed")
+    func updateButtonPressed(with product: SingleProduct) {
+        let newScreenVC = AddNewCategoryVC()
+        newScreenVC.setNavigationBar(title: "Update product")
+        newScreenVC.product = product
+        if let currentViewController = view as? UIViewController {
+            currentViewController.navigationController?.pushViewController(newScreenVC, animated: true)
+        }
+        
     }
+    
 }
+
+

@@ -53,6 +53,8 @@ struct NetworkingManager {
             parameters ["offset"] = "0"
             parameters ["limit"] = "15"
             parameters ["title"] = "\(request)"
+        case .updateCategory(id: let id):
+            parameters ["id"] = "\(id)"
         }
 
         return parameters
@@ -131,3 +133,62 @@ struct NetworkingManager {
         makeTask(for: url, completion: completion)
     }
 }
+
+
+// MARK: - PUT
+
+
+struct UpdatedCategory: Codable {
+    let id: Int?
+    let name: String?
+    let image: String?
+   
+}
+
+extension NetworkingManager {
+
+    /// Update category by ID
+    func updateCategory(withId id: Int, newData: UpdatedCategory, completion: @escaping(Result<Category, NetworkError>) -> Void) {
+        guard let url = createURL(for: .updateCategory(id: id)) else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+
+        do {
+            request.httpBody = try JSONEncoder().encode(newData)
+        } catch {
+            completion(.failure(.decodingError(error)))
+            return
+        }
+        let session = URLSession.shared
+        session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(.transportError(error)))
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                let error = NSError(domain: "No HTTPURLResponse", code: 0, userInfo: nil)
+                completion(.failure(.serverError(statusCode: error.code)))
+                return
+            }
+
+            let statusCode = httpResponse.statusCode
+
+            guard let data = data else {
+                let error = NSError(domain: "No data", code: 0, userInfo: nil)
+                completion(.failure(.noData))
+                return
+            }
+
+            do {
+                let updatedCategory = try JSONDecoder().decode(Category.self, from: data)
+                completion(.success(updatedCategory))
+            } catch {
+                completion(.failure(.decodingError(error)))
+            }
+        }.resume()
+    }
+}
+
+

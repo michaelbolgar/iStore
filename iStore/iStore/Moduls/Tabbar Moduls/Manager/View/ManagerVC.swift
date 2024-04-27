@@ -37,6 +37,8 @@ final class ManagerVC: UIViewController {
         navigationController?.isNavigationBarHidden = false
     
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
+        navigationItem.leftBarButtonItem?.tintColor = .white
+
         
         //добавляем рекогнайзер на кнопки(вью)
        // managerTitle.isUserInteractionEnabled = true
