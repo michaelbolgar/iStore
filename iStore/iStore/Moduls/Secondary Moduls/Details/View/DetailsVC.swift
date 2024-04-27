@@ -87,6 +87,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         presenter = DetailsPresenter(view: self)
         presenter.getData()
         title = "Details product"
+        navigationController?.isNavigationBarHidden = false
         setupViews()
         configureController()
         setupConstraints()

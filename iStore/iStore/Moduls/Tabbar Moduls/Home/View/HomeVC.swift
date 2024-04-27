@@ -98,6 +98,7 @@ final class HomeVC: UIViewController, HomeVCProtocol {
 }
     
 //MARK: - UICollectionViewDataSource
+
 extension HomeVC: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -168,7 +169,26 @@ extension HomeVC: UICollectionViewDataSource {
     //MARK: - UICollectionViewDelegate
 
 extension HomeVC: UICollectionViewDelegate {
-    
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        let section = sections[indexPath.section]
+        switch section {
+        case .searchField(_):
+            print("Поиск")
+
+        case .categories(let categories):
+            let selectedCategory = categories[indexPath.row].categories
+            print("Выбранная категория: \(selectedCategory)")
+
+        case .products(_):
+            print("item cell tapped")
+
+            let detailsVC = DetailsVC()
+//            detailsVC.configure(with: selectedItem)
+            navigationController?.pushViewController(detailsVC, animated: true)
+        }
+    }
 }
 
     //MARK: - Setup View

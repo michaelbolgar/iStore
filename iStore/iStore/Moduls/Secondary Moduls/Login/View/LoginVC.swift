@@ -79,7 +79,7 @@ class LoginVC: UIViewController {
         setupView()
         setupLayout()
         updatePasswordVisibilityButton()
-        tapGestureKeyboard()
+        view.hideKeyboard()
     }
     
     private func setupView() {
@@ -157,19 +157,6 @@ extension LoginVC: UITextFieldDelegate {
                 textField.placeholder = "Enter your password"
             }
         }
-    }
-}
-
-// End editing and dismiss keyboard
-extension LoginVC {
-    
-    private func tapGestureKeyboard() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
     }
 }
 

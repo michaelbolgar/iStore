@@ -118,7 +118,7 @@ class SignUpVC: UIViewController {
         setupView()
         setupLayout()
         setupTogglePassword()
-        tapGestureKeyboard()
+        view.hideKeyboard()
     }
     
     // MARK: Private Methods
@@ -269,19 +269,6 @@ extension SignUpVC: UITextFieldDelegate {
         default:
             break
         }
-    }
-}
-
-// End editing abd dismiss keyboard
-extension SignUpVC {
-    
-    private func tapGestureKeyboard() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
     }
 }
 
