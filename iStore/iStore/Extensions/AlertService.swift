@@ -47,4 +47,22 @@ class AlertService {
             topController.present(alert, animated: true)
         }
     }
+    func showInputAlert(title: String, message: String, placeholder: String, completion: @escaping (String?) -> Void) {
+            guard let topController = topViewController else {
+                return
+            }
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.addTextField { textField in
+                textField.placeholder = placeholder
+                textField.isSecureTextEntry = true
+            }
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { _ in
+                let textFieldText = alert.textFields?.first?.text
+                completion(textFieldText)
+            }))
+            DispatchQueue.main.async {
+                topController.present(alert, animated: true)
+            }
+        }
 }
