@@ -4,13 +4,14 @@ import Firebase
 
 protocol ProfileViewProtocol: AnyObject {
     func updateProfile(with name: String, email: String, imageUrl: String?)
-    func updateProfileImage(_ image: UIImage)
     func navigateToLoginScreen()
     func showSignOutError(_ error: Error)
     func imageUploadCompleted()
 }
 
 final class ProfileVC: UIViewController {
+    
+    var changePhotoPresenter: ChangePhotoPresenter?
     var presenter: ProfilePresenterProtocol!
     
     // MARK: - UI Elements
@@ -49,6 +50,7 @@ final class ProfileVC: UIViewController {
         return element
     }()
     
+    /// buttons on the underside
     private let typeAccountView = UIView.makeGreyButton(textLabel: "Type of account",
                                                         textColor: .customDarkGray,
                                                         nameMarker: "chevron.forward",
@@ -64,13 +66,20 @@ final class ProfileVC: UIViewController {
                                                     nameMarker: "arrow.forward.to.line.square",
                                                     colorMarker: .customDarkGray)
     
+    // MARK: init
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        fetchUserProfile()
-        presenter = ProfilePresenter(view: self)
         presenter.fetchProfileData()
     }
     
@@ -110,63 +119,30 @@ final class ProfileVC: UIViewController {
     }
     
     private func loadImage(from url: URL) {
-        URLSession.shared.dataTask(with: url) { data, _, error in
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
             guard let data = data, error == nil, let image = UIImage(data: data) else {
-                print("Failed to load image from URL: \(error?.localizedDescription ?? "Unknown error")")
+                DispatchQueue.main.async {
+                    self?.profileImage.image = UIImage(named: "defaultProfilePhoto") // Загрузка стандартного изображения в случае ошибки
+                }
                 return
             }
             DispatchQueue.main.async {
-                print("Image successfully loaded from URL")
-                self.profileImage.image = image
+                self?.profileImage.image = image
             }
         }.resume()
     }
     
-    private func fetchUserProfile() {
-        guard let userId = Auth.auth().currentUser?.uid else {
-            print("User not logged in")
-            return
-        }
-        let db = Firestore.firestore()
-        db.collection("users").document(userId).getDocument { (document, error) in
-            if let document = document, document.exists {
-                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                print("Document data: \(dataDescription)")
-                self.updateUI(with: document.data())
-            } else {
-                print("Document does not exist")
-            }
-        }
-    }
-    
-    func updateUI(with userData: [String: Any]?) {
-        DispatchQueue.main.async {
-            self.profileName.text = userData?["login"] as? String ?? "Name not available"
-            self.profileEmail.text = userData?["email"] as? String ?? "Email not available"
-            
-            if let imageUrlString = userData?["profileImageUrl"] as? String {
-                print("Image URL String: \(imageUrlString)")
-                if let imageUrl = URL(string: imageUrlString) {
-                    print("Loading image from URL: \(imageUrl)")
-                    self.loadImage(from: imageUrl)
-                } else {
-                    print("Invalid URL string for image")
-                    self.profileImage.image = UIImage(named: "profilePhoto") // Загрузка изображения по умолчанию, если URL недоступен
-                }
-            } else {
-                print("No image URL found")
-                self.profileImage.image = UIImage(named: "defaultProfilePhoto")
-            }
-        }
-    }
-    
     // MARK: Selector Methods
     @objc private func settingsProfileButtonTapped() {
-        print("settingsProfile button tapped")
+        let vc = SettingsVC()
+        vc.delegate = self
+        present(vc, animated: true)
     }
     
     @objc private func changePhotoProfileButtonTapped() {
-        let changePhotoVC = ChangePhotoViewController()
+//        presenter.showChangePhotoVC()
+        let profileBuilder = ProfileBuilder()
+        let changePhotoVC = profileBuilder.createChangePhotoModule(delegate: self)
         changePhotoVC.modalPresentationStyle = .automatic
         present(changePhotoVC, animated: true, completion: nil)
     }
@@ -187,13 +163,17 @@ final class ProfileVC: UIViewController {
     @objc private func signoutViewTapped() {
         presenter.signOut()
     }
+    
+    deinit {
+        print("ProfileVC deinited")
+    }
 }
 
 // MARK: - Setup Constraints
 private extension ProfileVC {
     
     func setupConstraints() {
-        // Определение константы для удобства
+        
         let inset: CGFloat = 20
         
         NSLayoutConstraint.activate([
@@ -233,7 +213,12 @@ private extension ProfileVC {
     }
 }
 
+// MARK: - Extension ProfileViewProtocol
 extension ProfileVC: ProfileViewProtocol {
+    
+    func imageUploadFailed(_ error: any Error) {
+        print(error.localizedDescription)
+    }
     
     func showSignOutError(_ error: any Error) {
         print(error.localizedDescription)
@@ -262,3 +247,21 @@ extension ProfileVC: ProfileViewProtocol {
     }
 }
 
+// MARK: - Extension ChangePhotoPresenterDelegate
+extension ProfileVC: ChangePhotoPresenterDelegate {
+    func imageDidUpdate(url: String) {
+        if let imageUrl = URL(string: url) {
+            loadImage(from: imageUrl)
+        }
+    }
+}
+
+extension ProfileVC: SettingsVCDelegate {
+    func didUpdateName(_ name: String) {
+        profileName.text = name
+    }
+    
+    func didUpdateEmail(_ email: String) {
+        profileEmail.text = email
+    }
+}
