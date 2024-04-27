@@ -42,13 +42,12 @@ final class ManagerRouter: ManagerRouterProtocol {
             navigationController?.viewControllers = [managerVC]
         }
     }
-
+    
     func showProductManagerVC() {
         guard let productVC = moduleBuilder?.createProductManagerVC() else { return }
-        navigationController?.navigationBar.topItem?.title = "Manager"
         navigationController?.pushViewController(productVC, animated: true)
     }
-
+    
     func showCategoryManagerVC() {
         guard let categoryVC = moduleBuilder?.createCategoryManagerVC() else { return }
         navigationController?.pushViewController(categoryVC, animated: true)

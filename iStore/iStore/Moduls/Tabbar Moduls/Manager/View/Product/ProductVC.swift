@@ -32,6 +32,7 @@ final class ProductVC: UIViewController, ProductVCProtocol {
         hideLeftNavigationItem()
         setupSearchBar()
         setupConstraints()
+        
     }
     
     // MARK: - Private Methods

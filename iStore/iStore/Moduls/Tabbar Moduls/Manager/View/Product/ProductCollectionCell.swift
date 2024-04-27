@@ -62,9 +62,9 @@ final class ProductCollectionCell: UICollectionViewCell {
     }
  
     //MARK: - Methods
-    func set(info: Product, at index: Int) {
+    func set(info: ProductVCModel, at index: Int) {
         self.index = index
-        let pictureName = info.picture ?? "Buy"
+        let pictureName = info.image ?? "Buy"
         productImage.image = UIImage(named: pictureName)
         productLabel.text = info.description
         priceLabel.text = String(format: "$%.2f", info.price ?? 0)

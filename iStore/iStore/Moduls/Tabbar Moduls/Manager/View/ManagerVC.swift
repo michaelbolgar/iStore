@@ -33,10 +33,10 @@ final class ManagerVC: UIViewController {
      
         [productView, categoryView].forEach { view.addSubview($0) }
         
-        setNavigationBar(title: "Manager Screen")
+        setNavigationBar(title: "Manager")
         navigationController?.isNavigationBarHidden = false
     
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 24)]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
         
         //добавляем рекогнайзер на кнопки(вью)
        // managerTitle.isUserInteractionEnabled = true

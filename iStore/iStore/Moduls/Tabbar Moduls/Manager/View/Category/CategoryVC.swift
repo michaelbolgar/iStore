@@ -52,25 +52,50 @@ final class CategoryVC: UIViewController {
     
     // MARK: - Actions
     @objc private func addCategoryButtonTapped() {
-        let alert = UIAlertController(title: "New Category", message: "Enter the name of the new category", preferredStyle: .alert)
-        alert.addTextField { textField in
-            textField.placeholder = "Category Name"
-        }
-        alert.addTextField { textField in
+        // Функция для отображения UIAlertController
+        func presentAlert() {
+            let alert = UIAlertController(title: "New Category", message: "Enter the name of the new category", preferredStyle: .alert)
+            
+            // TextField for Category Name
+            alert.addTextField { textField in
+                textField.placeholder = "Category Name"
+            }
+            
+            // TextField for Image URL
+            alert.addTextField { textField in
                 textField.placeholder = "Image URL"
             }
-        let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
-            if let categoryName = alert.textFields?.first?.text, !categoryName.isEmpty,
-               let imageName = alert.textFields?.last?.text, !imageName.isEmpty {
+            
+            let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
+                guard let categoryName = alert.textFields?.first?.text, !categoryName.isEmpty,
+                      let imageName = alert.textFields?.last?.text, !imageName.isEmpty else {
+                    // Одно или оба поля пустые, показываем пользователю предупреждение
+                    let emptyFieldsAlert = UIAlertController(title: "Empty Fields", message: "Please fill in both fields", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                        // Повторно отображаем UIAlertController в случае пустых полей
+                        presentAlert()
+                    }
+                    emptyFieldsAlert.addAction(okAction)
+                    self?.present(emptyFieldsAlert, animated: true, completion: nil)
+                    return
+                }
+                
+                // Все поля заполнены, добавляем категорию
                 self?.addCategory(name: categoryName, imageName: imageName)
             }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alert.addAction(addAction)
+            alert.addAction(cancelAction)
+            present(alert, animated: true, completion: nil)
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alert.addAction(addAction)
-        alert.addAction(cancelAction)
-        present(alert, animated: true, completion: nil)
+        
+        // Отображаем UIAlertController
+        presentAlert()
     }
+
 }
+
 
 // MARK: - Setup Constraints
 private extension CategoryVC {
