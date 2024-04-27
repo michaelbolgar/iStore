@@ -2,49 +2,49 @@ import UIKit
 
 #warning("внести правки:")
 /*
-
+ 
  1. делать лейблы через extension (заметил в ячейках)
  2. выставить марки по шаблону, который я закрепил в ветке в дискорде
  3. поправить кнопку filters и сделать её более похожей на макет в фигме
-
+ 
  */
 
+
 protocol HomeVCProtocol: AnyObject {
+//    func updateCategories(_ categories: [Category])
+//    func updateProducts(_ products: [Product])
     func reloadCollectionView(section: Int)
     func updateCollectionView(with results: [SingleProduct])
-    func show(category: [Category]) 
+    //    func show(category: [Category])
 }
 
 final class HomeVC: UIViewController, HomeVCProtocol {
-
+    
     var presenter: HomePresenterProtocol?
-//    var categories: [Category] = []
-//    private var service = NetworkingManager.shared
+    //    private let sections = MockData.shared.pageData
+    
+    enum Section {
+            case searchField(SearchFieldView)
+            case categories([Category])
+            case products([Product])
 
-    private let sections = MockData.shared.pageData
-    
-    func reloadCollectionView(section: Int) {
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            var title: String {
+                switch self {
+                case .searchField(_):
+                    return NSLocalizedString("Delivery address", comment: "")
+                case .categories(_):
+                    return ""
+                case .products(_):
+                    return NSLocalizedString("Products", comment: "")
+                }
+            }
         }
-    }
     
-    func updateCollectionView(with results: [SingleProduct]) {
-        collectionView.reloadData()
-    }
-    
-    func show(category: [Category]) {
-        DispatchQueue.main.async {
-            self.categories = category
-            self.collectionView.reloadData()
-        }
-    }
-//    func show(product: [SingleProduct]) {
-//        DispatchQueue.main.async {
-//            self.products = product
-//            self.collectionView.reloadData()
-//        }
-//    }
+    private var sections: [Section] = [
+        .searchField(SearchFieldView()),
+        .categories([]),
+        .products([])
+    ]
     
     //MARK: - UI Elements
     
@@ -63,28 +63,62 @@ final class HomeVC: UIViewController, HomeVCProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.viewDidLoad()
-        view.backgroundColor = .white // to setup
-        presenter = HomePresenter(viewController: self)
-        presenter?.getData()
+        setPresenter()
         addViews()
         setupViews()
         setDelegates()
-//        fetchFunc.getCategories() // delete
+        presenter?.getCategories()
+        //        fetchFunc.getCategories() // delete
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-
+        
     }
-
+    private func setPresenter() {
+        //        presenter = HomePresenter(view: HomeVCProtocol, router: HomeRouterProtocol)
+        presenter = HomePresenter(view: self)
+        presenter?.viewDidLoad()
+    }
+//    func updateCategories(_ categories: [Category]) {
+//        sections[1] = .categories(categories)
+//        DispatchQueue.main.async {
+//            self.collectionView.reloadSections(IndexSet(integer: 1))
+//        }
+//    }
+//
+//    func updateProducts(_ products: [Product]) {
+//        sections[2] = .products(products)
+//        DispatchQueue.main.async {
+//            self.collectionView.reloadSections(IndexSet(integer: 2))
+//        }
+//    }
+    
+    func reloadCollectionView(section: Int) {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    func updateCollectionView(with results: [SingleProduct]) {
+        collectionView.reloadData()
+    }
+    
+    //    func show(category: [Category]) {
+    //        DispatchQueue.main.async {
+    //            self.categories = category
+    //            self.collectionView.reloadData()
+    //        }
+    //    }
     
     //MARK: - Private Methods
     private func setupViews() {
+        view.backgroundColor = .white
+        
         collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)
         collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: "CategoryViewCell")
-        collectionView.register(SearchCollectionCell.self, forCellWithReuseIdentifier: SearchCollectionCell.identifier)
+        collectionView.register(SingleItemCell.self, forCellWithReuseIdentifier: SingleItemCell.identifier)
         collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderNavBarMenuView")
         collectionView.register(ProductsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ProductsHeaderView")
         collectionView.collectionViewLayout = createLayout()
@@ -96,7 +130,7 @@ final class HomeVC: UIViewController, HomeVCProtocol {
     }
     
 }
-    
+
 //MARK: - UICollectionViewDataSource
 
 extension HomeVC: UICollectionViewDataSource {
@@ -106,36 +140,52 @@ extension HomeVC: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        sections[section].count
-    }
+        switch sections[section] {
+            case .searchField(_):
+                return 1
+            case .categories(let categories):
+                return categories.count
+            case .products(let products):
+                return products.count
+            }
+        }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let section = sections[indexPath.section]
         switch section {
+            
         case .searchField(_):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchFieldView.identifier, for: indexPath) as?
                     SearchFieldView else { return UICollectionViewCell() }
+            //            cell.delegate = presenter
             return cell
+            
         case .categories(let categories):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryViewCell", for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
-
-            if indexPath.item < presenter.category.count {
-                let categoryItem = presenter.category[indexPath.item]
-                cell.configure(name: categoryItem.name ?? "") //добавить картинку
-            }
+            let categoryItem = categories[indexPath.item]
+            cell.configure(name: categoryItem.name ?? "")
             return cell
             
-        case .products(let products):
-//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductViewCell", for: indexPath) as?
-//                    SearchCollectionCell else { return UICollectionViewCell() }
-//            if indexPath.item < category.count {
-//                let product = products[indexPath.item]
-//                cell.configure()
-         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionCell.identifier, for: indexPath) as! SearchCollectionCell
-                let product = presenter.getProduct(at: indexPath.item)
-                cell.set(info: product)
-                return cell
+            //            let category = presenter?.getCategories(at: indexPath.row)
+            //            cell.configure(name:)
+            //            return cell
             
+            //                        if indexPath.item < presenter.category.count {
+            //                            let categoryItem = presenter.category[indexPath.item]
+            //                            cell.configure(name: categoryItem.name ?? "") //добавить картинку
+            //                        }
+            //            return cell
+            
+        case .products(_):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleItemCell.identifier, for: indexPath) as? SingleItemCell else { return UICollectionViewCell() }
+            if let product = presenter?.getProduct(at: indexPath.row)/*, let title = product.title*/ {
+                        cell.set(info: product)
+                    } else {
+                        cell.set(info: SingleProduct.placeholder)
+                    }
+            return cell
+        default:
+            return UICollectionViewCell()
         }
     }
     
@@ -166,32 +216,33 @@ extension HomeVC: UICollectionViewDataSource {
     }
 }
 
-    //MARK: - UICollectionViewDelegate
+//MARK: - UICollectionViewDelegate
 
 extension HomeVC: UICollectionViewDelegate {
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+        
         let section = sections[indexPath.section]
         switch section {
         case .searchField(_):
             print("Поиск")
-
+            
         case .categories(let categories):
-            let selectedCategory = categories[indexPath.row].categories
-            print("Выбранная категория: \(selectedCategory)")
-
+//            let selectedCategory = categories[indexPath.row].categories
+//            print("Выбранная категория: \(selectedCategory)")
+            print("categories selected")
+            
         case .products(_):
             print("item cell tapped")
-
+            
             let detailsVC = DetailsVC()
-//            detailsVC.configure(with: selectedItem)
+            //            detailsVC.configure(with: selectedItem)
             navigationController?.pushViewController(detailsVC, animated: true)
         }
     }
 }
 
-    //MARK: - Setup View
+//MARK: - Setup View
 
 extension HomeVC {
     private func addViews() {
@@ -211,7 +262,7 @@ extension HomeVC {
     }
 }
 
-    // MARK: - Setup tables
+// MARK: - Setup tables
 
 extension HomeVC {
     private func createLayout() -> UICollectionViewCompositionalLayout {

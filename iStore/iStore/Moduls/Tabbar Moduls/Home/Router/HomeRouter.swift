@@ -15,7 +15,7 @@ protocol HomeRouterProtocol: BaseRouter {
 final class HomeRouter: HomeRouterProtocol {
 
     let navigationController: UINavigationController
-    var moduleBuilder: (any HomeBuilderProtocol)?
+    var moduleBuilder: HomeBuilderProtocol?
     private let factory: AppFactory
 
     init(navigationController: UINavigationController,

@@ -8,22 +8,22 @@
 import Foundation
 
 enum Section {
-    case searchField([ListItem])
-    case categories([ListItem])
-    case products([ListItem])
+    case searchField(SearchFieldView)
+    case categories([Category])
+    case products([Product])
     
-    var items: [ListItem] {
-        switch self {
-        case    .searchField(let items),
-                .categories(let items),
-                .products(let items):
-            return items
-        }
-    }
-    
-    var count: Int {
-        return items.count
-    }
+//    var items: [ListItem] {
+//        switch self {
+//        case    .searchField(let items),
+//                .categories(let items),
+//                .products(let items):
+//            return items
+//        }
+//    }
+//    
+//    var count: Int {
+//        return items.count
+//    }
     
     var title: String {
         switch self {

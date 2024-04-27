@@ -1,5 +1,10 @@
 import UIKit
 
+protocol RouterMainHomeProtocol {
+    var navigationController: UINavigationController? { get set }
+    var moduleBuilder: HomeBuilderProtocol? { get set }
+}
+
 // MARK: HomeBuilderProtocol
 
 protocol HomeBuilderProtocol {
@@ -13,14 +18,14 @@ protocol HomeBuilderProtocol {
 // MARK: HomeBuilder
 
 final class HomeBuilder: HomeBuilderProtocol {
-
+    var navigationController: UINavigationController?
     func createHomeModule(router: HomeRouterProtocol) -> UIViewController {
         // get service a network layer
-        let viewController = HomeVC()
-        let presenter = HomePresenter(viewController: viewController)
-        viewController.presenter = presenter
+        let view = HomeVC()
+        let presenter = HomePresenter(view: view/*, router: router*/)
+        view.presenter = presenter
         
-        return viewController
+        return view
     }
 
     func createSearchVC(searchText: String) -> UIViewController {

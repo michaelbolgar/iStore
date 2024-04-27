@@ -1,46 +1,91 @@
 import Foundation
 
-protocol HomePresenterProtocol: AnyObject {
+protocol HomePresenterProtocol {
+    init(view: HomeVCProtocol/*, router: HomeRouterProtocol*/)
+    var products: [SingleProduct] { get }
+    var categories: [Category] { get }
+    var productCount: Int { get }
+    
     func viewDidLoad()
-    func getData()
+    func getCategories(at index: Int) -> Category
     func getProduct(at index: Int) -> SingleProduct
+    func getCount(at section: Int)
+    func getCategories()
+    func getProduct(for id: Int)
+    func searchData(searchText: String)
+
 }
 
 final class HomePresenter: HomePresenterProtocol {
-
-    //    weak var view: HomeVCProtocol?
-    weak var viewController:  HomeVCProtocol?
+    
+    
+    init(view: HomeVCProtocol/*, router: HomeRouterProtocol*/) {
+        self.view = view
+        //        self.router = router
+        return
+    }
+    
+    
+    weak var view:  HomeVCProtocol?
+    //    private var router: HomeRouterProtocol
+    
     private var service = NetworkingManager.shared
     var products: [SingleProduct] = []
     var categories: [Category] = []
+    let sections: [Section] = []
 
-    init(viewController: HomeVCProtocol) {
-        self.viewController = viewController
-    }
+//    init(viewController: HomeVCProtocol? = nil) {
+//        self.view = viewController
+//    }
     
     func viewDidLoad() {
-        getCategories()
+//        getCategories()
+    }
+    
 
+    func getCategories(at index: Int) -> Category {
+        return categories[index]
+    }
+    
+    func getProduct(at index: Int) -> SingleProduct {
+        return products[index]
     }
     
     var productCount: Int {
         return products.count
     }
-
-    func getProduct(at index: Int) -> SingleProduct {
-        return products[index]
-    }
-    func getData() {
-
+    
+    
+    func getCount(at section: Int) {
+        switch section {
+        case 1:
+            categories.count
+        case 2:
+            products.count
+        default:
+            0
+        }
     }
     
-    private func getCategories() {
+    
+    func getCategories() {
         service.getCategories { [weak self] result in
             switch result {
-            case let .success(resultRequest):
-                self?.viewController?.show(category: resultRequest)
+            case let .success(categories):
+                print("Info about product: \(categories)")
             case let .failure(error):
                 print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func getProduct(for id: Int) {
+        service.getProduct(for: id) { [weak self]  result in
+            switch result {
+            case .success(let product):
+                print("Info about product: \(product)")
+            case .failure(let error):
+                print("Error fetching collections: \(error)")
             }
         }
     }
@@ -52,7 +97,7 @@ final class HomePresenter: HomePresenterProtocol {
             case .success(let searchResults):
                 DispatchQueue.main.async {
                     self.products = searchResults
-                    self.viewController?.updateCollectionView(with: searchResults)
+                    self.view?.updateCollectionView(with: searchResults)
                     print(self.products)
                 }
             case .failure(let error):
