@@ -14,7 +14,7 @@ final class SearchPresenter: SearchPresenterProtocol {
     weak var view: SearchVCProtocol?
     var products: [SingleProduct] = []
     var emptyQuery: [LastSearchData] = []
-    var showSection1 = true
+    var isProductCellVisible = true
 
     var queryCount: Int {
         return emptyQuery.count
@@ -39,6 +39,7 @@ final class SearchPresenter: SearchPresenterProtocol {
                  LastSearchData(enteredWord: "Iphone 12 pro max"),
                  LastSearchData(enteredWord: "Iphone 12 pro max")
         ]
+        products = [SingleProduct(id: nil, title: "test", price: 12, description: "DSG", images: [nil], category: Category(id: nil, name: nil, image: nil))]
     }
     func searchData(searchText: String) {
         NetworkingManager.shared.doSearch(for: searchText) { [ weak self ] result in
@@ -48,7 +49,6 @@ final class SearchPresenter: SearchPresenterProtocol {
                 DispatchQueue.main.async {
                     self.products = searchResults
                     self.view?.updateTableView(with: searchResults)
-                    print(self.products)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -57,5 +57,13 @@ final class SearchPresenter: SearchPresenterProtocol {
             }
         }
     }
+    func closeButtonPressed(forProductAt indexPath: IndexPath) {
+         emptyQuery.remove(at: indexPath.item)
+         view?.reloadCollectionView()
+     }
 
+    func clearButtonPressed() {
+        emptyQuery.removeAll()
+        view?.reloadCollectionView()
+    }
 }
