@@ -87,6 +87,9 @@ class CardView: UIView {
         
         cardNumberTextField.delegate = self
         cvvTextField.delegate = self
+        
+        cardNumberTextField.inputView = UIView()
+        cvvTextField.inputView = UIView()
     }
     
     // MARK: Private methods
@@ -106,7 +109,7 @@ class CardView: UIView {
         NSLayoutConstraint.activate([
             cardNumberTextField.topAnchor.constraint(equalTo: topAnchor, constant: 100),
             cardNumberTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            cardNumberTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -120),
+            cardNumberTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -100),
             
             expiryDateTextField.topAnchor.constraint(equalTo: cardNumberTextField.bottomAnchor, constant: 20),
             expiryDateTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),

@@ -33,7 +33,6 @@ class PaymentVC: UIViewController {
     // Затемнение фона с помощью наложения UIView
     lazy var dimmingView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         view.alpha = 0
         return view
@@ -127,7 +126,7 @@ extension PaymentVC {
     private func setupView() {
         view.backgroundColor = .white
         
-        let views = [shadowView, cardView, payButton]
+        let views = [shadowView, cardView, payButton, dimmingView]
         
         views.forEach { view in
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -138,7 +137,7 @@ extension PaymentVC {
         shadowView.addSubview(cardView)
         
         NSLayoutConstraint.activate([
-            shadowView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            shadowView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             shadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             shadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             shadowView.heightAnchor.constraint(equalToConstant: 200),
