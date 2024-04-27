@@ -11,7 +11,6 @@ protocol ManagerRouterProtocol: RouterProtocol {
     func start()
     func showProductManagerVC()
     func showCategoryManagerVC()
-//    func initialViewController()
 }
 
 // MARK: ManagerRouter
@@ -29,12 +28,6 @@ final class ManagerRouter: ManagerRouterProtocol {
         self.moduleBuilder = builder
         self.factory = factory
     }
-
-//    func initialViewController() {
-//        if let managerVC = moduleBuilder?.createManagerModule(router: self) {
-//            navigationController?.viewControllers = [managerVC]
-//        }
-//    }
 
     func start() {
         if let managerVC = moduleBuilder?.createManagerModule(router: self) {

@@ -39,7 +39,24 @@ final class CategoryViewCell: UICollectionViewCell {
         categoryIcon.image = UIImage(named: image)
         categoryName.text = category
     }
-    
+
+    func configure(with model: Category) {
+
+        categoryName.text = model.name
+
+        /// getting image from server
+        guard let imageURL = URL(string: model.image ?? "") else { return }
+        ImageDownloader.shared.downloadImage(from: imageURL) { result in
+            switch result {
+            case .success(let image):
+//                print("success")
+                self.categoryIcon.image = image
+            case .failure(let error):
+                print("Error fetching image: \(error)")
+            }
+        }
+    }
+
     private func setViews() {
         addSubview(categoryIcon)
         addSubview(categoryName)

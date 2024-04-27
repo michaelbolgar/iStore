@@ -21,7 +21,8 @@ final class HomeVC: UIViewController {
     //MARK: - UI Elements
     
     private let sections = MockData.shared.pageData
-    
+    private let mockCategorie = MockData.shared.mockCategorie
+
     lazy var collectionView: UICollectionView = {
 //        let collectViewLayout = UICollectionViewLayout()
         let collectViewLayout =  UICollectionViewFlowLayout.createTwoColumnFlowLayout(in: view)
@@ -41,13 +42,15 @@ final class HomeVC: UIViewController {
         addViews()
         setupViews()
         setDelegates()
+        presenter?.setCategories()
+        presenter?.setProducts(for: 1)
     }
     
     //MARK: - Private Methods
     private func setupViews() {
         collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)
         collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: "CategoryViewCell")
-        collectionView.register(ProductViewCell.self, forCellWithReuseIdentifier: "ProductViewCell")
+        collectionView.register(SingleItemCell.self, forCellWithReuseIdentifier: SingleItemCell.identifier)
         collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderNavBarMenuView")
         collectionView.register(ProductsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ProductsHeaderView")
         collectionView.collectionViewLayout = createLayout()
@@ -64,31 +67,46 @@ final class HomeVC: UIViewController {
 
 extension HomeVC: UICollectionViewDataSource {
     
+    /// fetching collections count
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         sections.count
     }
     
+    /// fetching cells count in each collection
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        sections[section].count
+
+        switch sections[section] {
+        case .searchField:
+            return 1
+        case .categories:
+            return 10
+        case .products:
+            return 10
+        }
     }
     
+    /// fetching cells content
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch sections[indexPath.section] {
+
         case .searchField(_):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchFieldView.identifier, for: indexPath) as?
                     SearchFieldView else { return UICollectionViewCell() }
             return cell
+
         case .categories(let categories):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryViewCell", for: indexPath) as? CategoryViewCell else { return UICollectionViewCell() }
             
-            cell.configureCell(image: categories[indexPath.row].image, category: categories[indexPath.row].categories)
+            let categorie = /*presenter?.categoryData[indexPath.row] ??*/ mockCategorie
+            cell.configure(with: categorie)
             return cell
             
         case .products(let products):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductViewCell", for: indexPath) as?
-                    ProductViewCell else { return UICollectionViewCell() }
-            
-            cell.configureCell(image: products[indexPath.row].image, title: products[indexPath.row].title, price: products[indexPath.row].price)
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleItemCell.identifier, for: indexPath) as?
+                    SingleItemCell else { return UICollectionViewCell() }
+
+            let product = presenter?.setProducts(for: 1)
+//            cell.set(info: <#T##SingleProduct#>)
             return cell
             
         }
@@ -250,3 +268,6 @@ extension HomeVC {
     }
 }
 
+extension HomeVC: HomeVCProtocol {
+
+}

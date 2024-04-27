@@ -26,7 +26,9 @@ struct MockData {
                      .init(image: "icon1", categories: "All", products: "", title: "", price: "")
         ])
     }()
-    
+
+    let mockCategorie = Category(id: 1, name: "Clothes", image: "icon1")
+
     private let products: Section = {
         .products([.init(image: "img", categories: "", products: "", title: "tv LG", price: "$199.99"),
                    .init(image: "img", categories: "", products: "", title: "Aestechic mug", price: "$19.99"),
