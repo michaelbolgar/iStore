@@ -125,7 +125,7 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleItemCell.identifier, for: indexPath) as! SingleItemCell
             let product = presenter.getProduct(at: indexPath.item)
             self.emptyResponseLabel.isHidden = true
-            cell.set(info: product)
+            cell.configure(with: product)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptySearchCell.identifier, for: indexPath) as! EmptySearchCell

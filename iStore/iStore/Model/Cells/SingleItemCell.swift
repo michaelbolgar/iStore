@@ -18,6 +18,7 @@ class SingleItemCell: UICollectionViewCell {
         image.layer.cornerRadius = 5
         image.layer.masksToBounds = true
         image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
         return image
     }()
 
@@ -52,7 +53,7 @@ class SingleItemCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        setupViewConfigure()
         setupConstraints()
         backView.makeCellShadow()
     }
@@ -62,20 +63,41 @@ class SingleItemCell: UICollectionViewCell {
     }
     
     //MARK: Methods
-    func set(info: SingleProduct) {
+    
+    func configure(with model: SingleProduct) {
 
-        if let pictureName = info.images.first {
-            if let unwrappedPictureName = pictureName {
-                setImage(pictureURL: unwrappedPictureName)
+        productLabel.text = model.title
+        priceLabel.text = "$\(model.price ?? 0)"
+        
+        let correctImageURLString = "https://i.imgur.com/9LFjwpI.jpeg"
+        /// getting image from server
+        if let firstImageURLString = model.images.first,  let imageURL = URL(string: firstImageURLString ?? "") {
+                print("Загрузка изображения с URL: \(imageURL)")
+                ImageDownloader.shared.downloadImage(from: imageURL) { result in
+                    switch result {
+                    case .success(let image):
+                        self.productImage.image = image
+                    case .failure(let error):
+                        print("Ошибка при загрузке изображения: \(error)")
+                        guard let newImageURL = URL(string: correctImageURLString) else {return}
+                        print(newImageURL)
+                        ImageDownloader.shared.downloadImage(from: newImageURL) { result in
+                            switch result {
+                            case .success(let image):
+                                self.productImage.image = image
+                            case .failure(let error):
+                                print("Ошибка при загрузке изображения: \(error)")
+                                
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("Не удалось создать URL для изображения")
             }
-        }
-
-        productLabel.text = info.title
-        priceLabel.text = "$\(info.price ?? 0)"
-
     }
 
-    private func configure() {
+    private func setupViewConfigure() {
         contentView.addSubview(backView)
         [productImage, productLabel, buyButton, priceLabel].forEach { backView.addSubview($0)}
     }
@@ -119,7 +141,6 @@ class SingleItemCell: UICollectionViewCell {
         ImageDownloader.shared.downloadImage(from: imageURL) { result in
             switch result {
             case .success(let image):
-//                print("success")
                 self.productImage.image = image
             case .failure(let error):
                 print("Error fetching image: \(error)")
