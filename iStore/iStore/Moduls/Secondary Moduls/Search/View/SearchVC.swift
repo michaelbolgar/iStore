@@ -6,7 +6,9 @@ protocol SearchVCProtocol: AnyObject {
 }
 
 final class SearchVC: UIViewController, SearchVCProtocol {
+    
     var presenter: SearchPresenter!
+//    private let searchText: String
 
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
@@ -42,6 +44,16 @@ final class SearchVC: UIViewController, SearchVCProtocol {
       
     }
 
+//    init(searchText: String) {
+//        self.searchText = searchText
+//
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+    
     // MARK: Private Methods
     private func setSearchBar() {
         let frame = CGRect(x: 55, y: 0, width: 250, height: 44)
@@ -122,7 +134,7 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleItemCell.identifier, for: indexPath) as! SingleItemCell
             let product = presenter.getProduct(at: indexPath.item)
             self.emptyResponseLabel.isHidden = true
-            cell.set(info: product)
+            cell.configure(with: product)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptySearchCell.identifier, for: indexPath) as! EmptySearchCell
@@ -149,8 +161,8 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
                 print("Error fetching search results: \(error)")
             }
 
-            }
         }
+    }
 
 
 
@@ -182,7 +194,7 @@ extension SearchVC: SearchBarViewDelegate, SearchBarForSearchVCDelegate {
 
         collectionView.reloadData()
     }
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {    }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -201,12 +213,8 @@ extension SearchVC: SearchBarViewDelegate, SearchBarForSearchVCDelegate {
             }
             presenter.searchData(searchText: searchText)
        }
-        if !searchText.isEmpty {
-             if !presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.contains(searchText) {
-                 presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.insert(searchText, at: 0)
-             }
-         }
         collectionView.reloadData()
+        presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.append(searchText)
     }
 
 }

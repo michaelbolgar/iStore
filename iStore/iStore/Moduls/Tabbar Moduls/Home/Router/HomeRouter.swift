@@ -6,15 +6,14 @@ protocol HomeRouterProtocol: BaseRouter {
     func start()
     func showSearchVC(searchText: String)
     func showCartVC()
-    func showDetailsVC()
-//    func initialViewController()
+    func showDetailsVC(data: SingleProduct)
 }
 
 // MARK: HomeRouter
 
 final class HomeRouter: HomeRouterProtocol {
 
-    let navigationController: UINavigationController
+    var navigationController: UINavigationController
     var moduleBuilder: (any HomeBuilderProtocol)?
     private let factory: AppFactory
 
@@ -26,12 +25,6 @@ final class HomeRouter: HomeRouterProtocol {
         self.factory = factory
     }
 
-//    func initialViewController() {
-//        if let homeVC = moduleBuilder?.createHomeModule(router: self) {
-//            navigationController.viewControllers = [homeVC]
-//        }
-//    }
-
     func start() {
         if let homeVC = moduleBuilder?.createHomeModule(router: self) {
             navigationController.viewControllers = [homeVC]
@@ -39,15 +32,18 @@ final class HomeRouter: HomeRouterProtocol {
     }
 
     func showSearchVC(searchText: String) {
-//        guard let searchVC = moduleBuilder?.createSearchVC(searchText: searchText) else { return }
-//        navigationController.pushViewController(searchVC, animated: true)
+//        if let detailsVC = moduleBuilder?.createSearchVC(searchText: <#T##String#>)(data: data) {
+//            navigationController.pushViewController(detailsVC, animated: true)
+//        }
     }
 
     func showCartVC() {
         // code
     }
 
-    func showDetailsVC() {
-        // code
+    func showDetailsVC(data: SingleProduct) {
+        if let detailsVC = moduleBuilder?.createDetailsVC(data: data) {
+            navigationController.pushViewController(detailsVC, animated: true)
+        }
     }
 }

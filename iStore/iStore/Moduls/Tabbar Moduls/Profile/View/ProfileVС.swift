@@ -15,11 +15,6 @@ final class ProfileVC: UIViewController {
     var presenter: ProfilePresenterProtocol!
     
     // MARK: - UI Elements
-    private let profileTitle = UILabel.makeLabel(text: "Profile",
-                                                 font: .InterBold(ofSize: 24),
-                                                 textColor: .customDarkGray,
-                                                 numberOfLines: nil,
-                                                 alignment: .center)
     
     private lazy var profileImage: UIImageView = {
         let element = UIImageView()
@@ -41,16 +36,6 @@ final class ProfileVC: UIViewController {
                                                  textColor: .customLightGray,
                                                  numberOfLines: 1,
                                                  alignment: .left)
-    
-    private lazy var settingsProfileButton: UIButton = {
-        let element = UIButton(type: .system)
-        element.setBackgroundImage(UIImage(systemName: "gearshape.2"), for: .normal)
-        element.backgroundColor = .white
-        element.tintColor = .customDarkGray
-        element.addTarget(self, action: #selector(settingsProfileButtonTapped), for: .touchUpInside)
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
     
     
     private lazy var changePhotoProfileButton: UIButton = {
@@ -105,7 +90,17 @@ final class ProfileVC: UIViewController {
         
         view.hideKeyboard() // это нужно для реализации функции по изменению логина и почты
         
-        [profileTitle, settingsProfileButton, profileImage, profileName, profileEmail, changePhotoProfileButton, typeAccountView, termsView, signoutView].forEach { view.addSubview($0) }
+        setNavigationBar(title: "Profile")
+        navigationController?.isNavigationBarHidden = false
+        
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
+        navigationController?.navigationBar.tintColor = UIColor.black
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"),
+                                                            style: .plain, target: self,
+                                                            action: #selector(settingsProfileButtonTapped))
+        
+        [profileImage, profileName, profileEmail, changePhotoProfileButton, typeAccountView, termsView, signoutView].forEach { view.addSubview($0) }
         
         //добавляем рекогнайзер на кнопки(вью)
         typeAccountView.isUserInteractionEnabled = true
@@ -183,13 +178,7 @@ private extension ProfileVC {
         
         NSLayoutConstraint.activate([
             
-            profileTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            profileTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            settingsProfileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            settingsProfileButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
-            
-            profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 92),
+            profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 62),
             profileImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: inset),
             profileImage.widthAnchor.constraint(equalToConstant: 130),
             profileImage.heightAnchor.constraint(equalToConstant: 130),
@@ -199,12 +188,12 @@ private extension ProfileVC {
             changePhotoProfileButton.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor),
             changePhotoProfileButton.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor),
             
-            profileName.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 104),
+            profileName.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 74),
             profileName.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 150),
             profileName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
             profileName.heightAnchor.constraint(equalToConstant: 24),
             
-            profileEmail.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 128),
+            profileEmail.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 98),
             profileEmail.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 150),
             profileEmail.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
             profileEmail.heightAnchor.constraint(equalToConstant: 24),
