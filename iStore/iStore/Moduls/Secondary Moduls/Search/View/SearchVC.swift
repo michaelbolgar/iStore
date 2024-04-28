@@ -23,7 +23,12 @@ final class SearchVC: UIViewController, SearchVCProtocol {
 
     private let searchBar = SearchBarView()
 
-   
+    private let emptyResponseLabel = UILabel.makeLabel(text: "Sorry, couldn't find \n anything 😢",
+                                                   font: UIFont.InterRegular(ofSize: 18),
+                                                   textColor: UIColor.darkGray,
+                                                   numberOfLines: 2,
+                                                   alignment: .center)
+
     
     // MARK: Life cycle
     override func viewDidLoad() {
@@ -59,8 +64,10 @@ final class SearchVC: UIViewController, SearchVCProtocol {
                                 forCellWithReuseIdentifier: SingleItemCell.identifier)
         collectionView.register(EmptySearchCell.self,
                                 forCellWithReuseIdentifier: EmptySearchCell.identifier)
-        collectionView.register(EmptyHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
-        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderViewTwo")
+//        collectionView.register(EmptyHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
+//        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderViewTwo")
+        collectionView.register(EmptyHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EmptyHeaderView.identifier)
+        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.identifier)
     }
 
     func reloadCollectionView() {
@@ -70,8 +77,12 @@ final class SearchVC: UIViewController, SearchVCProtocol {
     }
 
     func updateTableView(with results: [SingleProduct]) {
-        collectionView.reloadData()
-    }
+           if presenter.products.isEmpty {
+               print ("nothing found")
+               emptyResponseLabel.isHidden = false
+           }
+           collectionView.reloadData()
+       }
 
     // MARK: Selector Methods
     @objc func buyButtonPressed() {}
@@ -80,15 +91,19 @@ final class SearchVC: UIViewController, SearchVCProtocol {
 
 extension SearchVC {
     func setViews() {
-        [collectionView].forEach { view.addSubview($0)}
+        [collectionView, emptyResponseLabel].forEach { view.addSubview($0)}
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        emptyResponseLabel.isHidden = true
     }
     func setupUI() {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
+            emptyResponseLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyResponseLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 
@@ -109,11 +124,13 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
         if presenter.isProductCellVisible  {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleItemCell.identifier, for: indexPath) as! SingleItemCell
             let product = presenter.getProduct(at: indexPath.item)
+            self.emptyResponseLabel.isHidden = true
             cell.set(info: product)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptySearchCell.identifier, for: indexPath) as! EmptySearchCell
             let product = presenter.getQuery(at: indexPath.row)
+            self.emptyResponseLabel.isHidden = true
             cell.set(info: product)
             cell.delegate = self
             return cell
@@ -146,12 +163,13 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
             return CGSize(width: collectionView.frame.width, height: 30)
 
     }
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if presenter.isProductCellVisible {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderViewTwo", for: indexPath) as! HeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderView.identifier, for: indexPath) as! HeaderView
             return header
         } else {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderView", for: indexPath) as! EmptyHeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: EmptyHeaderView.identifier, for: indexPath) as! EmptyHeaderView
             header.delegate = self
             return header
         }

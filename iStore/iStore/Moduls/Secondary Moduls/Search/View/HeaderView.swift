@@ -6,6 +6,8 @@
 import UIKit
 
 class HeaderView: UICollectionReusableView {
+    static var identifier: String {"\(Self.self)"}
+    
     // MARK: UI Elements
     let searchlabel = UILabel.makeLabel(text: "Search result for",
                                                 font: UIFont.InterRegular(ofSize: 14),

@@ -11,6 +11,8 @@ protocol EmptyHeaderViewDelegate: AnyObject {
 
 
 final class EmptyHeaderView: UICollectionReusableView {
+
+    static var identifier: String {"\(Self.self)"}
     weak var delegate: EmptyHeaderViewDelegate?
 
     // MARK: UI Elements

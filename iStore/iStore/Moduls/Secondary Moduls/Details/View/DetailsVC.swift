@@ -102,7 +102,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         view.backgroundColor = .white
         presenter = DetailsPresenter(view: self)
  //       presenter.getData()
-        setNavigationBar(title: "Details product")
+        setNavigationBar(title: "Product details")
         navigationController?.isNavigationBarHidden = false
         setupViews()
         configureController()
