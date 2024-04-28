@@ -8,6 +8,7 @@ protocol HomePresenterProtocol {
     func showCartVC()
     func showSearchVC(with request: String)
     func showDetailsVC(with id: Int)
+    func showFilterVC()
 
     func setCategories()
     func setProducts(for id: Int)
@@ -68,5 +69,14 @@ final class HomePresenter: HomePresenterProtocol {
 
     func showDetailsVC(with id: Int) {
         // code
+    }
+    func showFilterVC() {
+        
+    }
+}
+extension HomePresenter: SingleItemCellDelegate {
+    
+    func buyButtonPressed() {
+        print("Buy pressed")
     }
 }

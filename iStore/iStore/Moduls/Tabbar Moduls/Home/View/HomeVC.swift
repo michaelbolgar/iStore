@@ -14,7 +14,7 @@ protocol HomeVCProtocol: AnyObject {
     func reloadData(with section: Int)
 }
 
-final class HomeVC: UIViewController {
+final class HomeVC: UIViewController, HomeVCProtocol {
     
     var presenter: HomePresenterProtocol!
     
@@ -239,12 +239,12 @@ private func createSearchFieldSection() -> NSCollectionLayoutSection {
 private func createCategorySection() -> NSCollectionLayoutSection {
     let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
                                                         heightDimension: .fractionalWidth(1)))
-    let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(57),
-                                                                     heightDimension: .absolute(61)),
+    let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(65),
+                                                                     heightDimension: .absolute(62)),
                                                    subitems: [item])
     let section = createLayoutSection(group: group,
                                       behavior: .continuous,
-                                      interGroupSpacing: 16,
+                                      interGroupSpacing: 10,
                                       supplementaryItems: [],
                                       contentInsets: false)
     section.contentInsets = .init(top: 0, leading: 16, bottom: 16, trailing: 16)
@@ -255,7 +255,7 @@ private func createProductSection() -> NSCollectionLayoutSection {
     let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5),
                                                         heightDimension: .fractionalHeight(1)))
     let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                                                     heightDimension: .fractionalHeight(0.35)),
+                                                                     heightDimension: .absolute(217)),
                                                    subitems: [item])
     group.interItemSpacing = .fixed(16)
     let section = NSCollectionLayoutSection(group: group)
@@ -274,7 +274,7 @@ private func supplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementar
 }
 
 
-extension HomeVC: HomeVCProtocol {
+extension HomeVC {
     func reloadData(with section: Int) {
         if section == 2 {
             collectionView.reloadSections(IndexSet(integer: section))
