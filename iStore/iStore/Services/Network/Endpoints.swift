@@ -17,7 +17,7 @@ enum Endpoint {
             return "/api/v1/products/\(id)/"
         case .doSearch:
             return "/api/v1/products"
-        case .updateCategory(let id): 
+        case .updateCategory(id: let id):
                     return "/api/v1/categories/\(id)"
         
         }

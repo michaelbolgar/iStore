@@ -113,7 +113,7 @@ extension ProductVC: UICollectionViewDelegate, UICollectionViewDataSource, UICol
 extension ProductVC: SearchBarViewDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        presenter.fetchProductsByCategory(searchText: searchText)
+        presenter.fetchProductsByCategory(searchText: (searchText))
         }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

@@ -113,34 +113,26 @@ final class AddNewCategoryVC: UIViewController {
     }
     
     @objc private func saveChangeButtonTapped() {
-        guard let newName = nameTextView.text,
-              let newPrice = Int(priceTextView.text ?? ""),
-              let newCategoryName = categoryTextField.text,
-              let newDescription = descriptionTextView.text,
-              let newImage = imagesTextView.text,
-              let productId = product?.id else {
-                  // Возможно, вы хотите предпринять какие-то действия, если не удалось получить все необходимые данные
-                  return
-              }
+        guard let productID = product?.id else { return }
 
-        let updatedCategory = UpdatedCategory(id: productId,
-                                              name: newName,
-                                              image: newImage)
-        print("Updated category data:", updatedCategory)
+        guard let newTitle = nameTextView.text, !newTitle.isEmpty else { return }
 
-        NetworkingManager.shared.updateCategory(withId: productId, newData: updatedCategory) { [weak self] result in
+        guard let newPriceString = priceTextView.text,
+              let newPrice = Int(newPriceString) else { return }
+
+        let newImages = imagesTextView.text.components(separatedBy: ",")
+
+       NetworkingManager.shared.updateProduct(id: productID, newTitle: newTitle, newPrice: newPrice, newDescription: "", newImages: newImages) { result in
             switch result {
-            case .success(let updatedCategory):
-                // Обновление прошло успешно, обновите интерфейс или выполните другие действия по вашему усмотрению
-                print("Category updated successfully:", updatedCategory)
+            case .success:
+                // Handle successful product update
+                print("Product updated successfully")
             case .failure(let error):
-                // Обработка ошибки при обновлении категории
-                print("Failed to update category:", error)
+                // Handle error
+                print("Failed to update product:", error)
             }
         }
     }
-
-    
 }
 
 // MARK: - Setup Constraints
@@ -242,3 +234,27 @@ extension AddNewCategoryVC: UITextFieldDelegate {
     }
 }
 
+//guard let newName = nameTextView.text,
+//      let newImage = imagesTextView.text,
+//      let productId = product?.id else {
+////              let newPrice = Int(priceTextView.text ?? ""),
+////              let newCategoryName = categoryTextField.text,
+////              let newDescription = descriptionTextView.text,
+//    return
+//}
+//
+//let updatedProduct = UpdatedProduct(name: newName,
+//                                      image: newImage)
+//print("Инициализация обновленного продукта:", updatedProduct)
+//
+//NetworkingManager.shared.updateProduct(withId: productId, newData: updatedProduct) { [weak self] result in
+//        switch result {
+//        case .success(let updatedProduct):
+//            
+//            // Обновление прошло успешно, обновите интерфейс или выполните другие действия по вашему усмотрению
+//            print("Продукт обновлен:", updatedProduct)
+//        case .failure(let error):
+//            // Обработка ошибки при обновлении продукта
+//            print("Ошибка обновления:", error)
+//        }
+//}
