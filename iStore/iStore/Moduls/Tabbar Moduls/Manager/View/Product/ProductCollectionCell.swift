@@ -1,14 +1,16 @@
 import UIKit
 
 protocol ProductCollectionCellDelegate: AnyObject {
-    func updateButtonPressed()
+    func updateButtonPressed(with product: SingleProduct)
     func deleteButtonPressed()
 }
 
 final class ProductCollectionCell: UICollectionViewCell {
 //MARK: - Properties
+    var product: SingleProduct?
     var index: Int?
     static let identifier = String(describing: ProductCollectionCell.self)
+    var presenter: ProductPresenter!
     weak var delegate: ProductCollectionCellDelegate?
     let spacing: CGFloat = 12
     
@@ -17,6 +19,8 @@ final class ProductCollectionCell: UICollectionViewCell {
     private lazy var productImage: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = 5
+        image.layer.masksToBounds = true
+        image.contentMode = .scaleAspectFill
         return image
     }()
     
@@ -62,15 +66,36 @@ final class ProductCollectionCell: UICollectionViewCell {
     }
  
     //MARK: - Methods
-    func set(info: Product, at index: Int) {
+    func set(info: SingleProduct, at index: Int) {
         self.index = index
-        let pictureName = info.picture ?? "Buy"
-        productImage.image = UIImage(named: pictureName)
-        productLabel.text = info.description
-        priceLabel.text = String(format: "$%.2f", info.price ?? 0)
+        productImage.image = nil
+        if let pictureName = info.images.first {
+            if let unwrappedPictureName = pictureName {
+                setImage(pictureURL: unwrappedPictureName)
+            }
+        }
+        productLabel.text = info.title
+        priceLabel.text = "$\(info.price ?? 0)"
+        
     }
-   
+    
+    
     //MARK: - Private Methods
+    private func setImage(pictureURL: String) {
+        
+        guard let imageURL = URL(string: pictureURL) else { return }
+        
+        ImageDownloader.shared.downloadImage(from: imageURL) { result in
+            switch result {
+            case .success(let image):
+                //                print("success")
+                self.productImage.image = image
+            case .failure(let error):
+                print("Error fetching image: \(error)")
+            }
+        }
+    }
+    
     private func configure() {
         contentView.addSubview(backView)
         [productImage, productLabel, updateButton, deleteButton, priceLabel].forEach { backView.addSubview($0)}
@@ -83,20 +108,21 @@ final class ProductCollectionCell: UICollectionViewCell {
 
     //MARK: - Selector Methods
     @objc func deleteButtonTapped() {
-        delegate?.deleteButtonPressed()
     }
     
     @objc func updateButtonTapped() {
-        delegate?.updateButtonPressed()
+        print("датути from cell")
+        guard let product = product else { return }
+        presenter.updateButtonPressed(with: product)
     }
+
 }
 
 //MARK: - Setup Constraints
 private extension ProductCollectionCell {
     func setupConstraints() {
-        backView.translatesAutoresizingMaskIntoConstraints = false
+        
         productImage.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             backView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -107,7 +133,8 @@ private extension ProductCollectionCell {
             productImage.topAnchor.constraint(equalTo: backView.topAnchor),
             productImage.leadingAnchor.constraint(equalTo: backView.leadingAnchor),
             productImage.trailingAnchor.constraint(equalTo: backView.trailingAnchor),
-            productImage.heightAnchor.constraint(equalTo: backView.heightAnchor, multiplier: 0.5),
+            productImage.widthAnchor.constraint(equalToConstant: 170),
+            productImage.heightAnchor.constraint(equalToConstant: 112),
             
             productLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: spacing),
             productLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -spacing),
@@ -126,5 +153,3 @@ private extension ProductCollectionCell {
         ])
     }
 }
-
-

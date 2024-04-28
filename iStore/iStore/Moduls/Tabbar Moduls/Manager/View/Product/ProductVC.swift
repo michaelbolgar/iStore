@@ -1,13 +1,20 @@
 import UIKit
 
 protocol ProductVCProtocol: AnyObject {
-    func reloadCollectionView()
+    //func reloadCollectionView()
+    func updateTableView(with results: [SingleProduct])
 }
 
 final class ProductVC: UIViewController, ProductVCProtocol {
     
+    func updateTableView(with results: [SingleProduct]) {
+        collectionView.reloadData()
+    }
+    
     var presenter: ProductPresenter!
-
+    var presenterManager: ManagerPresenterProtocol!
+    let shared = NetworkingManager.shared
+    
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout.createTwoColumnFlowLayout(in: view)
@@ -26,9 +33,11 @@ final class ProductVC: UIViewController, ProductVCProtocol {
         setPresenter()
         configureCollectionView()
         setupViews()
-        setupConstraints()
+        
         hideLeftNavigationItem()
         setupSearchBar()
+        setupConstraints()
+        
     }
     
     // MARK: - Private Methods
@@ -36,29 +45,32 @@ final class ProductVC: UIViewController, ProductVCProtocol {
     private func setupViews() {
         view.backgroundColor = .white
         view.hideKeyboard()
-    
+        
+        setNavigationBar(title: "Product")
+        navigationController?.isNavigationBarHidden = false
+        
         view.addSubview(collectionView)
+        view.addSubview(searchBar)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.add,
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                                             style: .plain, target: self,
-                                                            action: #selector(goToCategoryVCButtonPressed))
+                                                            action: #selector(addNewProduct))
+        navigationItem.leftBarButtonItem?.tintColor = .customDarkGray
         navigationController?.navigationBar.tintColor = UIColor.black
     }
     
     private func setPresenter() {
         presenter = ProductPresenter(viewController: self)
-        presenter.viewDidLoad()
+        //presenter.viewDidLoad()
     }
-
     
     private func setupSearchBar() {
-        let frame = CGRect(x: 0, y: 0, width: 300, height: 40)
-        let titleView = UIView(frame: frame)
-        searchBar.frame = frame
-        titleView.addSubview(searchBar)
-        navigationItem.titleView = titleView
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.backgroundColor = .white
         searchBar.delegate = self
+        
     }
     
     private func configureCollectionView() {
@@ -68,15 +80,15 @@ final class ProductVC: UIViewController, ProductVCProtocol {
                                 forCellWithReuseIdentifier: ProductCollectionCell.identifier)
     }
     
-    func reloadCollectionView() {
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-    }
+    //    func reloadCollectionView() {
+    //        DispatchQueue.main.async {
+    //            self.collectionView.reloadData()
+    //        }
+    //    }
     
     // MARK: - Selector Methods
-    @objc func goToCategoryVCButtonPressed() {
-        // go to cart screen
+    @objc func addNewProduct() {
+        presenter.navToAddCategoryVC()
     }
 }
 
@@ -85,11 +97,13 @@ extension ProductVC: UICollectionViewDelegate, UICollectionViewDataSource, UICol
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return presenter.productCount
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionCell.identifier, for: indexPath) as! ProductCollectionCell
         let product = presenter.getProduct(at: indexPath.item)
         cell.set(info: product, at: indexPath.item)
+        cell.presenter = presenter // Устанавливаем делегата ячейке
+        cell.product = product
         cell.delegate = presenter
         return cell
     }
@@ -98,9 +112,10 @@ extension ProductVC: UICollectionViewDelegate, UICollectionViewDataSource, UICol
 //MARK: - SearchBarViewDelegate
 extension ProductVC: SearchBarViewDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-      print(searchText)
-    }
-
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        presenter.fetchProductsByCategory(searchText: (searchText))
+        }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
         print(searchText)
@@ -113,7 +128,11 @@ extension ProductVC {
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
