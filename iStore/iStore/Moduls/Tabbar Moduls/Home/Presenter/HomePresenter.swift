@@ -17,7 +17,6 @@ final class HomePresenter: HomePresenterProtocol {
 
     weak var view: HomeVCProtocol?
     private let router: HomeRouterProtocol
-//    private let networkingManager: NetworkingManager
 
     var categoryData: [Category] = []
     var productData: [SingleProduct] = []
@@ -28,33 +27,33 @@ final class HomePresenter: HomePresenterProtocol {
     {
         self.view = view
         self.router = router
-//        self.networkingManager = networkingManager
     }
 
     func setCategories() {
-        NetworkingManager.shared.getCategories { result in
-            switch result {
-
-            case .success(let categories):
-                self.categoryData = categories
-//                print(self.categoryData)
-
-            case .failure(let error):
-                print("Error fetching collections: \(error)")
+        NetworkingManager.shared.getCategories { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let categories):
+                    self?.categoryData = categories
+                    self?.view?.reloadData(with: 1)
+                case .failure(let error):
+                    print("Error fetching collections: \(error)")
+                }
             }
         }
     }
 
     func setProducts(for id: Int) {
-        NetworkingManager.shared.getProductsByCategory(for: id) { result in
-            switch result {
-
-            case .success(let products):
-                self.productData = products
-//                print(self.productData)
-
-            case .failure(let error):
-                print("Error fetching: \(error)")
+        NetworkingManager.shared.getProductsByCategory(for: id) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let products):
+                    self?.productData = products
+                                    print(products)
+                    self?.view?.reloadData(with: 2)
+                case .failure(let error):
+                    print("Error fetching: \(error)")
+                }
             }
         }
     }
