@@ -37,7 +37,9 @@ final class HomeRouter: HomeRouterProtocol {
     }
 
     func showCartVC() {
-        // code
+        if let cartVC = moduleBuilder?.createCartVC() {
+            navigationController.pushViewController(cartVC, animated: true)
+        }
     }
 
     func showDetailsVC() {

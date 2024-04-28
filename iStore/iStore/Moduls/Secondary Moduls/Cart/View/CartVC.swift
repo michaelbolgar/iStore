@@ -35,7 +35,8 @@ final class CartVC: UIViewController, CartVCProtocol {
                                                            titleColor: .white,
                                                            titleSize: 16,
                                                            width: 308,
-                                                           height: 50)
+                                                           height: 50,
+                                                           cornerRadius: 6)
 
     // MARK: Life cycle
     override func viewDidLoad() {
@@ -124,18 +125,18 @@ extension CartVC {
             footerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             footerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             footerView.heightAnchor.constraint(equalToConstant: 160),
-            footerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            footerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60),
 
-            orderLabel.topAnchor.constraint(equalTo: footerView.topAnchor, constant: 15),
+            orderLabel.topAnchor.constraint(equalTo: footerView.topAnchor, constant: 10),
             orderLabel.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 23),
 
-            totalLabel.topAnchor.constraint(equalTo: orderLabel.bottomAnchor, constant: 10),
+            totalLabel.topAnchor.constraint(equalTo: orderLabel.bottomAnchor, constant: 8),
             totalLabel.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 23),
 
             priceLabel.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
             priceLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -23),
 
-            selectButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 10),
+            selectButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 15),
             selectButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor)
 
         ])

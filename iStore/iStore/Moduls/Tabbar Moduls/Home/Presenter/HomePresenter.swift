@@ -60,7 +60,8 @@ final class HomePresenter: HomePresenterProtocol {
     }
 
     func showCartVC() {
-        // code
+        print ("and here")
+        router.showCartVC()
     }
 
     func showSearchVC(with request: String) {
@@ -74,6 +75,7 @@ final class HomePresenter: HomePresenterProtocol {
         
     }
 }
+
 extension HomePresenter: SingleItemCellDelegate {
     
     func buyButtonPressed() {

@@ -128,6 +128,7 @@ extension HomeVC: UICollectionViewDataSource {
                     withReuseIdentifier: "HeaderNavBarMenuView",
                     for: indexPath) as! HeaderNavBarMenuView
                 header.configureHeader(labelName: section)
+                header.delegate = self
                 return header
             case "categories":
                 fallthrough
@@ -281,5 +282,11 @@ extension HomeVC {
         } else {
             collectionView.reloadData()
         }
+    }
+}
+
+extension HomeVC: HeaderNavBarMenuViewDelegate {
+    func cartButtonTapped() {
+        presenter.showCartVC()
     }
 }

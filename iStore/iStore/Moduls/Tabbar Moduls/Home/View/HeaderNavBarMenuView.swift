@@ -7,10 +7,15 @@
 
 import UIKit
 
+protocol HeaderNavBarMenuViewDelegate: AnyObject {
+    func cartButtonTapped()
+}
+
 final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: Properties
     
+    weak var delegate: HeaderNavBarMenuViewDelegate?
     private var dropdownTableView: UITableView!
     private var dropdownOptions = ["Europe - €", "USA - $", "Rus - ₽"]
     
@@ -55,7 +60,7 @@ final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate,
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
 
     //MARK: - Initialization
 
@@ -108,6 +113,7 @@ final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate,
 
     @objc private func cartButtonTapped() {
         print("Cart button tapped")
+        delegate?.cartButtonTapped()
     }
 
     @objc private func bellButtonTapped() {
