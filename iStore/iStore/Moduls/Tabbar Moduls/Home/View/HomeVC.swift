@@ -139,9 +139,9 @@ extension HomeVC: UICollectionViewDelegate {
         case .products(_):
             print("item cell tapped")
 
-            let detailsVC = DetailsVC()
+//            let detailsVC = DetailsVC()
 //            detailsVC.configure(with: selectedItem)
-            navigationController?.pushViewController(detailsVC, animated: true)
+//            navigationController?.pushViewController(detailsVC, animated: true)
         }
     }
 }

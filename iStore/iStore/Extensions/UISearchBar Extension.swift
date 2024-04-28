@@ -46,12 +46,13 @@ extension SearchBarView {
     
     private func cancelAction(with searchBar: UISearchBar) {
         withAnimation { [self] in
-            searchBar.text = nil
-            searchBar.showsCancelButton = false
-            dismiss(searchBar)
-            
+        searchBar.text = nil
+        searchBar.showsCancelButton = false
+        dismiss(searchBar)
             layoutIfNeeded()
         }
+        // Call searchBarCancelButtonClicked on the delegate that handles cancel action
+        secondDelegate?.searchBarCancelButtonClicked(searchBar)
     }
 }
 

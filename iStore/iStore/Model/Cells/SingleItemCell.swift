@@ -87,7 +87,7 @@ class SingleItemCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             backView.heightAnchor.constraint(equalToConstant: 217),
             backView.widthAnchor.constraint(equalToConstant: 170),
-            backView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            backView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
