@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseAuth
+import Firebase
 
 final class RootRouter {
     
@@ -29,20 +30,21 @@ final class RootRouter {
             showOnboarding()
         }
 
-        /// проверка, авторизован ли пользователь; если нет - показать LoginVC()
+        /// проверяем, авторизован ли пользователь
         if Auth.auth().currentUser != nil {
-            print ("пользователь авторизован")
+            print("пользователь авторизован")
         } else {
-            // Пользователь не авторизован
+            print("Пользователь не авторизован")
             showLoginScreen()
         }
     }
-    
+
+
     func showMainTabBar() -> UITabBarController {
         return factory.makeTabBar(
             factory.makeHomeRouter().navigationController,
             factory.makeWishlistRouter().navigationController,
-            factory.makeManagerRouter().navigationController,
+            factory.makeManagerRouter().navigationController ?? UIViewController(),
             factory.makeProfileRouter().navigationController
         )
     }
@@ -63,9 +65,7 @@ final class RootRouter {
         let navigationController = UINavigationController(rootViewController: loginVC)
         navigationController.modalPresentationStyle = .fullScreen
         navigationController.isModalInPresentation = true
-        window?.rootViewController?.present(navigationController, animated: true) {
-            self.userDefaults.onboardingCompleted = true
-        }
+        window?.rootViewController?.present(navigationController, animated: true)
     }
     
     /// метод проверки для сброса прохождения Онбординга (установлен и закомментирован в начале start())

@@ -2,9 +2,14 @@ import UIKit
 
 protocol SearchVCProtocol: AnyObject {
     func reloadCollectionView()
+    func updateTableView(with results: [SingleProduct])
 }
 
 final class SearchVC: UIViewController, SearchVCProtocol {
+    func updateTableView(with results: [SingleProduct]) {
+        collectionView.reloadData()
+    }
+    
 
     var presenter: SearchPresenter!
 
@@ -23,7 +28,7 @@ final class SearchVC: UIViewController, SearchVCProtocol {
 
     private let searchBar = SearchBarView()
 
-    private let searchlabel = UILabel.makeLabel(text: "Search result for Earphones",
+    private let searchlabel = UILabel.makeLabel(text: "Search result for",
                                                 font: UIFont.InterRegular(ofSize: 14),
                                                 textColor: UIColor.customDarkGray,
                                                 numberOfLines: 1,
@@ -70,6 +75,7 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         titleView.addSubview(searchBar)
         navigationItem.titleView = titleView
         searchBar.delegate = self
+        searchBar.secondDelegate = self 
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Buy"),
                                                             style: .plain, target: self,
                                                             action: #selector(buyButtonPressed))
@@ -78,8 +84,8 @@ final class SearchVC: UIViewController, SearchVCProtocol {
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(SearchCollectionCell.self,
-                                forCellWithReuseIdentifier: SearchCollectionCell.identifier)
+        collectionView.register(SingleItemCell.self,
+                                forCellWithReuseIdentifier: SingleItemCell.identifier)
         collectionView.register(EmptySearchCell.self,
                                 forCellWithReuseIdentifier: EmptySearchCell.identifier)
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
@@ -151,7 +157,7 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if presenter.showSection1  {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionCell.identifier, for: indexPath) as! SearchCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleItemCell.identifier, for: indexPath) as! SingleItemCell
             let product = presenter.getProduct(at: indexPath.item)
             cell.set(info: product)
             return cell
@@ -181,14 +187,16 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
     }
 }
 
-extension SearchVC: SearchBarViewDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-      print(searchText)
+extension SearchVC: SearchBarViewDelegate, SearchBarForSearchVCDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print("sdg")
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {}
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
-
+        searchlabel.text = "Search result for '\(searchText)'"
         if searchText.isEmpty {
             presenter.showSection1 = false
             if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -199,20 +207,11 @@ extension SearchVC: SearchBarViewDelegate {
             if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
                 layout.itemSize = CGSize(width: 170, height: 217)
             }
+            presenter.searchData(searchText: searchText)
         }
         collectionView.reloadData()
+      
     }
 
 }
 
-
-enum UICollectionFlowLayout {
-
-    static func createTwoColFlowLayout(in view: UIView) -> UICollectionViewFlowLayout {
-        let padding: CGFloat = 12
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-        flowLayout.itemSize = CGSize(width: 170, height: 217)
-        return flowLayout
-    }
-}

@@ -3,13 +3,16 @@ import UIKit
 enum ButtonColor {
     case green
     case gray
-
+    case red
+    
     var color: UIColor {
         switch self {
         case .green:
             return .lightGreen
         case .gray:
             return .customLightGray
+        case .red:
+            return .customRed
         }
     }
 }

@@ -6,7 +6,7 @@ protocol WishlistRouterProtocol: BaseRouter {
     func start()
     func showCartVC()
     func showDetailsVC()
-    func initialViewController()
+//    func initialViewController()
 }
 
 // MARK: WishlistRouter
@@ -25,14 +25,16 @@ final class WishlistRouter: WishlistRouterProtocol {
         self.factory = factory
     }
 
-    func initialViewController() {
+//    func initialViewController() {
+//        if let wishlistVC = moduleBuilder?.createWishlistModule(router: self) {
+//            navigationController.viewControllers = [wishlistVC]
+//        }
+//    }
+
+    func start() {
         if let wishlistVC = moduleBuilder?.createWishlistModule(router: self) {
             navigationController.viewControllers = [wishlistVC]
         }
-    }
-
-    func start() {
-        navigationController.viewControllers = [factory.makeWishlistVC()]
     }
 
     func showCartVC() {
