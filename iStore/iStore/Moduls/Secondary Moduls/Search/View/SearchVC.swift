@@ -6,8 +6,9 @@ protocol SearchVCProtocol: AnyObject {
 }
 
 final class SearchVC: UIViewController, SearchVCProtocol {
-    var presenter: SearchPresenter!
     
+    var presenter: SearchPresenter!
+//    private let searchText: String
 
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
@@ -43,6 +44,16 @@ final class SearchVC: UIViewController, SearchVCProtocol {
       
     }
 
+//    init(searchText: String) {
+//        self.searchText = searchText
+//
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+    
     // MARK: Private Methods
     private func setSearchBar() {
         let frame = CGRect(x: 55, y: 0, width: 250, height: 44)
@@ -64,8 +75,6 @@ final class SearchVC: UIViewController, SearchVCProtocol {
                                 forCellWithReuseIdentifier: SingleItemCell.identifier)
         collectionView.register(EmptySearchCell.self,
                                 forCellWithReuseIdentifier: EmptySearchCell.identifier)
-//        collectionView.register(EmptyHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
-//        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderViewTwo")
         collectionView.register(EmptyHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EmptyHeaderView.identifier)
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.identifier)
     }
@@ -152,8 +161,8 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
                 print("Error fetching search results: \(error)")
             }
 
-            }
         }
+    }
 
 
 

@@ -22,6 +22,8 @@
 		514452532BD10DCB0093B9D5 /* TermsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514452512BD10DCB0093B9D5 /* TermsVC.swift */; };
 		514452552BD140F90093B9D5 /* TermsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514452542BD140F80093B9D5 /* TermsModel.swift */; };
 		514452592BD23CAE0093B9D5 /* ChangeProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514452582BD23CAD0093B9D5 /* ChangeProfileVC.swift */; };
+		517151C52BDCC502002A27E8 /* ProductVCModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517151C42BDCC501002A27E8 /* ProductVCModel.swift */; };
+		517151C72BDD0684002A27E8 /* UITextView Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517151C62BDD0684002A27E8 /* UITextView Extension.swift */; };
 		519BD3D02BDA582B00B905C1 /* AddNewCategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519BD3C92BDA582A00B905C1 /* AddNewCategoryVC.swift */; };
 		519BD3D12BDA582B00B905C1 /* CategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519BD3CA2BDA582A00B905C1 /* CategoryVC.swift */; };
 		519BD3D22BDA582B00B905C1 /* ProductPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519BD3CC2BDA582A00B905C1 /* ProductPresenter.swift */; };
@@ -128,6 +130,8 @@
 		514452512BD10DCB0093B9D5 /* TermsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsVC.swift; sourceTree = "<group>"; };
 		514452542BD140F80093B9D5 /* TermsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsModel.swift; sourceTree = "<group>"; };
 		514452582BD23CAD0093B9D5 /* ChangeProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileVC.swift; sourceTree = "<group>"; };
+		517151C42BDCC501002A27E8 /* ProductVCModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductVCModel.swift; sourceTree = "<group>"; };
+		517151C62BDD0684002A27E8 /* UITextView Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView Extension.swift"; sourceTree = "<group>"; };
 		519BD3C92BDA582A00B905C1 /* AddNewCategoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewCategoryVC.swift; sourceTree = "<group>"; };
 		519BD3CA2BDA582A00B905C1 /* CategoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryVC.swift; sourceTree = "<group>"; };
 		519BD3CC2BDA582A00B905C1 /* ProductPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductPresenter.swift; sourceTree = "<group>"; };
@@ -247,6 +251,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		517151C32BDCC501002A27E8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				517151C42BDCC501002A27E8 /* ProductVCModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		519BD3C82BDA582A00B905C1 /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -335,6 +347,7 @@
 				F41763BC2BCF30A700EBB86D /* UIViewController Extension.swift */,
 				F41763BE2BCF32C400EBB86D /* UIButton Extension.swift */,
 				F41763C02BCF3ACF00EBB86D /* UITextField Extension.swift */,
+				517151C62BDD0684002A27E8 /* UITextView Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -383,6 +396,7 @@
 		F41763C42BCF469B00EBB86D /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				517151C32BDCC501002A27E8 /* Model */,
 				F426C3FF2BD54D6C003683DE /* Module Builder */,
 				F426C3FE2BD54D68003683DE /* Router */,
 				F41763D92BCF47BC00EBB86D /* View */,
@@ -560,8 +574,8 @@
 			isa = PBXGroup;
 			children = (
 				519BD3CF2BDA582B00B905C1 /* ManagerVC.swift */,
-				519BD3C82BDA582A00B905C1 /* Category */,
 				519BD3CB2BDA582A00B905C1 /* Product */,
+				519BD3C82BDA582A00B905C1 /* Category */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -901,10 +915,12 @@
 				F426C4072BD54F7D003683DE /* ProfileRouter.swift in Sources */,
 				F41763C12BCF3ACF00EBB86D /* UITextField Extension.swift in Sources */,
 				F420B3A32BD712020088BA23 /* Endpoints.swift in Sources */,
+				517151C72BDD0684002A27E8 /* UITextView Extension.swift in Sources */,
 				514452522BD10DCB0093B9D5 /* ChangePhotoVC.swift in Sources */,
 				F4900BAC2BD04F83009BB675 /* HomeBuilder.swift in Sources */,
 				F426C4162BD5CF9D003683DE /* SearchFieldView.swift in Sources */,
 				F4900BAA2BD04F7B009BB675 /* HomeRouter.swift in Sources */,
+				517151C52BDCC502002A27E8 /* ProductVCModel.swift in Sources */,
 				519BD3D22BDA582B00B905C1 /* ProductPresenter.swift in Sources */,
 				D09501D72BDCD16C0084ED65 /* HeaderView.swift in Sources */,
 				F41764072BCF4B8900EBB86D /* HomePresenter.swift in Sources */,

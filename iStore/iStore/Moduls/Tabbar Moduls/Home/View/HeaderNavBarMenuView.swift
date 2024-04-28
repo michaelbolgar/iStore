@@ -12,7 +12,7 @@ protocol HeaderNavBarMenuViewDelegate: AnyObject {
 }
 
 final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate, UITableViewDataSource {
-    
+
     // MARK: Properties
     
     weak var delegate: HeaderNavBarMenuViewDelegate?
