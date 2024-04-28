@@ -5,8 +5,12 @@
 
 
 import UIKit
+protocol SearchCellDelegate: AnyObject {
+    func closeButtonPressed(for cell: EmptySearchCell)
+}
 
 class EmptySearchCell: UICollectionViewCell {
+    weak var delegate: SearchCellDelegate?
 
     // MARK: Properties
     static var identifier: String {"\(Self.self)"}
@@ -36,6 +40,7 @@ class EmptySearchCell: UICollectionViewCell {
         super.init(frame: frame)
         configure()
         setupConstraints()
+        closeButton.addTarget(self, action: #selector(closeButtonPressed), for: .touchUpInside)
     }
 
     required init?(coder: NSCoder) {
@@ -43,8 +48,8 @@ class EmptySearchCell: UICollectionViewCell {
     }
 
     //MARK: Methods
-    func set(info: LastSearchData) {
-        searchLabel.text = info.enteredWord
+    func set(info: String) {
+        searchLabel.text = info
     }
 
     private func configure() {
@@ -70,5 +75,9 @@ class EmptySearchCell: UICollectionViewCell {
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
         ])
+    }
+
+    @objc func closeButtonPressed() {
+        delegate?.closeButtonPressed(for: self)
     }
 }

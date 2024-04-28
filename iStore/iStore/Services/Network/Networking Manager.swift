@@ -40,7 +40,7 @@ struct NetworkingManager {
 
         case .getCategories:
             parameters ["offset"] = "0"
-            parameters ["limit"] = "10"
+            parameters ["limit"] = "6"
 
         case .getProductsByCategory:
             parameters ["offset"] = "0"

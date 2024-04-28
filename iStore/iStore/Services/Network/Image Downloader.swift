@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 final class ImageDownloader {
 
@@ -6,25 +7,15 @@ final class ImageDownloader {
 
     private init() {}
 
-    func downloadImage(from url: URL, completion: @escaping (Result<UIImage, Error>) -> Void)  {
-
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard self != nil else { return }
-            if let error = error {
-                DispatchQueue.main.async {
-                    print("Error downloading image")
-                    completion(.failure(error))
-                }
-                return
+    func downloadImage(from url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
+        let imageView = UIImageView()
+        imageView.kf.setImage(with: url, completionHandler: { result in
+            switch result {
+            case .success(let value):
+                completion(.success(value.image))
+            case .failure(let error):
+                completion(.failure(error))
             }
-
-            if let data = data, let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    completion(.success(image))
-                }
-            } else {
-                print("Invalid image data")
-            }
-        }.resume()
+        })
     }
 }

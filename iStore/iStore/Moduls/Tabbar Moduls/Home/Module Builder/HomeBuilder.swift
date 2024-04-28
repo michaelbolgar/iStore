@@ -6,7 +6,7 @@ protocol HomeBuilderProtocol {
     func createHomeModule(router: HomeRouterProtocol) -> UIViewController
     func createSearchVC(searchText: String) -> UIViewController
     func createCartVC() -> UIViewController
-    func createDetailsVC() -> UIViewController
+    func createDetailsVC(data: SingleProduct) -> UIViewController
 }
 
 // MARK: HomeBuilder
@@ -15,8 +15,8 @@ final class HomeBuilder: HomeBuilderProtocol {
 
     func createHomeModule(router: HomeRouterProtocol) -> UIViewController {
         let view = HomeVC()
-        let presenter = HomePresenter.self
-        view.presenter = presenter as? HomePresenterProtocol
+        let presenter = HomePresenter(view: view, router: router)
+        view.presenter = presenter
         return view
     }
 
@@ -28,7 +28,7 @@ final class HomeBuilder: HomeBuilderProtocol {
         CartVC()
     }
 
-    func createDetailsVC() -> UIViewController {
-        DetailsVC()
+    func createDetailsVC(data: SingleProduct) -> UIViewController {
+        DetailsVC(data: data)
     }
 }
