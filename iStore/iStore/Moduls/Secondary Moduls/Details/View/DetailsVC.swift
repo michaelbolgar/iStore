@@ -47,15 +47,11 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
                                                numberOfLines: 1,
                                                alignment: .left)
 
-    #warning("переделать под лейбл")
-    private let descriptionTextView: UITextView = {
-        let textView = UITextView()
-        textView.font = UIFont.InterRegular(ofSize: 14)
-        textView.textColor = UIColor.darkGray
-        textView.isEditable = false
-        textView.isScrollEnabled = false
-        return textView
-    }()
+    private let descriptionTextView = UILabel.makeLabel(text: nil, 
+                                                        font: UIFont.InterRegular(ofSize: 14),
+                                                        textColor: UIColor.darkGray,
+                                                        numberOfLines: 0,
+                                                        alignment: .justified)
 
     private let grayCircle: UIView = {
         let view = UIView()
@@ -65,13 +61,9 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         return view
     }()
 
-    #warning("украсть с экрана Wishlist кнопку (через экстеншн)")
-    private let heartButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Heart"), for: .normal)
-        button.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .selected)
-        return button
-    }()
+    private let heartButton = UIButton.makeImageButton(imageForNormal: UIImage.heart,
+                                                       imageForSelected: UIImage.selectedheart, 
+                                                       color: .lightGreen)
 
     private let addButton = UIButton.makeButton(text: "Add to Cart", 
                                                 buttonColor: ButtonColor.green,
@@ -95,6 +87,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         presenter = DetailsPresenter(view: self)
         presenter.getData()
         title = "Details product"
+        navigationController?.isNavigationBarHidden = false
         setupViews()
         configureController()
         setupConstraints()
@@ -119,7 +112,6 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         [addButton, buyButton].forEach{view.addSubview($0)}
     }
     private func configureController() {
-        descriptionTextView.delegate = self
         scrollView.contentInsetAdjustmentBehavior = .never
         heartButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
     }

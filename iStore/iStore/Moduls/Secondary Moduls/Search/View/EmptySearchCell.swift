@@ -48,8 +48,8 @@ class EmptySearchCell: UICollectionViewCell {
     }
 
     //MARK: Methods
-    func set(info: LastSearchData) {
-        searchLabel.text = info.enteredWord
+    func set(info: String) {
+        searchLabel.text = info
     }
 
     private func configure() {

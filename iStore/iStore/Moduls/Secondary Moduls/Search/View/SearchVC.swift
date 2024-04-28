@@ -7,6 +7,7 @@ protocol SearchVCProtocol: AnyObject {
 
 final class SearchVC: UIViewController, SearchVCProtocol {
     var presenter: SearchPresenter!
+    
 
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
@@ -30,12 +31,11 @@ final class SearchVC: UIViewController, SearchVCProtocol {
         view.backgroundColor = .white
         view.hideKeyboard()
         presenter = SearchPresenter(viewController: self)
-        presenter.getData()
         configureCollectionView()
         setViews()
         setupUI()
         setSearchBar()
-
+      
     }
 
     // MARK: Private Methods
@@ -55,8 +55,8 @@ final class SearchVC: UIViewController, SearchVCProtocol {
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(SearchCollectionCell.self,
-                                forCellWithReuseIdentifier: SearchCollectionCell.identifier)
+        collectionView.register(SingleItemCell.self,
+                                forCellWithReuseIdentifier: SingleItemCell.identifier)
         collectionView.register(EmptySearchCell.self,
                                 forCellWithReuseIdentifier: EmptySearchCell.identifier)
         collectionView.register(EmptyHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
@@ -107,14 +107,14 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if presenter.isProductCellVisible  {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionCell.identifier, for: indexPath) as! SearchCollectionCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleItemCell.identifier, for: indexPath) as! SingleItemCell
             let product = presenter.getProduct(at: indexPath.item)
             cell.set(info: product)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptySearchCell.identifier, for: indexPath) as! EmptySearchCell
             let product = presenter.getQuery(at: indexPath.row)
-            cell.set(info: product)
+            cell.set(info: presenter.userDefaultsManager.searchHistoryForEmptySearchScreen[indexPath.row])
             cell.delegate = self
             return cell
         }
@@ -152,13 +152,13 @@ extension SearchVC: SearchBarViewDelegate, SearchBarForSearchVCDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
        guard let searchText = searchBar.text else { return }
         (collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader).first as? HeaderView)?.searchlabel.text = "Search result for '\(searchText)'"
- //       searchlabel.text = "Search result for '\(searchText)'"
         if searchText.isEmpty {
             presenter.isProductCellVisible = false
             if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
                 layout.itemSize = CGSize(width: collectionView.frame.width, height: 25)
             }
         } else {
+
             presenter.isProductCellVisible = true
             if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
                 layout.itemSize = CGSize(width: 170, height: 217)
@@ -166,7 +166,7 @@ extension SearchVC: SearchBarViewDelegate, SearchBarForSearchVCDelegate {
             presenter.searchData(searchText: searchText)
        }
         collectionView.reloadData()
-        presenter.emptyQuery.append(LastSearchData(enteredWord: searchText))
+        presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.append(searchText)
     }
 
 }

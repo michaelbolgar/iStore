@@ -5,7 +5,7 @@
 
 import UIKit
 
-class SearchCollectionCell: UICollectionViewCell {
+class SingleItemCell: UICollectionViewCell {
 
     // MARK: Properties
 
@@ -63,13 +63,15 @@ class SearchCollectionCell: UICollectionViewCell {
     
     //MARK: Methods
     func set(info: SingleProduct) {
-    if let pictureName = info.images.first {
-      if let unwrappedPictureName = pictureName {
-       setImage(pictureName: unwrappedPictureName)
+
+        if let pictureName = info.images.first {
+            if let unwrappedPictureName = pictureName {
+                setImage(pictureURL: unwrappedPictureName)
             }
         }
+
         productLabel.text = info.title
-      priceLabel.text = "$\(info.price ?? 0)"
+        priceLabel.text = "$\(info.price ?? 0)"
 
     }
 
@@ -110,26 +112,21 @@ class SearchCollectionCell: UICollectionViewCell {
         ])
     }
 
-    func setImage(pictureName: String) {
-        guard let imageURL = URL(string: pictureName) else { return }
+    private func setImage(pictureURL: String) {
 
-            URLSession.shared.dataTask(with: imageURL) { [weak self] data, _, error in
-                guard let self = self else { return }
-                if let error = error {
-                    print("Error downloading image:", error)
-                    return
-                }
-                if let data = data, let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self.productImage.image = image
-                    }
-                } else {
-                    print("Invalid image data")
-                }
-            }.resume()
+        guard let imageURL = URL(string: pictureURL) else { return }
+
+        ImageDownloader.shared.downloadImage(from: imageURL) { result in
+            switch result {
+            case .success(let image):
+//                print("success")
+                self.productImage.image = image
+            case .failure(let error):
+                print("Error fetching image: \(error)")
+            }
         }
-
     }
+}
 
 
 

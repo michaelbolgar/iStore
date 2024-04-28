@@ -1,11 +1,8 @@
 import Foundation
 
-struct LastSearchData {
-    let enteredWord: String?
-}
+
 
 protocol SearchPresenterProtocol: AnyObject {
-    func getData()
     var productCount: Int { get }
     func getProduct(at index: Int) -> SingleProduct
 }
@@ -13,15 +10,15 @@ protocol SearchPresenterProtocol: AnyObject {
 final class SearchPresenter: SearchPresenterProtocol {
     weak var view: SearchVCProtocol?
     var products: [SingleProduct] = []
-    var emptyQuery: [LastSearchData] = []
     var isProductCellVisible = true
+    let userDefaultsManager = UserDefaultsManager()
 
     var queryCount: Int {
-        return emptyQuery.count
+        return userDefaultsManager.searchHistoryForEmptySearchScreen.count
     }
 
-    func getQuery(at index: Int) -> LastSearchData {
-        return emptyQuery[index]
+    func getQuery(at index: Int) -> String  {
+        return userDefaultsManager.searchHistoryForEmptySearchScreen[index]
     }
 
     init(viewController: SearchVC? = nil) {
@@ -33,13 +30,6 @@ final class SearchPresenter: SearchPresenterProtocol {
 
     func getProduct(at index: Int) -> SingleProduct {
         return products[index]
-    }
-    func getData() {
-        emptyQuery = [LastSearchData(enteredWord: "Iphone 12 pro max"),
-                 LastSearchData(enteredWord: "Iphone 12 pro max"),
-                 LastSearchData(enteredWord: "Iphone 12 pro max")
-        ]
-        products = [SingleProduct(id: nil, title: "test", price: 12, description: "DSG", images: [nil], category: Category(id: nil, name: nil, image: nil))]
     }
     func searchData(searchText: String) {
         NetworkingManager.shared.doSearch(for: searchText) { [ weak self ] result in
@@ -58,12 +48,12 @@ final class SearchPresenter: SearchPresenterProtocol {
         }
     }
     func closeButtonPressed(forProductAt indexPath: IndexPath) {
-         emptyQuery.remove(at: indexPath.item)
+        userDefaultsManager.searchHistoryForEmptySearchScreen.remove(at: indexPath.item)
          view?.reloadCollectionView()
      }
 
     func clearButtonPressed() {
-        emptyQuery.removeAll()
+        userDefaultsManager.searchHistoryForEmptySearchScreen.removeAll()
         view?.reloadCollectionView()
     }
 }
