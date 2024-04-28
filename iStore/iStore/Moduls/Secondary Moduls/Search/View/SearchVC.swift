@@ -114,11 +114,32 @@ extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptySearchCell.identifier, for: indexPath) as! EmptySearchCell
             let product = presenter.getQuery(at: indexPath.row)
-            cell.set(info: presenter.userDefaultsManager.searchHistoryForEmptySearchScreen[indexPath.row])
+            cell.set(info: product)
             cell.delegate = self
             return cell
         }
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+
+        let product = presenter.getProduct(at: indexPath.item)
+        guard let productId = product.id else { return }
+        NetworkingManager.shared.getProduct(for: productId) { result in
+            switch result {
+            case .success(let resultProducts):
+                DispatchQueue.main.async {
+                    let vc = DetailsVC(data: resultProducts)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            case .failure(let error):
+                print("Error fetching search results: \(error)")
+            }
+
+            }
+        }
+
+
+
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
 
@@ -175,6 +196,7 @@ extension SearchVC: SearchCellDelegate, EmptyHeaderViewDelegate {
     func clearButtonPressed() {
         presenter.clearButtonPressed()
     }
+    
     func closeButtonPressed(for cell: EmptySearchCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         presenter.closeButtonPressed(forProductAt: indexPath)
