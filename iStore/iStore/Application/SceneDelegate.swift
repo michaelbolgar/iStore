@@ -25,9 +25,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //
 //        let window = UIWindow(windowScene: windowScene)
 //        //      window.rootViewController = ViewController()
-//        //       let startVC = SearchVC()
-//        let cartVC = CartVC()
-//        let navigationController = UINavigationController(rootViewController: cartVC)
+//        let startVC = SearchVC()
+//     //   let cartVC = CartVC()
+//        let navigationController = UINavigationController(rootViewController: startVC)
 //        window.rootViewController = navigationController
 //        window.makeKeyAndVisible()
 //        self.window = window

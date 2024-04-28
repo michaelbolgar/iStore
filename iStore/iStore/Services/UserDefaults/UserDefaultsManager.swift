@@ -21,7 +21,11 @@ class UserDefaultsManager {
         get { userDefaults.stringArray(forKey: Keys.searchHistory) ?? [] }
         set { userDefaults.set(newValue, forKey: Keys.searchHistory) }
     }
-    
+    var searchHistoryForEmptySearchScreen: [String] {
+        get { userDefaults.stringArray(forKey: Keys.searchHistoryEmpty) ?? [] }
+        set { userDefaults.set(newValue, forKey: Keys.searchHistoryEmpty) }
+    }
+
     // Добавление результатов поиска
     func addSearchQuery(_ query: String) {
         var history = searchHistory
@@ -47,5 +51,6 @@ extension UserDefaultsManager {
         static let onboardingCompleted = "isLaunchedBefore"
         static let isManagerAccount = "isManagerAccount"
         static let searchHistory = "searchHistory"
+        static let searchHistoryEmpty = "searchHistoryEmpty"
     }
 }
