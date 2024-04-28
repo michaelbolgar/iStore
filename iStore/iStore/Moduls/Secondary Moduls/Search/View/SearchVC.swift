@@ -7,7 +7,6 @@ protocol SearchVCProtocol: AnyObject {
 
 final class SearchVC: UIViewController, SearchVCProtocol {
     var presenter: SearchPresenter!
-    
 
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
@@ -64,8 +63,6 @@ final class SearchVC: UIViewController, SearchVCProtocol {
                                 forCellWithReuseIdentifier: SingleItemCell.identifier)
         collectionView.register(EmptySearchCell.self,
                                 forCellWithReuseIdentifier: EmptySearchCell.identifier)
-//        collectionView.register(EmptyHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
-//        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderViewTwo")
         collectionView.register(EmptyHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: EmptyHeaderView.identifier)
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.identifier)
     }
@@ -185,7 +182,7 @@ extension SearchVC: SearchBarViewDelegate, SearchBarForSearchVCDelegate {
 
         collectionView.reloadData()
     }
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {    }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -204,8 +201,12 @@ extension SearchVC: SearchBarViewDelegate, SearchBarForSearchVCDelegate {
             }
             presenter.searchData(searchText: searchText)
        }
+        if !searchText.isEmpty {
+             if !presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.contains(searchText) {
+                 presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.insert(searchText, at: 0)
+             }
+         }
         collectionView.reloadData()
-        presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.append(searchText)
     }
 
 }
