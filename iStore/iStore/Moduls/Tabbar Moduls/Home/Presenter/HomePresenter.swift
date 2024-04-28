@@ -7,7 +7,7 @@ protocol HomePresenterProtocol {
 
     func showCartVC()
     func showSearchVC(with request: String)
-    func showDetailsVC(with id: Int)
+    func showDetailsVC(data: SingleProduct)
 
     func setCategories()
     func setProducts(for id: Int)
@@ -66,7 +66,7 @@ final class HomePresenter: HomePresenterProtocol {
         // code
     }
 
-    func showDetailsVC(with id: Int) {
-        // code
+    func showDetailsVC(data: SingleProduct) {
+        router.showDetailsVC(data: data)
     }
 }

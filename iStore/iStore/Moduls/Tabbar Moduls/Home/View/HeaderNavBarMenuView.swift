@@ -8,9 +8,10 @@
 import UIKit
 
 final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate, UITableViewDataSource {
-    
+
     // MARK: Properties
     
+    var presenter: HomePresenterProtocol!
     private var dropdownTableView: UITableView!
     private var dropdownOptions = ["Europe - €", "USA - $", "Rus - ₽"]
     
@@ -108,6 +109,11 @@ final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate,
 
     @objc private func cartButtonTapped() {
         print("Cart button tapped")
+        let cartVC = CartVC()
+        let navigationController = UINavigationController(rootViewController: cartVC)
+        navigationController.modalPresentationStyle = .formSheet
+        navigationController.isModalInPresentation = true
+        window?.rootViewController?.present(navigationController, animated: true)
     }
 
     @objc private func bellButtonTapped() {

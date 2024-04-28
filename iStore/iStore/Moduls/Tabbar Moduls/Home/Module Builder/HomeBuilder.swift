@@ -21,7 +21,7 @@ final class HomeBuilder: HomeBuilderProtocol {
     }
 
     func createSearchVC(searchText: String) -> UIViewController {
-        SearchVC()
+        CartVC() // заглушка
     }
 
     func createCartVC() -> UIViewController {

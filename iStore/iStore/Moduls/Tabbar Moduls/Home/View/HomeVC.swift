@@ -17,7 +17,7 @@ protocol HomeVCProtocol: AnyObject {
 final class HomeVC: UIViewController {
     
     var presenter: HomePresenterProtocol!
-    
+
     //MARK: - UI Elements
     
     private let mockCategorie = MockData.shared.mockCategorie
@@ -128,6 +128,7 @@ extension HomeVC: UICollectionViewDataSource {
                     withReuseIdentifier: "HeaderNavBarMenuView",
                     for: indexPath) as! HeaderNavBarMenuView
                 header.configureHeader(labelName: section)
+                header.presenter = presenter
                 return header
             case "categories":
                 fallthrough
@@ -162,6 +163,8 @@ extension HomeVC: UICollectionViewDelegate {
             print("item cell tapped")
 //            let detailsVC = DetailsVC(data: <#T##SingleProduct#>)
 //            navigationController?.pushViewController(detailsVC, animated: true)
+            let item = presenter.productData[indexPath.row]
+            presenter.showDetailsVC(data: item)
         default:
             fatalError("Unknown section type")
         }
