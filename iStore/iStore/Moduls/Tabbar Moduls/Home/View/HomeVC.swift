@@ -160,8 +160,8 @@ extension HomeVC: UICollectionViewDelegate {
             presenter.setProducts(for: (indexPath.row + 1))
         case "products":
             print("item cell tapped")
-            let detailsVC = DetailsVC()
-            navigationController?.pushViewController(detailsVC, animated: true)
+//            let detailsVC = DetailsVC(data: <#T##SingleProduct#>)
+//            navigationController?.pushViewController(detailsVC, animated: true)
         default:
             fatalError("Unknown section type")
         }
