@@ -123,11 +123,13 @@ class SingleItemCell: UICollectionViewCell {
             productLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),
             productLabel.topAnchor.constraint(equalTo: productImage.bottomAnchor, constant: 13),
 
-            priceLabel.topAnchor.constraint(equalTo: productLabel.bottomAnchor, constant: 4),
+//            priceLabel.topAnchor.constraint(equalTo: productLabel.bottomAnchor, constant: 4),
             priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
+            priceLabel.bottomAnchor.constraint(equalTo: buyButton.topAnchor, constant: -5),
 
-            buyButton.topAnchor.constraint(greaterThanOrEqualTo: priceLabel.bottomAnchor, constant: 3),
-            buyButton.topAnchor.constraint(lessThanOrEqualTo: priceLabel.bottomAnchor, constant: 11),
+//            buyButton.topAnchor.constraint(greaterThanOrEqualTo: priceLabel.bottomAnchor, constant: 3),
+//            buyButton.topAnchor.constraint(lessThanOrEqualTo: priceLabel.bottomAnchor, constant: 11),
+            buyButton.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -7),
             buyButton.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
             buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),
 

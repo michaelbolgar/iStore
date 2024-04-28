@@ -20,7 +20,7 @@ final class CategoryViewCell: UICollectionViewCell {
     }()
     
     private lazy var categoryName = UILabel.makeLabel(text: nil,
-                                                      font: UIFont.InterRegular(ofSize: 12),
+                                                      font: UIFont.InterRegular(ofSize: 11),
                                                       textColor: UIColor.darkGray,
                                                       numberOfLines: 1,
                                                       alignment: .center)
