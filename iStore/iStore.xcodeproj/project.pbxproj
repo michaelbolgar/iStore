@@ -37,6 +37,7 @@
 		E0364B652BD6D65C00CACBCC /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E0364B642BD6D65C00CACBCC /* FirebaseStorage */; };
 		E05283EF2BDC2ECA00ACB140 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05283EE2BDC2ECA00ACB140 /* SettingsVC.swift */; };
 		E05283F12BDC6C0500ACB140 /* SingleItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05283F02BDC6C0500ACB140 /* SingleItemCell.swift */; };
+		E05283F32BDC74B200ACB140 /* VerifyPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05283F22BDC74B200ACB140 /* VerifyPassword.swift */; };
 		E078DFC22BDA9FC100FE8FF9 /* ProfileDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E078DFC12BDA9FC100FE8FF9 /* ProfileDataService.swift */; };
 		E078DFC42BDAA04F00FE8FF9 /* UserProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E078DFC32BDAA04F00FE8FF9 /* UserProfileModel.swift */; };
 		E0D9E8FF2BD9CE9900F47A18 /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D9E8FE2BD9CE9900F47A18 /* AlertService.swift */; };
@@ -132,6 +133,7 @@
 		E0364B5B2BD6AD5300CACBCC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E05283EE2BDC2ECA00ACB140 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		E05283F02BDC6C0500ACB140 /* SingleItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleItemCell.swift; sourceTree = "<group>"; };
+		E05283F22BDC74B200ACB140 /* VerifyPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyPassword.swift; sourceTree = "<group>"; };
 		E078DFC12BDA9FC100FE8FF9 /* ProfileDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataService.swift; sourceTree = "<group>"; };
 		E078DFC32BDAA04F00FE8FF9 /* UserProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileModel.swift; sourceTree = "<group>"; };
 		E0D9E8FE2BD9CE9900F47A18 /* AlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
@@ -642,6 +644,7 @@
 			children = (
 				F417640A2BCF4BF500EBB86D /* LoginVC.swift */,
 				F417640C2BCF4C0B00EBB86D /* SignUpVC.swift */,
+				E05283F22BDC74B200ACB140 /* VerifyPassword.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -892,6 +895,7 @@
 				514452532BD10DCB0093B9D5 /* TermsVC.swift in Sources */,
 				E05283F12BDC6C0500ACB140 /* SingleItemCell.swift in Sources */,
 				E078DFC22BDA9FC100FE8FF9 /* ProfileDataService.swift in Sources */,
+				E05283F32BDC74B200ACB140 /* VerifyPassword.swift in Sources */,
 				F41763BF2BCF32C400EBB86D /* UIButton Extension.swift in Sources */,
 				37EF426E2BD3AC0100AEB339 /* UISearchBar Extension.swift in Sources */,
 				37EF426C2BD3AAE100AEB339 /* WishListCellModel.swift in Sources */,
