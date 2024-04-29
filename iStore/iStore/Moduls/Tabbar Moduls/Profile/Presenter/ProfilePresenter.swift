@@ -74,7 +74,6 @@ extension ProfilePresenter: ProfilePresenterProtocol {
             try auth.signOut()
             if Auth.auth().currentUser == nil {
                 print("Log out tapped")
-
             }
             view?.navigateToLoginScreen()
         } catch let signOutError {
