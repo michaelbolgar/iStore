@@ -161,7 +161,7 @@ extension HomeVC: UICollectionViewDelegate {
             presenter.setProducts(for: (indexPath.row + 1))
         case "products":
             print("item cell tapped")
-//            let detailsVC = DetailsVC(data: <#T##SingleProduct#>)
+//            let detailsVC = DetailsVC(data: presenter.productData[indexPath.row])
 //            navigationController?.pushViewController(detailsVC, animated: true)
             let item = presenter.productData[indexPath.row]
             presenter.showDetailsVC(data: item)
