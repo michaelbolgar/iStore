@@ -24,7 +24,10 @@ final class WishCollectionCell: UICollectionViewCell {
    //MARK: - UI elements
     private lazy var productImage: UIImageView = {
         let image = UIImageView()
+        image.contentMode = .scaleAspectFill
         image.layer.cornerRadius = 5
+        image.layer.masksToBounds = true
+        image.clipsToBounds = true
         return image
     }()
     
@@ -72,8 +75,6 @@ final class WishCollectionCell: UICollectionViewCell {
     //MARK: - Methods
     func set(info: Product, at index: Int) {
         self.index = index
-        let pictureName = info.picture ?? "placeholder"  // Ensure there's a fallback image named "placeholder"
-        productImage.image = UIImage(named: pictureName)
         productLabel.text = info.description ?? "No description available"
         if let price = info.price {
             priceLabel.text = String(format: "$%.2f", price)
@@ -81,8 +82,25 @@ final class WishCollectionCell: UICollectionViewCell {
             priceLabel.text = "Price not available"
         }
 
-        // Update heart button based on favourite status
-        let heartImage = info.isFavourite ?? false ? UIImage.selectedheart : UIImage.heart
+        // Проверка и установка картинки
+        if let imageString = info.picture, let imageURL = URL(string: imageString) {
+            ImageDownloader.shared.downloadImage(from: imageURL) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let image):
+                        self.productImage.image = image
+                    case .failure(let error):
+                        print("Ошибка загрузки изображения: \(error)")
+                        self.productImage.image = UIImage(named: "placeholder") // Изображение-заполнитель в случае ошибки
+                    }
+                }
+            }
+        } else {
+            productImage.image = UIImage(named: "placeholder") // Изображение-заполнитель, если URL нет
+        }
+
+        // Установка статуса избранного
+        let heartImage = info.isFavourite ?? false ? UIImage(named: "selectedheart") : UIImage(named: "heart")
         heartButton.setImage(heartImage, for: .normal)
     }
    
