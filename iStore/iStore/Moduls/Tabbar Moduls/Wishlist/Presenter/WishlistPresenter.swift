@@ -66,7 +66,7 @@ final class WishlistPresenter: WishlistPresenterProtocol {
                 let isFavourite = data["isFavorite"] as? Bool
                 return Product(id: id, picture: picture, description: description, price: price, isFavourite: isFavourite)
             }
-            self.view?.reloadCollectionView()
+//            self.view?.reloadCollectionView()
         }
     }
 
@@ -112,7 +112,7 @@ final class WishlistPresenter: WishlistPresenterProtocol {
                     let isFavourite = data["isFavorite"] as? Bool
                     return Product(id: id, picture: images?.first, description: description, price: price, isFavourite: isFavourite)
                 } ?? []
-                self.view?.reloadCollectionView()
+//                self.view?.reloadCollectionView()
             }
         }
     }
@@ -137,7 +137,7 @@ final class WishlistPresenter: WishlistPresenterProtocol {
                 let isFavourite = data["isFavorite"] as? Bool
                 return Product(id: id, picture: picture, description: description, price: price, isFavourite: isFavourite)
             }
-            self.view?.reloadCollectionView() // Обновляем UI
+//            self.view?.reloadCollectionView() // Обновляем UI
         }
     }
 }

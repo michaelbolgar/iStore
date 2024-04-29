@@ -148,9 +148,22 @@ final class ProfileVC: UIViewController {
     }
     
     @objc private func typeAccountViewTapped() {
-        let changePhotoVC = ChangeProfileViewController()
-        changePhotoVC.modalPresentationStyle = .automatic
-        present(changePhotoVC, animated: true, completion: nil)
+        AlertService.shared.showInputAlert(title: "Enter Password",
+                                                  message: "Please enter your password to access this feature.",
+                                                  placeholder: "Password") { [weak self] password in
+                   guard let self = self, let password = password, !password.isEmpty else {
+                       AlertService.shared.showAlert(title: "Error", message: "You must enter a password.")
+                       return
+                   }
+                   if verifyPassword(password) {
+                       let changeProfileVC = ChangeProfileViewController()
+//                       changeProfileVC.delegate = self
+                       changeProfileVC.modalPresentationStyle = .automatic
+                       present(changeProfileVC, animated: true, completion: nil)
+                   } else {
+                       AlertService.shared.showAlert(title: "Error", message: "Incorrect password.")
+                   }
+               }
     }
     
     @objc private func termsViewTapped() {

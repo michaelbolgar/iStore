@@ -57,11 +57,11 @@ final class ChangeProfileViewController: UIViewController {
         managerView.isUserInteractionEnabled = true
 
         /// функции активируют удаление/добавление табы в таббар. Отключено, потому что из-за этого умирает навигация менеджера
-//        let typeAccountTapGesture = UITapGestureRecognizer(target: self, action: #selector(userViewTapped))
-//        userView.addGestureRecognizer(typeAccountTapGesture)
-//
-//        let termsTapGesture = UITapGestureRecognizer(target: self, action: #selector(managerViewTapped))
-//        managerView.addGestureRecognizer(termsTapGesture)
+        let typeAccountTapGesture = UITapGestureRecognizer(target: self, action: #selector(userViewTapped))
+        userView.addGestureRecognizer(typeAccountTapGesture)
+
+        let termsTapGesture = UITapGestureRecognizer(target: self, action: #selector(managerViewTapped))
+        managerView.addGestureRecognizer(termsTapGesture)
     }
     
     // MARK: - Selector Methods
