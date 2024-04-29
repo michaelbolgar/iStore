@@ -18,6 +18,9 @@ final class CartTableCell: UITableViewCell, CartCellView {
 
     private let orderImage: UIImageView = {
         let view = UIImageView()
+        view.layer.cornerRadius = 6
+        view.clipsToBounds = true
+        view.contentMode = .scaleAspectFill
         return view
     }()
 

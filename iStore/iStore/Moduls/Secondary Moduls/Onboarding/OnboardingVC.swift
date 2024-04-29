@@ -2,6 +2,8 @@ import UIKit
 
 final class OnboardingVC: UIViewController {
     
+    private let userDefaults = UserDefaultsManager()
+
     // MARK: UI Elements
     
     private let titles = ["20% Discount New Arrival Product", 
@@ -11,13 +13,15 @@ final class OnboardingVC: UIViewController {
                                 "Everything you love is now available at great prices.", 
                                 "Discover a variety of offers for every occasion!"]
 
-//    private let imageNames = ["1",
-//                              "2", 
-//                              "3"]
 
-    private let imageNames = ["vova",
-                              "parochka",
-                              "devushka"]
+    /// user account
+    private let imageNames = ["1",
+                              "2", 
+                              "3"]
+    /// manager account
+//    private let imageNames = ["vova",
+//                              "parochka",
+//                              "devushka"]
 
     private var slides: [PagesView] = []
     private var lastAnimatedPageIndex: Int?
