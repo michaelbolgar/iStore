@@ -7,6 +7,7 @@ protocol HomeBuilderProtocol {
     func createSearchVC(searchText: String) -> UIViewController
     func createCartVC() -> UIViewController
     func createDetailsVC(data: SingleProduct) -> UIViewController
+//    func createPaymentVC() -> UIViewController
 }
 
 // MARK: HomeBuilder
@@ -31,4 +32,8 @@ final class HomeBuilder: HomeBuilderProtocol {
     func createDetailsVC(data: SingleProduct) -> UIViewController {
         DetailsVC(data: data)
     }
+
+//    func createPaymentVC() -> UIViewController {
+//        PaymentVC()
+//    }
 }

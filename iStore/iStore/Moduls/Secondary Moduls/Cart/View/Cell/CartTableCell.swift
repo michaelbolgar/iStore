@@ -77,7 +77,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    //MARK: Functions
+    //MARK: Methods
 
     func set(info: ChosenItem) {
         orderImage.image = UIImage(named: info.image)

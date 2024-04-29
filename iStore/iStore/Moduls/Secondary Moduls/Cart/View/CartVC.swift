@@ -30,7 +30,7 @@ final class CartVC: UIViewController, CartVCProtocol {
                                                           numberOfLines: 1,
                                                           alignment: .left)
 
-    private let selectButton = UIButton.makeButton(text: "Select payment method",
+    private let selectPaymentButton = UIButton.makeButton(text: "Select payment method",
                                                            buttonColor: ButtonColor.green,
                                                            titleColor: .white,
                                                            titleSize: 16,
@@ -55,7 +55,7 @@ final class CartVC: UIViewController, CartVCProtocol {
         title = "Your Cart"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Buy"),
                                                             style: .plain, target: self,
-                                                            action: #selector(selectButtonPressed))
+                                                            action: #selector(selectPaymentButtonAction))
         navigationController?.navigationBar.tintColor = UIColor.black
      }
 
@@ -79,9 +79,11 @@ final class CartVC: UIViewController, CartVCProtocol {
     }
 
     // MARK: Selector Methods
-    @objc func selectButtonPressed() {}
-
-
+    @objc func selectPaymentButtonAction() {
+        let paymentVC = PaymentVC()
+        paymentVC.modalPresentationStyle = .fullScreen
+        present(paymentVC, animated: true, completion: nil)
+    }
 }
 
     // MARK: Setup table
@@ -110,11 +112,12 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
 extension CartVC {
     func setViews() {
         [tableView, footerView].forEach{view.addSubview($0)}
-        [orderLabel, totalLabel, priceLabel, selectButton].forEach{footerView.addSubview($0)}
+        [orderLabel, totalLabel, priceLabel, selectPaymentButton].forEach{footerView.addSubview($0)}
     }
     func setupUI() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         footerView.translatesAutoresizingMaskIntoConstraints = false
+        selectPaymentButton.addTarget(self, action: #selector(selectPaymentButtonAction), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -136,8 +139,8 @@ extension CartVC {
             priceLabel.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
             priceLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -23),
 
-            selectButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 15),
-            selectButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor)
+            selectPaymentButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 15),
+            selectPaymentButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor)
 
         ])
     }

@@ -4,10 +4,10 @@ class SuccessViewController: UIViewController {
     
     // MARK: UI Elements
     
-    private lazy var cangratulationsLabel = UILabel.makeLabel(text: "Congrats! Your payment Successfully", 
-                                                              font: .InterBold(ofSize: 20), 
+    private lazy var cangratulationsLabel = UILabel.makeLabel(text: "Congrats! Paid successfully",
+                                                              font: .InterBold(ofSize: 20),
                                                               textColor: .black, 
-                                                              numberOfLines: 0, 
+                                                              numberOfLines: 2,
                                                               alignment: .center)
     
     private lazy var imageView: UIImageView = {
@@ -72,7 +72,6 @@ class SuccessViewController: UIViewController {
             cangratulationsLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             continueButton.topAnchor.constraint(equalTo: cangratulationsLabel.bottomAnchor, constant: 20),
-            
             continueButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             continueButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             continueButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
