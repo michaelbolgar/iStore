@@ -33,6 +33,7 @@ final class WishlistPresenter: WishlistPresenterProtocol {
     // MARK: Methods
 
     func getProduct(at index: Int) -> Product {
+//        print(products.first?.picture)
         return products[index]
     }
     
@@ -60,11 +61,12 @@ final class WishlistPresenter: WishlistPresenterProtocol {
             self.products = snapshot.documents.compactMap { document -> Product? in
                 let data = document.data()
                 let id = Int(document.documentID)  // Проверьте, что ID документа можно преобразовать в Int
-                let picture = data["picture"] as? String
+                let picture = data["images"] as? [String]
+                let newPicture = picture?.first
                 let description = data["description"] as? String
                 let price = (data["price"] as? NSNumber)?.doubleValue
                 let isFavourite = data["isFavorite"] as? Bool
-                return Product(id: id, picture: picture, description: description, price: price, isFavourite: isFavourite)
+                return Product(id: id, picture: newPicture, description: description, price: price, isFavourite: isFavourite)
             }
 //            self.view?.reloadCollectionView()
         }
@@ -110,7 +112,15 @@ final class WishlistPresenter: WishlistPresenterProtocol {
                     let price = (data["price"] as? NSNumber)?.doubleValue
                     let images = data["images"] as? [String]
                     let isFavourite = data["isFavorite"] as? Bool
-                    return Product(id: id, picture: images?.first, description: description, price: price, isFavourite: isFavourite)
+//                    print(images?.first)
+                    if let imagesString = data["images"] as? String,
+                                   let jsonData = imagesString.data(using: .utf8),
+                                   let urls = try? JSONDecoder().decode([String].self, from: jsonData) {
+                                    // Используем первый URL из распаршенного массива
+                                    return Product(id: id, picture: urls.first, description: description, price: price, isFavourite: isFavourite)
+                                } else {
+                                    return nil
+                                }
                 } ?? []
 //                self.view?.reloadCollectionView()
             }
