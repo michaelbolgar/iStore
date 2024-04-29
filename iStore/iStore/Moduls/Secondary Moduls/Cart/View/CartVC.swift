@@ -76,7 +76,7 @@ final class CartVC: UIViewController, CartVCProtocol {
     @objc func selectPaymentButtonAction() {
         let paymentVC = PaymentVC()
         #warning("после установления мода automatic перестало перекидывать на сайт девраша")
-        paymentVC.modalPresentationStyle = .automatic
+        paymentVC.modalPresentationStyle = .fullScreen
         present(paymentVC, animated: true, completion: nil)
     }
 }
