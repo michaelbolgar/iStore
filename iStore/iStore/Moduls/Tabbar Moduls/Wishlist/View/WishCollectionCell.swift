@@ -72,17 +72,18 @@ final class WishCollectionCell: UICollectionViewCell {
     //MARK: - Methods
     func set(info: Product, at index: Int) {
         self.index = index
-        let pictureName = info.picture ?? "Buy"
+        let pictureName = info.picture ?? "placeholder"  // Ensure there's a fallback image named "placeholder"
         productImage.image = UIImage(named: pictureName)
-        productLabel.text = info.description
-        priceLabel.text = String(format: "$%.2f", info.price ?? 0)
-        
-        // Update heart button based on favourite status
-        if let isFavourite = info.isFavourite, isFavourite {
-            heartButton.setImage(UIImage.selectedheart, for: .normal)
+        productLabel.text = info.description ?? "No description available"
+        if let price = info.price {
+            priceLabel.text = String(format: "$%.2f", price)
         } else {
-            heartButton.setImage(UIImage.heart, for: .normal)
+            priceLabel.text = "Price not available"
         }
+
+        // Update heart button based on favourite status
+        let heartImage = info.isFavourite ?? false ? UIImage.selectedheart : UIImage.heart
+        heartButton.setImage(heartImage, for: .normal)
     }
    
     //MARK: - Private Methods

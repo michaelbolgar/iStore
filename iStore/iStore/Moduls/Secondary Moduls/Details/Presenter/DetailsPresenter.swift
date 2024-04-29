@@ -27,25 +27,34 @@ final class DetailsPresenter: DetailsPresenterProtocol {
     }
     
     func toggleFavorite(for product: SingleProduct) {
-        let productId = product.id
         guard let userId = Auth.auth().currentUser?.uid else { return }
-        let docRef = db.collection("users").document(userId).collection("favorites").document(productId?.description ?? "")
-        
+        let productId = product.id?.description ?? "defaultId"
+        let docRef = db.collection("users").document(userId).collection("favorites").document(productId)
+
         docRef.getDocument { (document, error) in
             if let document = document, document.exists {
+                // Удаляем продукт из избранного
                 docRef.delete() { error in
                     if let error = error {
-                        print("Error removing product from favorites: \(error)")
+                        print("Ошибка при удалении из избранного: \(error)")
                     } else {
-                        print("Product successfully removed from favorites")
+                        print("Продукт успешно удален из избранного")
                     }
                 }
             } else {
-                docRef.setData(["isFavorite": true]) { error in
+                // Добавляем продукт в избранное
+                let data: [String: Any] = [
+                    "title": product.title ?? "",
+                    "description": product.description ?? "",
+                    "price": product.price ?? 0,
+                    "images": product.images,
+                    "isFavorite": true
+                ]
+                docRef.setData(data) { error in
                     if let error = error {
-                        print("Error adding product to favorites: \(error)")
+                        print("Ошибка при добавлении в избранное: \(error)")
                     } else {
-                        print("Product successfully added to favorites")
+                        print("Продукт успешно добавлен в избранное")
                     }
                 }
             }

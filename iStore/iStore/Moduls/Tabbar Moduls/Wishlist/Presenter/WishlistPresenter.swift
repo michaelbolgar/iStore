@@ -27,12 +27,47 @@ final class WishlistPresenter: WishlistPresenterProtocol {
     init(view: WishlistVCProtocol, router: WishlistRouterProtocol) {
         self.view = view
         self.router = router
+        self.startListeningForFavoritesUpdates()
     }
 
     // MARK: Methods
 
     func getProduct(at index: Int) -> Product {
         return products[index]
+    }
+    
+    var listenerRegistration: ListenerRegistration?
+
+    func startListeningForFavoritesUpdates() {
+        listenerRegistration?.remove()  // Удаляем предыдущий слушатель, если он есть
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("UID пользователя не доступен.")
+            return
+        }
+        let favoritesCollection = db.collection("users").document(userId).collection("favorites")
+
+        listenerRegistration = favoritesCollection.addSnapshotListener { [weak self] (snapshot, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print("Ошибка при обновлении данных: \(error)")
+                return
+            }
+
+            guard let snapshot = snapshot else {
+                print("Данные снимка не доступны.")
+                return
+            }
+            self.products = snapshot.documents.compactMap { document -> Product? in
+                let data = document.data()
+                let id = Int(document.documentID)  // Проверьте, что ID документа можно преобразовать в Int
+                let picture = data["picture"] as? String
+                let description = data["description"] as? String
+                let price = (data["price"] as? NSNumber)?.doubleValue
+                let isFavourite = data["isFavorite"] as? Bool
+                return Product(id: id, picture: picture, description: description, price: price, isFavourite: isFavourite)
+            }
+            self.view?.reloadCollectionView()
+        }
     }
 
 //    func setView() {
@@ -61,26 +96,50 @@ final class WishlistPresenter: WishlistPresenterProtocol {
     func viewDidLoad() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let favoritesCollection = db.collection("users").document(userId).collection("favorites")
-        
+
         favoritesCollection.getDocuments { [weak self] (querySnapshot, err) in
             guard let self = self else { return }
             if let err = err {
-                print("Error getting documents: \(err)")
+                print("Ошибка получения документов: \(err)")
             } else {
                 self.products = querySnapshot?.documents.compactMap { document -> Product? in
                     let data = document.data()
-                    let id = Int(document.documentID) // Attempt to convert the string ID to Int
-                    let picture = data["picture"] as? String
+                    let id = Int(document.documentID) // Преобразуем ID
+                    let title = data["title"] as? String
                     let description = data["description"] as? String
-                    let price = (data["price"] as? NSNumber)?.doubleValue // Use NSNumber to handle any numeric type
-                    let isFavourite = data["isFavourite"] as? Bool
-                    return Product(id: id, picture: picture, description: description, price: price, isFavourite: isFavourite)
+                    let price = (data["price"] as? NSNumber)?.doubleValue
+                    let images = data["images"] as? [String]
+                    let isFavourite = data["isFavorite"] as? Bool
+                    return Product(id: id, picture: images?.first, description: description, price: price, isFavourite: isFavourite)
                 } ?? []
                 self.view?.reloadCollectionView()
             }
         }
     }
-
+    func reloadData() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let favoritesCollection = db.collection("users").document(userId).collection("favorites")
+        
+        favoritesCollection.getDocuments { [weak self] (snapshot, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print("Ошибка при обновлении данных: \(error)")
+                return
+            }
+            
+            guard let snapshot = snapshot else { return }
+            self.products = snapshot.documents.compactMap { document -> Product? in
+                let data = document.data()
+                let id = Int(document.documentID) // Преобразуем ID
+                let picture = data["picture"] as? String
+                let description = data["description"] as? String
+                let price = (data["price"] as? NSNumber)?.doubleValue
+                let isFavourite = data["isFavorite"] as? Bool
+                return Product(id: id, picture: picture, description: description, price: price, isFavourite: isFavourite)
+            }
+            self.view?.reloadCollectionView() // Обновляем UI
+        }
+    }
 }
 
 //MARK: - WishCollectionCellDelegate
@@ -109,20 +168,6 @@ extension WishlistPresenter: WishCollectionCellDelegate {
                         print("Product successfully removed from favorites")
                     }
                     // Обновляем представление после удаления
-                    self.view?.reloadCollectionView()
-                }
-            } else {
-                // Добавляем в избранное
-                let data: [String: Any] = [
-                    "isFavourite": true
-                ]
-                docRef.setData(data) { error in
-                    if let error = error {
-                        print("Error adding document: \(error)")
-                    } else {
-                        print("Document successfully added to favorites")
-                    }
-                    // Обновляем представление после добавления
                     self.view?.reloadCollectionView()
                 }
             }

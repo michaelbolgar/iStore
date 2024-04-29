@@ -43,6 +43,13 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
         checkCollectionState()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.startListeningForFavoritesUpdates()
+//        collectionView.reloadData()
+        presenter.reloadData()
+    }
+    
     // MARK: Private Methods
     // Initial code commented by Qew through
     //    private func setupSearchBar() {
@@ -72,7 +79,8 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     
     func reloadCollectionView() {
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            print("Перезагружаем коллекцию. Текущее количество продуктов: \(self.presenter.productCount)")
+                   self.collectionView.reloadData()
         }
     }
     
@@ -97,7 +105,7 @@ extension WishlistVC {
     }
     
     func setPresenter() {
-//        presenter = WishlistPresenter(viewController: self)
+//        presenter = WishlistPresenter(view: self)
         presenter.viewDidLoad()
     }
     
@@ -128,6 +136,7 @@ extension WishlistVC {
 //MARK: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 extension WishlistVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("Количество продуктов: \(presenter.productCount)")
         return presenter.productCount
     }
     
