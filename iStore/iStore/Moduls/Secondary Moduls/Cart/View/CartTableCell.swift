@@ -1,40 +1,38 @@
+//
+//  CartTableCell.swift
+//  iStore
+//
+
+
 import UIKit
 
 final class CartTableCell: UITableViewCell, CartCellView {
-
-    // MARK: Properties
-
-    static let identifier = String(describing: CartTableCell.self)
+    //MARK: -> Properties
+    static let identifier = "CartTableViewCell"
     var presenter: CartCellPresenter?
     private let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .ultraLight)
-    var checkmarkAction: ((Bool) -> Void)?
 
-    // MARK: UI Elements
     private let checkmarkButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.veryLightGray, renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor(red: 0.941, green: 0.949, blue: 0.945, alpha: 1), renderingMode: .alwaysOriginal), for: .normal)
         return button
     }()
 
     private let orderImage: UIImageView = {
         let view = UIImageView()
-        view.layer.cornerRadius = 6
-        view.clipsToBounds = true
-        view.contentMode = .scaleAspectFill
         return view
     }()
-
-    private let bigTitle = UILabel.makeLabel(text: nil, font: UIFont.InterSemiBold(ofSize: 14),
+    private let bigTitle = UILabel.makeLabel(text: nil, font: UIFont.InterSemiBold(ofSize: 14), 
                                              textColor: UIColor.darkGray,
                                              numberOfLines: 1,
                                              alignment: .left)
 
-    private let smallTitle = UILabel.makeLabel(text: nil, font: UIFont.InterRegular(ofSize: 13),
+    private let smallTitle = UILabel.makeLabel(text: nil, font: UIFont.InterRegular(ofSize: 13), 
                                                textColor: UIColor.lightGray,
                                                numberOfLines: 1,
                                                alignment: .left)
 
-    private let pricelabel = UILabel.makeLabel(text: nil, font: UIFont.InterSemiBold(ofSize: 14),
+    private let pricelabel = UILabel.makeLabel(text: nil, font: UIFont.InterSemiBold(ofSize: 14), 
                                                textColor: UIColor.darkGray,
                                                numberOfLines: 1,
                                                alignment: .left)
@@ -51,7 +49,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
         return button
     }()
 
-    private let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11),
+    private let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11), 
                                                textColor: UIColor.gray,
                                                numberOfLines: 1,
                                                alignment: .center)
@@ -68,20 +66,31 @@ final class CartTableCell: UITableViewCell, CartCellView {
         stack.spacing = 5
         return stack
     }()
-
-    //MARK: Init
+    
+    //MARK: -> init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
         setupConstraints()
         presenter = CartCellPresenter(view: self)
-        setButtonsTargets()
+        plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
+        minusButton.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
+        checkmarkButton.addTarget(self, action: #selector(checkmarkTapped), for: .touchUpInside)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    //MARK: -> Functions
 
-    //MARK: Methods
+    @objc func plusButtonTapped() {
+        presenter?.incrementCount()
+    }
+    @objc func minusButtonTapped() {
+        presenter?.decrementCount()
+    }
+    @objc func checkmarkTapped() {
+        presenter?.checkmarkButtonTapped(checkmarkButton)
+    }
 
     func set(info: ChosenItem) {
         orderImage.image = UIImage(named: info.image)
@@ -97,38 +106,6 @@ final class CartTableCell: UITableViewCell, CartCellView {
         [checkmarkButton, orderImage, bigTitle, smallTitle, pricelabel, countStack].forEach {contentView.addSubview($0)}
         [minusButton, countLabel, plusButton, basketButton].forEach{countStack.addArrangedSubview($0)}
     }
-
-    private func setButtonsTargets() {
-        plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
-        minusButton.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
-        checkmarkButton.addTarget(self, action: #selector(checkmarkTapped), for: .touchUpInside)
-        basketButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
-
-    }
-
-    // MARK: Selector methods
-
-    @objc func deleteButtonTapped() {
-        presenter?.deleteCell()
-    }
-
-    @objc func plusButtonTapped() {
-        presenter?.incrementCount()
-    }
-    @objc func minusButtonTapped() {
-        presenter?.decrementCount()
-    }
-    @objc func checkmarkTapped() {
-                checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor(red: 0.404, green: 0.769, blue: 0.655, alpha: 1), renderingMode: .alwaysOriginal), for: .selected)
-        checkmarkButton.isSelected = !checkmarkButton.isSelected
-        checkmarkAction?(checkmarkButton.isSelected)
-    }
-}
-
-    // MARK: Layout
-
-private extension CartTableCell {
-
     func setupConstraints() {
         orderImage.translatesAutoresizingMaskIntoConstraints = false
         checkmarkButton.translatesAutoresizingMaskIntoConstraints = false
@@ -155,7 +132,8 @@ private extension CartTableCell {
             pricelabel.leadingAnchor.constraint(equalTo: orderImage.trailingAnchor, constant: 5),
 
             countStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            countStack.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 5)
+            countStack.centerYAnchor.constraint(equalTo: pricelabel.centerYAnchor)
         ])
     }
+
 }
