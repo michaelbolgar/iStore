@@ -47,26 +47,15 @@ final class CartVC: UIViewController, CartVCProtocol {
         configureTableView()
         setViews()
         setupUI()
-        setNavigationBar()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        setNavigationBar(title: "Your Cart")
+        #warning("не работает при первом запуске, без открытия DetailsVC")
+        navigationController?.navigationBar.isHidden = false
     }
 
     // MARK: Private Methods
-
-    private func setNavigationBar() {
-         super.viewDidLayoutSubviews()
-        footerView.addBorder(y: 0)
-        view.backgroundColor = .white
-
-        let backButton = UIBarButtonItem(image: UIImage(named: "leftArrow"),
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(backButtonPressed))
-
-        title = "Your Cart"
-        navigationController?.navigationBar.tintColor = UIColor.black
-        backButton.tintColor = UIColor.black
-        navigationItem.leftBarButtonItem = backButton
-     }
 
     private func configureTableView() {
         tableView.separatorStyle = .none
@@ -81,7 +70,7 @@ final class CartVC: UIViewController, CartVCProtocol {
     func reloadTableView(at indexPath: IndexPath) {
         DispatchQueue.main.async {
             self.tableView.reloadData()
-             }
+        }
     }
 
     func updateTotalPrice() {
@@ -95,12 +84,9 @@ final class CartVC: UIViewController, CartVCProtocol {
     // MARK: Selector Methods
     @objc func selectPaymentButtonAction() {
         let paymentVC = PaymentVC()
+        #warning("после установления мода automatic перестало перекидывать на сайт девраша")
         paymentVC.modalPresentationStyle = .fullScreen
         present(paymentVC, animated: true, completion: nil)
-    }
-
-    @objc func backButtonPressed() {
-        navigationController?.popViewController(animated: true)
     }
 }
 

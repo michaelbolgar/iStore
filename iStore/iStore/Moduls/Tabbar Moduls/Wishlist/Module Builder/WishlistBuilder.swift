@@ -14,9 +14,8 @@ final class WishlistBuilder: WishlistBuilderProtocol {
 
     func createWishlistModule(router: WishlistRouterProtocol) -> UIViewController {
         let view = WishlistVC()
-        let presenter = WishlistPresenter.self
-#warning("поменял тут WishlistPresenterProtocol на WishlistPresenter, может повлиять на логику в дальнейшем")
-        view.presenter = presenter as? WishlistPresenter
+        let presenter = WishlistPresenter(view: view, router: router)
+        view.presenter = presenter
         return view
     }
 

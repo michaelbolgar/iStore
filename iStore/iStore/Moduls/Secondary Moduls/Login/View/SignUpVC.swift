@@ -212,11 +212,16 @@ class SignUpVC: UIViewController {
     
     @objc private func signUpButtonTapped() {
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
-        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-            if let error = error {
-                AlertService.shared.showAlert(title: "Error", message: error.localizedDescription)
-            } else {
-                self.saveUserData()
+
+        if passwordTextField.text != confirmPasswordTextField.text {
+            AlertService.shared.showAlert(title: "Error", message: "Passwords don't match")
+        } else {
+            Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+                if let error = error {
+                    AlertService.shared.showAlert(title: "Error", message: error.localizedDescription)
+                } else {
+                    self.saveUserData()
+                }
             }
         }
     }
