@@ -66,11 +66,26 @@ final class ChangeProfileViewController: UIViewController {
     // MARK: - Selector Methods
     @objc private func userViewTapped() {
         delegate?.didSelectAccountType("User")
+        if let window = UIApplication.shared.windows.first,
+           let tabBarController = window.rootViewController as? UITabBarController,
+           let viewControllers = tabBarController.viewControllers,
+           viewControllers.count > 3 {
+            tabBarController.viewControllers?.remove(at: 2)
+        }
         dismiss(animated: true, completion: nil)
     }
     
     @objc private func managerViewTapped() {
         delegate?.didSelectAccountType("Manager")
+        if let window = UIApplication.shared.windows.first,
+           let tabBarController = window.rootViewController as? UITabBarController,
+           let viewControllers = tabBarController.viewControllers,
+           viewControllers.count < 4 {
+            let managerVC = ManagerVC()
+            managerVC.tabBarItem = UITabBarItem(title: "Manager", image: UIImage.paper, selectedImage: UIImage.selectedpaper)
+                    
+                    tabBarController.viewControllers?.insert(managerVC, at: 2)
+        }
         dismiss(animated: true, completion: nil)
     }
 }

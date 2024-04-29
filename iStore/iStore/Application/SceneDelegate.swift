@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 
-/// запуск отдельного экрана без навигационного контроллера
+// запуск отдельного экрана без навигационного контроллера
 //class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //
 //    var window: UIWindow?
@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //
 //        let window = UIWindow(windowScene: windowScene)
 //        //      window.rootViewController = ViewController()
-//            let startVC = SearchVC()
+//            let startVC = FilterVC()
 //     //   let cartVC = CartVC()
 //        let navigationController = UINavigationController(rootViewController: startVC)
 //        window.rootViewController = navigationController
