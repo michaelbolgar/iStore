@@ -35,7 +35,13 @@ final class AddNewCategoryVC: UIViewController {
                                   numberOfLines: 1,
                                   alignment: .left)
     
-    private var nameTextView = UITextView.makeTextView(height: 52, scroll: true)
+     let idLabel = UILabel.makeLabel(text: "ID",
+                                  font: UIFont.systemFont(ofSize: 16, weight: .semibold),
+                                  textColor: .customDarkGray,
+                                  numberOfLines: 1,
+                                  alignment: .left)
+
+    private var nameTextView = UITextView.makeTextView(height: 40, scroll: true)
     private var priceTextView = UITextView.makeTextView(height: 40, scroll: false)
    
     private var categoryTextField = UITextField.makeTextField(placeholder: "",
@@ -46,7 +52,8 @@ final class AddNewCategoryVC: UIViewController {
                                                               showHideButton: false)
     
     private let descriptionTextView = UITextView.makeTextView(height: 125, scroll: true)
-    private var imagesTextView = UITextView.makeTextView(height: 52, scroll: true)
+    private var imagesTextView = UITextView.makeTextView(height: 40, scroll: true)
+     var idTextView = UITextView.makeTextView(height: 40, scroll: false)
     
     
     private lazy var categoryPicker: UIPickerView = {
@@ -77,7 +84,6 @@ final class AddNewCategoryVC: UIViewController {
         categoryTextField.layer.borderWidth = 1.0
         categoryTextField.layer.borderColor = UIColor.customLightGray.cgColor
         
-        
         navigationController?.isNavigationBarHidden = false
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -86,7 +92,7 @@ final class AddNewCategoryVC: UIViewController {
         navigationItem.leftBarButtonItem?.tintColor = .customDarkGray
         navigationController?.navigationBar.tintColor = UIColor.black
      
-        [nameLabel, nameTextView, priceLabel, priceTextView, categoryLabel, categoryTextField, descriptionLabel, descriptionTextView, imagesLabel, imagesTextView].forEach { view.addSubview($0) }
+        [nameLabel, nameTextView, priceLabel, priceTextView, categoryLabel, categoryTextField, descriptionLabel, descriptionTextView, imagesLabel, imagesTextView, idLabel, idTextView].forEach { view.addSubview($0) }
     }
     
     private func setupUIElements() {
@@ -113,23 +119,42 @@ final class AddNewCategoryVC: UIViewController {
     }
     
     @objc private func saveChangeButtonTapped() {
-        guard let productID = product?.id else { return }
-
-        guard let newTitle = nameTextView.text, !newTitle.isEmpty else { return }
-
-        guard let newPriceString = priceTextView.text,
-              let newPrice = Int(newPriceString) else { return }
-
-        let newImages = imagesTextView.text.components(separatedBy: ",")
-
-       NetworkingManager.shared.updateProduct(id: productID, newTitle: newTitle, newPrice: newPrice, newDescription: "", newImages: newImages) { result in
-            switch result {
-            case .success:
-                // Handle successful product update
-                print("Product updated successfully")
-            case .failure(let error):
-                // Handle error
-                print("Failed to update product:", error)
+        if navigationItem.title == "Update product" {
+            guard let productID = product?.id else { return }
+            guard let newTitle = nameTextView.text, !newTitle.isEmpty else { return }
+            guard let newPriceString = Int(priceTextView.text) else { return }
+            guard let newDescription = descriptionTextView.text else { return }
+            guard let newCategory = categoryTextField.text else { return }
+            //let newImages = imagesTextView.text.components(separatedBy: ",")
+            
+            NetworkingManager.shared.updateProduct(id: productID, 
+                                                   newTitle: newTitle,
+                                                   newPrice: newPriceString,
+                                                   newDescription: newDescription,
+                                                   newCategory: newCategory) {
+                result in
+                switch result {
+                case .success:
+                    print("Product updated successfully")
+                case .failure(let error):
+                    print("Failed to update product:", error)
+                }
+            }
+            
+        } else {
+         
+            NetworkingManager.shared.createProduct(title: nameTextView.text,
+                                                   price: 10,
+                                                   description: descriptionTextView.text,
+                                                   categoryId: 1,
+                                                   images: [imagesTextView.text])  {
+                result in
+                switch result {
+                case .success:
+                    print("Product create successfully")
+                case .failure(let error):
+                    print("Failed to create product:", error)
+                }
             }
         }
     }
@@ -169,6 +194,11 @@ private extension AddNewCategoryVC {
             imagesLabel.widthAnchor.constraint(equalToConstant: 100),
             imagesLabel.heightAnchor.constraint(equalToConstant: 40),
             
+            idLabel.topAnchor.constraint(equalTo: imagesLabel.bottomAnchor, constant: 30),
+            idLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            idLabel.widthAnchor.constraint(equalToConstant: 100),
+            idLabel.heightAnchor.constraint(equalToConstant: 40),
+            
             nameTextView.topAnchor.constraint(equalTo: nameLabel.topAnchor),
             nameTextView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             nameTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -188,6 +218,10 @@ private extension AddNewCategoryVC {
             imagesTextView.topAnchor.constraint(equalTo: imagesLabel.topAnchor),
             imagesTextView.leadingAnchor.constraint(equalTo: imagesLabel.trailingAnchor),
             imagesTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            
+            idTextView.topAnchor.constraint(equalTo: idLabel.topAnchor),
+            idTextView.leadingAnchor.constraint(equalTo: idLabel.trailingAnchor),
+            idTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
         ])
     }

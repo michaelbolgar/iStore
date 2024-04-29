@@ -56,7 +56,7 @@ final class ProductVC: UIViewController, ProductVCProtocol {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                                             style: .plain, target: self,
-                                                            action: #selector(addNewProduct))
+                                                            action: #selector(addNewProductButtonTapped))
         navigationItem.leftBarButtonItem?.tintColor = .customDarkGray
         navigationController?.navigationBar.tintColor = UIColor.black
     }
@@ -87,8 +87,8 @@ final class ProductVC: UIViewController, ProductVCProtocol {
     //    }
     
     // MARK: - Selector Methods
-    @objc func addNewProduct() {
-        presenter.navToAddCategoryVC()
+    @objc func addNewProductButtonTapped() {
+        presenter.addNewProduct()
     }
 }
 
