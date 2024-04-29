@@ -23,7 +23,7 @@ class SuccessViewController: UIViewController {
         button.backgroundColor = .lightGreen
         button.layer.cornerRadius = 12
         button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(dismissAlert), for: .touchUpInside)
+        button.addTarget(self, action: #selector(tapContinueButton), for: .touchUpInside)
         button.titleLabel?.font = UIFont.InterBold(ofSize: 25)
         return button
     }()
@@ -81,7 +81,7 @@ class SuccessViewController: UIViewController {
     
     //MARK: Selector methods
     
-    @objc func dismissAlert() {
+    @objc func tapContinueButton() {
         if let paymentVC = presentingViewController as? PaymentVC {
             UIView.animate(withDuration: 0.3) {
                 paymentVC.dimmingView.alpha = 0
