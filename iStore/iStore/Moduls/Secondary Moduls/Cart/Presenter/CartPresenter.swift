@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 protocol CartPresenterProtocol: AnyObject {
     var itemsCount: Int { get }
@@ -14,6 +15,7 @@ final class CartPresenter: CartPresenterProtocol {
 //    private let router: HomeRouterProtocol
     weak var view: CartVCProtocol?
     var items: [ChosenItem] = []
+    var amountForPriceLabel = [Double]()
 
     var itemsCount: Int {
         return items.count
@@ -36,10 +38,10 @@ final class CartPresenter: CartPresenterProtocol {
         return items[index]
     }
     func getData() {
-        items = [ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 1999.99)
+        items = [ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 99.99),
+                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 299.99),
+                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 399.99),
+                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 599.99)
         ]
     }
 
@@ -50,5 +52,10 @@ final class CartPresenter: CartPresenterProtocol {
     func showDetailsVC(data: SingleProduct) {
 //        let detailsVC = DetailsVC(data: mockItem)
 //        self.navigationController.pushViewController(detailsVC, animated: true)
+    }
+
+    func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
+        items.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
     }
 }

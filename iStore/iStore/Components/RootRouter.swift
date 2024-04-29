@@ -20,7 +20,7 @@ final class RootRouter {
         window?.rootViewController = showMainTabBar()
         window?.makeKeyAndVisible()
 
-        // resetOnboardingStatus()
+//         resetOnboardingStatus()
 
         /// показ Onboarding'a с проверкой, был ли уже пройден онбординг
         if userDefaults.onboardingCompleted {
