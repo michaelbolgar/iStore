@@ -79,7 +79,7 @@ class LoginVC: UIViewController {
         setupView()
         setupLayout()
         updatePasswordVisibilityButton()
-        tapGestureKeyboard()
+        view.hideKeyboard()
     }
     
     private func setupView() {
@@ -128,10 +128,10 @@ class LoginVC: UIViewController {
         guard let login = loginTextField.text, let password = passwordTextField.text else { return }
         Auth.auth().signIn(withEmail: login, password: password) { [weak self] authResult, error in
             if let error = error {
-                print("Login error: \(error.localizedDescription)")
-                // Обработка ошибок, например, показать сообщение пользователю
+                AlertService.shared.showAlert(title: "Error", message: error.localizedDescription)
             } else {
                 print("User logged in successfully")
+                self?.navigationController?.dismiss(animated: true, completion: nil)
             }
         }
     }
@@ -157,19 +157,6 @@ extension LoginVC: UITextFieldDelegate {
                 textField.placeholder = "Enter your password"
             }
         }
-    }
-}
-
-// End editing and dismiss keyboard
-extension LoginVC {
-    
-    private func tapGestureKeyboard() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
     }
 }
 

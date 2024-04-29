@@ -189,6 +189,18 @@ extension OnboardingVC {
             pageControl.centerYAnchor.constraint(equalTo: nextButtonImageView.centerYAnchor)
         ])
     }
+    
+    /// test сохранения истории поиска
+    private func TestUD() {
+        let defaultsManager = UserDefaultsManager()
+        
+        defaultsManager.addSearchQuery("Я")
+        defaultsManager.addSearchQuery("люблю")
+        defaultsManager.addSearchQuery("пиво")
+        defaultsManager.printSearchHistory()
+        defaultsManager.clearSearchHistory()
+        defaultsManager.printSearchHistory()
+    }
 }
 // Тест Удалить
 private func TestUD() {

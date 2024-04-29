@@ -18,14 +18,18 @@ struct MockData {
         .searchField([.init(image: "", categories: "", products: "", title: "", price: "")])
     }()
     
-    private let categories: Section = {
-        .categories([.init(image: "icon1", categories: "Clothes", products: "", title: "", price: ""),
-                     .init(image: "icon1", categories: "School", products: "", title: "", price: ""),
-                     .init(image: "icon1", categories: "Sports", products: "", title: "", price: ""),
-                     .init(image: "icon1", categories: "Electronic", products: "", title: "", price: ""),
-                     .init(image: "icon1", categories: "All", products: "", title: "", price: "")
-        ])
-    }()
+//    private let categories: Section = {
+//        .categories([.init(image: "icon1", categories: "Clothes", products: "", title: "", price: ""),
+//                     .init(image: "icon1", categories: "School", products: "", title: "", price: ""),
+//                     .init(image: "icon1", categories: "Sports", products: "", title: "", price: ""),
+//                     .init(image: "icon1", categories: "Electronic", products: "", title: "", price: ""),
+//                     .init(image: "icon1", categories: "All", products: "", title: "", price: "")
+//        ])
+//    }()
+
+    let mockCategorie = Category(id: 1, name: "Clothes", image: "icon1")
+
+    let mockSingleProduct = SingleProduct(id: 0, title: "", price: 190, description: "", images: [""], category: Category(id: 0, name: "", image: ""))
     
     private let products: Section = {
         .products([.init(image: "img", categories: "", products: "", title: "tv LG", price: "$199.99"),
@@ -39,9 +43,9 @@ struct MockData {
         ])
     }()
 
-    var pageData: [Section] {
-        [searchField, categories, products]
-    }
+//    var pageData: [Section] {
+//        [searchField, categories, products]
+//    }
 }
 
 

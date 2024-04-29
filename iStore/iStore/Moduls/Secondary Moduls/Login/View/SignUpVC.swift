@@ -118,7 +118,7 @@ class SignUpVC: UIViewController {
         setupView()
         setupLayout()
         setupTogglePassword()
-        tapGestureKeyboard()
+        view.hideKeyboard()
     }
     
     // MARK: Private Methods
@@ -186,7 +186,7 @@ class SignUpVC: UIViewController {
               let login = loginTextField.text,
               let email = emailTextField.text,
               let accountType = selectedAccountType else {
-            print("Not all fields are filled")
+              AlertService.shared.showAlert(title: "Error", message: "Not all fields are filled")
             return
         }
         let db = Firestore.firestore()
@@ -196,8 +196,7 @@ class SignUpVC: UIViewController {
             "typeOfAccount": accountType
         ]) { error in
             if let error = error {
-                print("Error saving user data: \(error.localizedDescription)")
-                // Обработка ошибок
+                AlertService.shared.showAlert(title: "Error", message: error.localizedDescription)
             } else {
                 print("User data saved successfully")
                 self.navigationController?.dismiss(animated: true, completion: nil)
@@ -207,25 +206,41 @@ class SignUpVC: UIViewController {
     
     // MARK: Selector Methods
     
-    @objc private func typeAccountViewTapped() {
-        let changeProfileVC = ChangeProfileViewController()
-        changeProfileVC.delegate = self
-        changeProfileVC.modalPresentationStyle = .automatic
-        present(changeProfileVC, animated: true, completion: nil)
-    }
-    
     @objc private func loginButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
     
     @objc private func signUpButtonTapped() {
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
-        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-            if let error = error {
-                print("Error creating user: \(error.localizedDescription)")
-                // Обработка ошибок
+
+        if passwordTextField.text != confirmPasswordTextField.text {
+            AlertService.shared.showAlert(title: "Error", message: "Passwords don't match")
+        } else {
+            Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+                if let error = error {
+                    AlertService.shared.showAlert(title: "Error", message: error.localizedDescription)
+                } else {
+                    self.saveUserData()
+                }
+            }
+        }
+    }
+    
+    @objc private func typeAccountViewTapped() {
+        AlertService.shared.showInputAlert(title: "Enter Password",
+                                           message: "Please enter your password to access this feature.",
+                                           placeholder: "Password") { [weak self] password in
+            guard let self = self, let password = password, !password.isEmpty else {
+                AlertService.shared.showAlert(title: "Error", message: "You must enter a password.")
+                return
+            }
+            if verifyPassword(password) {
+                let changeProfileVC = ChangeProfileViewController()
+                changeProfileVC.delegate = self
+                changeProfileVC.modalPresentationStyle = .automatic
+                present(changeProfileVC, animated: true, completion: nil)
             } else {
-                self.saveUserData()
+                AlertService.shared.showAlert(title: "Error", message: "Incorrect password.")
             }
         }
     }
@@ -271,19 +286,6 @@ extension SignUpVC: UITextFieldDelegate {
         default:
             break
         }
-    }
-}
-
-// End editing abd dismiss keyboard
-extension SignUpVC {
-    
-    private func tapGestureKeyboard() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
     }
 }
 

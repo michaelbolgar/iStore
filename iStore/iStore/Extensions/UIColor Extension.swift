@@ -36,4 +36,14 @@ extension UIColor {
     static var lightViolet: UIColor = {
         return UIColor (red: 246/255, green: 248/255, blue: 254/255, alpha: 1.0)
     }()
+
+    /// thin gray lines
+    static var veryLightGray: UIColor = {
+        return UIColor (red: 0.941, green: 0.949, blue: 0.945, alpha: 1)
+    }()
+
+    /// background gray
+      static var backLightGray: UIColor = {
+         return UIColor (red: 0.979, green: 0.979, blue: 0.988, alpha: 1)
+      }()
 }
