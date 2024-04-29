@@ -20,6 +20,17 @@ class PaymentVC: UIViewController {
         return button
     }()
     
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Cancel", for: .normal)
+        button.backgroundColor = .lightGray
+        button.layer.cornerRadius = 12
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        button.titleLabel?.font = UIFont.InterBold(ofSize: 25)
+        return button
+    }()
+    
     private lazy var shadowView: UIView = {
         let shadow = UIView()
         shadow.layer.shadowColor = UIColor.black.cgColor
@@ -50,7 +61,7 @@ class PaymentVC: UIViewController {
     }
 
     // MARK: Private methods
-    
+#warning ("Ввод с физической клавиатуры позволяет вводить любые символы")
     private func insertNumber(_ number: String, into textField: UITextField) {
         var currentText = textField.text ?? ""
         currentText += number
@@ -119,6 +130,10 @@ class PaymentVC: UIViewController {
         }
         present(successVC, animated: true)
     }
+    
+    @objc private func cancelButtonTapped() {
+        dismiss(animated: true)
+    }
 }
 
 // MARK: Extension layouts
@@ -127,7 +142,7 @@ extension PaymentVC {
     private func setupView() {
         view.backgroundColor = .white
         
-        let views = [shadowView, cardView, payButton, dimmingView]
+        let views = [shadowView, cardView, payButton, cancelButton, dimmingView]
         
         views.forEach { view in
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -135,6 +150,7 @@ extension PaymentVC {
         
         view.addSubview(shadowView)
         view.addSubview(payButton)
+        view.addSubview(cancelButton)
         shadowView.addSubview(cardView)
         
         NSLayoutConstraint.activate([
@@ -148,10 +164,15 @@ extension PaymentVC {
             cardView.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor),
             cardView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor),
             
-            payButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            payButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -20),
             payButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             payButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            payButton.heightAnchor.constraint(equalToConstant: 50)
+            payButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            cancelButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }
