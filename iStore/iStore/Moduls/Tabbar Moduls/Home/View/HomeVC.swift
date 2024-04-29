@@ -45,7 +45,11 @@ final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate
         presenter?.setCategories()
         presenter?.setProducts(for: 2)
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = true
+    }
+
     //MARK: - Private Methods
     private func setupViews() {
         collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)

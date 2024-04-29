@@ -46,8 +46,9 @@ class PaymentVC: UIViewController {
         setupButtons()
         setupTapGesture()
         setupDimmingView()
+        setNavigationBar(title: "Finish payment")
     }
-    
+
     // MARK: Private methods
     
     private func insertNumber(_ number: String, into textField: UITextField) {
