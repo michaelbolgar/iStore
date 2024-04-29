@@ -50,7 +50,7 @@ final class CartVC: UIViewController, CartVCProtocol {
 
     override func viewWillAppear(_ animated: Bool) {
         setNavigationBar(title: "Your Cart")
-        #warning("не работает при первом запуске, без открытие DetailsVC")
+        #warning("не работает при первом запуске, без открытия DetailsVC")
         navigationController?.navigationBar.isHidden = false
     }
 
@@ -69,13 +69,14 @@ final class CartVC: UIViewController, CartVCProtocol {
     func reloadTableView(at indexPath: IndexPath) {
         DispatchQueue.main.async {
             self.tableView.reloadData()
-             }
+        }
     }
 
     // MARK: Selector Methods
     @objc func selectPaymentButtonAction() {
         let paymentVC = PaymentVC()
-        paymentVC.modalPresentationStyle = .fullScreen
+        #warning("после установления мода automatic перестало перекидывать на сайт девраша")
+        paymentVC.modalPresentationStyle = .automatic
         present(paymentVC, animated: true, completion: nil)
     }
 }
