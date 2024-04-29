@@ -30,7 +30,7 @@ class PaymentVC: UIViewController {
         return shadow
     }()
     
-    // Затемнение фона с помощью наложения UIView
+    /// затемнение фона с помощью наложения UIView
     lazy var dimmingView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
@@ -46,7 +46,7 @@ class PaymentVC: UIViewController {
         setupButtons()
         setupTapGesture()
         setupDimmingView()
-        setNavigationBar(title: "Finish payment")
+//        setNavigationBar(title: "Finish payment")
     }
 
     // MARK: Private methods
@@ -143,7 +143,7 @@ extension PaymentVC {
             shadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             shadowView.heightAnchor.constraint(equalToConstant: 200),
             
-            cardView.topAnchor.constraint(equalTo: shadowView.topAnchor),
+            cardView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: 20),
             cardView.leadingAnchor.constraint(equalTo: shadowView.leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor),
             cardView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor),
