@@ -10,10 +10,15 @@ final class OnboardingVC: UIViewController {
     private let descriptions = ["Don't miss out — unique prices on the latest arrivals!", 
                                 "Everything you love is now available at great prices.", 
                                 "Discover a variety of offers for every occasion!"]
-    private let imageNames = ["1", 
-                              "2", 
-                              "3"]
-    
+
+//    private let imageNames = ["1",
+//                              "2", 
+//                              "3"]
+
+    private let imageNames = ["vova",
+                              "parochka",
+                              "devushka"]
+
     private var slides: [PagesView] = []
     private var lastAnimatedPageIndex: Int?
     
