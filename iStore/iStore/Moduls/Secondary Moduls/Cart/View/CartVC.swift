@@ -46,21 +46,26 @@ final class CartVC: UIViewController, CartVCProtocol {
         configureTableView()
         setViews()
         setupUI()
+        setNavigationBar()
     }
 
-    override func viewDidLayoutSubviews() {
+    // MARK: Private Methods
+
+    private func setNavigationBar() {
          super.viewDidLayoutSubviews()
         footerView.addBorder(y: 0)
         view.backgroundColor = .white
+
+        let backButton = UIBarButtonItem(image: UIImage(named: "leftArrow"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backButtonTapped))
+
         title = "Your Cart"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Buy"),
-                                                            style: .plain, target: self,
-                                                            action: #selector(selectPaymentButtonAction))
         navigationController?.navigationBar.tintColor = UIColor.black
+        backButton.tintColor = UIColor.black
+        navigationItem.leftBarButtonItem = backButton
      }
-
-
-    // MARK: Private Methods
 
     private func configureTableView() {
         tableView.separatorStyle = .none
@@ -83,6 +88,10 @@ final class CartVC: UIViewController, CartVCProtocol {
         let paymentVC = PaymentVC()
         paymentVC.modalPresentationStyle = .fullScreen
         present(paymentVC, animated: true, completion: nil)
+    }
+
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }
 

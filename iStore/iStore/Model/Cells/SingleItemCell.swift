@@ -15,6 +15,7 @@ class SingleItemCell: UICollectionViewCell {
 
     static var identifier: String {"\(Self.self)"}
     weak var delegate: SingleItemCellDelegate?
+    
     // MARK: UI Elements
 
     private let productImage: UIImageView = {

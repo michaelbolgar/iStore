@@ -77,7 +77,6 @@ final class HomePresenter: HomePresenterProtocol {
 }
 
 extension HomePresenter: SingleItemCellDelegate {
-    
     func buyButtonPressed() {
         print("Buy pressed")
     }

@@ -16,8 +16,8 @@ final class ProductsHeaderView: UICollectionReusableView {
     //MARK: UI Elements
 
     private let titleLabel = UILabel.makeLabel(text: "Products",
-                                       font: UIFont(name: "Inter-Medium", size: 14),
-                                       textColor: UIColor.red,
+                                               font: UIFont.InterMedium(ofSize: 14),
+                                               textColor: UIColor.black,
                                                numberOfLines: nil, alignment: .left)
     
     private let filterImageView: UIImageView = {

@@ -14,7 +14,7 @@ protocol HomeVCProtocol: AnyObject {
     func reloadData(with section: Int)
 }
 
-final class HomeVC: UIViewController, HomeVCProtocol {
+final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate {
     
     var presenter: HomePresenterProtocol!
 
@@ -61,7 +61,9 @@ final class HomeVC: UIViewController, HomeVCProtocol {
         collectionView.dataSource = self
     }
     
-    
+    func didTapFiltersButton() {
+        print ("filter tapped")
+    }
 }
 //MARK: - UICollectionViewDataSource
 
@@ -111,6 +113,7 @@ extension HomeVC: UICollectionViewDataSource {
             
             let product = presenter?.productData[indexPath.row] ?? mockSingleProduct
             cell.configure(with: product)
+            cell.delegate = self
             return cell
         default:
             fatalError("Unknown section type")
@@ -137,6 +140,7 @@ extension HomeVC: UICollectionViewDataSource {
                                                                              withReuseIdentifier: "ProductsHeaderView",
                                                                              for: indexPath) as! ProductsHeaderView
                 header.configureHeader(labelName: section)
+                header.delegate = self
                 return header
             default:
                 fatalError("Unknown section type")
@@ -290,5 +294,11 @@ extension HomeVC {
 extension HomeVC: HeaderNavBarMenuViewDelegate {
     func cartButtonTapped() {
         presenter.showCartVC()
+    }
+}
+
+extension HomeVC: SingleItemCellDelegate {
+    func buyButtonPressed() {
+        print ("add to cart button tapped")
     }
 }
