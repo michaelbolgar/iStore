@@ -151,6 +151,8 @@ final class ProfileVC: UIViewController {
         let changePhotoVC = ChangeProfileViewController()
         changePhotoVC.modalPresentationStyle = .automatic
         present(changePhotoVC, animated: true, completion: nil)
+
+        
     }
     
     @objc private func termsViewTapped() {
@@ -162,6 +164,11 @@ final class ProfileVC: UIViewController {
     
     @objc private func signoutViewTapped() {
         presenter.signOut()
+        #warning("не получается залогиниться обратно, нужно восстанавливать навигацию")
+        let loginVC = LoginVC()
+        self.navigationController?.pushViewController(loginVC, animated: true)
+        self.navigationController?.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     deinit {

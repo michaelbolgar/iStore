@@ -78,11 +78,7 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     
     // MARK: Selector Methods
     @objc func cartButtonPressed() {
-        // go to cart screen
-        print("cart button tap")
         presenter.showCartVC()
-
-        // Add tapping animation
         cartButton.tappingAnimation()
     }
 }
@@ -97,13 +93,11 @@ extension WishlistVC {
     }
     
     func setPresenter() {
-//        presenter = WishlistPresenter(viewController: self)
         presenter.setView()
     }
     
     func setupUI() {
         view.backgroundColor = .white
-#warning ("Клавиатура не убирается по тапу")
         view.hideKeyboard()
         
         NSLayoutConstraint.activate([
