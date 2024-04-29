@@ -14,7 +14,7 @@ protocol HomeVCProtocol: AnyObject {
     func reloadData(with section: Int)
 }
 
-final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate {
+final class HomeVC: UIViewController, HomeVCProtocol {
     
     var presenter: HomePresenterProtocol!
 
@@ -298,6 +298,12 @@ extension HomeVC {
 extension HomeVC: HeaderNavBarMenuViewDelegate {
     func cartButtonTapped() {
         presenter.showCartVC()
+    }
+}
+
+extension HomeVC:  ProductsHeaderViewDelegate {
+    func filtersButtonTapped() {
+        presenter.showFilterVC()
     }
 }
 

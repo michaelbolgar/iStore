@@ -44,12 +44,12 @@ class ButtonsCell: UITableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60),
-            cancelButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            cancelButton.widthAnchor.constraint(equalToConstant: 110),
+            cancelButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            cancelButton.widthAnchor.constraint(equalToConstant: 120),
             
             saveButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60),
-            saveButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            saveButton.widthAnchor.constraint(equalToConstant: 110)
+            saveButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            saveButton.widthAnchor.constraint(equalToConstant: 120)
         ])
     }
 }

@@ -7,10 +7,10 @@
 
 import UIKit
 protocol ProductsHeaderViewDelegate: AnyObject {
-    func didTapFiltersButton()
+    func filtersButtonTapped()
 }
 
-final class ProductsHeaderView: UICollectionReusableView {
+final class ProductsHeaderView: UICollectionReusableView, UITableViewDelegate {
 
     weak var delegate: ProductsHeaderViewDelegate?
     //MARK: UI Elements
@@ -69,8 +69,7 @@ final class ProductsHeaderView: UICollectionReusableView {
     
     //MARK: - Private Methods
     @objc private func filtersButtonTapped() {
-//        print("нажата - Filters")
-        delegate?.didTapFiltersButton()
+        delegate?.filtersButtonTapped()
     }
 }
 

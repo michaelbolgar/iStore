@@ -46,7 +46,7 @@ final class CartVC: UIViewController, CartVCProtocol {
         configureTableView()
         setViews()
         setupUI()
-        setNavigationBar()
+//        setNavigationBar()
     }
 
     override func viewWillAppear(_ animated: Bool) {

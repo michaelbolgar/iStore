@@ -72,7 +72,7 @@ final class HomePresenter: HomePresenterProtocol {
     }
 
     func showFilterVC() {
-        
+        router.showFilterVC()
     }
 }
 

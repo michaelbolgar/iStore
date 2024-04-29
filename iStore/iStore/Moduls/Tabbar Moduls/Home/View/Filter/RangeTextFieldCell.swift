@@ -46,11 +46,11 @@ class RangeTextFieldCell: UITableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             minTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 90),
-            minTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            minTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             minTextField.widthAnchor.constraint(equalToConstant: 80),
             
             maxTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -90),
-            maxTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            maxTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             maxTextField.widthAnchor.constraint(equalToConstant: 80)
         ])
     }
