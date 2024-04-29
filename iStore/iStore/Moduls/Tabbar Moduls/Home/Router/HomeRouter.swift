@@ -7,6 +7,7 @@ protocol HomeRouterProtocol: BaseRouter {
     func showSearchVC(searchText: String)
     func showCartVC()
     func showDetailsVC(data: SingleProduct)
+//    func showPaymentVC()
 }
 
 // MARK: HomeRouter
@@ -38,7 +39,9 @@ final class HomeRouter: HomeRouterProtocol {
     }
 
     func showCartVC() {
-        // code
+        if let cartVC = moduleBuilder?.createCartVC() {
+            navigationController.pushViewController(cartVC, animated: true)
+        }
     }
 
     func showDetailsVC(data: SingleProduct) {
@@ -46,4 +49,10 @@ final class HomeRouter: HomeRouterProtocol {
             navigationController.pushViewController(detailsVC, animated: true)
         }
     }
+
+//    func showPaymentVC() {
+//        if let paymentVC = moduleBuilder?.createPaymentVC() {
+//            navigationController.pushViewController(paymentVC, animated: true)
+//        }
+//    }
 }

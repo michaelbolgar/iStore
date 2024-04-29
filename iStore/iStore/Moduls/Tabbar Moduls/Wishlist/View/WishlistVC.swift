@@ -24,7 +24,7 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     
     private lazy var cartButton: UIButton = {
         let element = UIButton()
-        element.setImage(UIImage.cart, for: .normal)
+        element.setImage(UIImage.buy, for: .normal)
         element.addTarget(self, action: #selector(cartButtonPressed), for: .touchUpInside)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element

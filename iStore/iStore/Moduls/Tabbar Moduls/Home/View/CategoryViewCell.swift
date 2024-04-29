@@ -12,15 +12,14 @@ final class CategoryViewCell: UICollectionViewCell {
     // MARK: - Properties
     private lazy var categoryIcon: UIImageView = {
         let element = UIImageView()
-        element.contentMode = .center
-        element.backgroundColor = .yellow
+        element.contentMode = .scaleAspectFit
         element.layer.cornerRadius = 8
         element.clipsToBounds = true
         return element
     }()
     
     private lazy var categoryName = UILabel.makeLabel(text: nil,
-                                                      font: UIFont.InterRegular(ofSize: 11),
+                                                      font: UIFont.InterRegular(ofSize: 10),
                                                       textColor: UIColor.darkGray,
                                                       numberOfLines: 1,
                                                       alignment: .center)
@@ -71,8 +70,8 @@ private extension CategoryViewCell{
         NSLayoutConstraint.activate([
             categoryIcon.topAnchor.constraint(equalTo: self.topAnchor),
             categoryIcon.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            categoryIcon.widthAnchor.constraint(equalToConstant: 40),
-            categoryIcon.heightAnchor.constraint(equalToConstant: 40)
+            categoryIcon.widthAnchor.constraint(equalToConstant: 42),
+            categoryIcon.heightAnchor.constraint(equalToConstant: 42)
         ])
         
         NSLayoutConstraint.activate([
