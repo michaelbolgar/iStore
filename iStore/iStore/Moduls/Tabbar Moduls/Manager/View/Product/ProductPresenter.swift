@@ -24,18 +24,14 @@ final class ProductPresenter: ProductPresenterProtocol {
         return products[index]
     }
     
-    func navToAddCategoryVC() {
+    func addNewProduct() {
         let newScreenVC = AddNewCategoryVC()
         newScreenVC.setNavigationBar(title: "Add new product")
         if let currentViewController = view as? UIViewController {
             currentViewController.navigationController?.pushViewController(newScreenVC, animated: true)
         }
     }
-//
-//    func deleteButtonPressed(at index: IndexPath) {
-//        products.remove(at: index.item)
-//    }
-//    
+
     func fetchProductsByCategory(searchText: String) {
         NetworkingManager.shared.doSearch(for: searchText) { [ weak self ] result in
             guard let self = self else { return }
@@ -58,14 +54,30 @@ final class ProductPresenter: ProductPresenterProtocol {
 
 //MARK: - WishCollectionCellDelegate
 extension ProductPresenter: ProductCollectionCellDelegate {
-    func deleteButtonPressed() {
-        
+ 
+    
+    func deleteButtonPressed(with product: SingleProduct) {
+        guard let productID = products.first?.id else { return }
+
+        NetworkingManager.shared.deleteProduct(id: productID) { result in
+            switch result {
+            case .success:
+                // Обработка успешного удаления продукта
+                print("Product deleted successfully")
+            case .failure(let error):
+                // Обработка ошибки удаления продукта
+                print("Failed to delete product:", error)
+            }
+        }
     }
+
     
     func updateButtonPressed(with product: SingleProduct) {
         let newScreenVC = AddNewCategoryVC()
         newScreenVC.setNavigationBar(title: "Update product")
         newScreenVC.product = product
+        newScreenVC.idLabel.isHidden = true
+        newScreenVC.idTextView.isHidden = true
         if let currentViewController = view as? UIViewController {
             currentViewController.navigationController?.pushViewController(newScreenVC, animated: true)
         }
