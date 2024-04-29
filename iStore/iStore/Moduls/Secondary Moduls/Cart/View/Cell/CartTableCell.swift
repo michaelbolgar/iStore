@@ -11,7 +11,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
     // MARK: UI Elements
     private let checkmarkButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor(red: 0.941, green: 0.949, blue: 0.945, alpha: 1), renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.veryLightGray, renderingMode: .alwaysOriginal), for: .normal)
         return button
     }()
 
@@ -71,15 +71,13 @@ final class CartTableCell: UITableViewCell, CartCellView {
         configure()
         setupConstraints()
         presenter = CartCellPresenter(view: self)
-        plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
-        minusButton.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
-        checkmarkButton.addTarget(self, action: #selector(checkmarkTapped), for: .touchUpInside)
+        setButtonsTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    //MARK: Functions
+    //MARK: Methods
 
     func set(info: ChosenItem) {
         orderImage.image = UIImage(named: info.image)
@@ -94,6 +92,12 @@ final class CartTableCell: UITableViewCell, CartCellView {
     private func configure() {
         [checkmarkButton, orderImage, bigTitle, smallTitle, pricelabel, countStack].forEach {contentView.addSubview($0)}
         [minusButton, countLabel, plusButton, basketButton].forEach{countStack.addArrangedSubview($0)}
+    }
+
+    private func setButtonsTargets() {
+        plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
+        minusButton.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
+        checkmarkButton.addTarget(self, action: #selector(checkmarkTapped), for: .touchUpInside)
     }
 
     // MARK: Selector methods
@@ -139,7 +143,7 @@ private extension CartTableCell {
             pricelabel.leadingAnchor.constraint(equalTo: orderImage.trailingAnchor, constant: 5),
 
             countStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            countStack.centerYAnchor.constraint(equalTo: pricelabel.centerYAnchor)
+            countStack.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 5)
         ])
     }
 }
