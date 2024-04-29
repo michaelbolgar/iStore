@@ -213,8 +213,13 @@ extension SearchVC: SearchBarViewDelegate, SearchBarForSearchVCDelegate {
             }
             presenter.searchData(searchText: searchText)
        }
+        if !searchText.isEmpty {
+             if !presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.contains(searchText) {
+                 presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.insert(searchText, at: 0)
+             }
+         }
         collectionView.reloadData()
-        presenter.userDefaultsManager.searchHistoryForEmptySearchScreen.append(searchText)
+
     }
 
 }
