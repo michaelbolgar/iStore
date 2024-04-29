@@ -81,3 +81,11 @@ extension HomePresenter: SingleItemCellDelegate {
         print("Buy pressed")
     }
 }
+extension HomePresenter: ButtonCellDelegate {
+    func cancelButtonTapped() {
+        print("cancel")
+    }
+    func saveButtonTapped() {
+        print("save")
+    }
+}

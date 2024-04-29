@@ -7,32 +7,60 @@
 
 import UIKit
 
+protocol ButtonCellDelegate: AnyObject {
+    func cancelButtonTapped()
+    func saveButtonTapped()
+    }
+
+
 class ButtonsCell: UITableViewCell {
     
+    // MARK: - Properties
     static let identifier = String(describing: ButtonsCell.self)
+    var onSave: (() -> Void)?
+    var onCancel: (() -> Void)?
+    var presenter: HomePresenter! //не знаю нужно здесь или нет
+    weak var delegate: ButtonCellDelegate?
     
+    // MARK: - UI
     private let cancelButton = UIButton.makeButtonFlexWidth(text: "Cancel",
-                                                            buttonColor: .red,
+                                                         buttonColor: .red,
                                                          titleColor: .white,
-                                                         titleSize: 14,
+                                                         titleSize: 16,
                                                          height: 40,
                                                          cornerRadius: 4)
     
     private let saveButton = UIButton.makeButtonFlexWidth(text: "Save",
-                                                            buttonColor: .green,
+                                                         buttonColor: .green,
                                                          titleColor: .white,
-                                                         titleSize: 14,
+                                                         titleSize: 16,
                                                          height: 40,
                                                          cornerRadius: 4)
-    
+    // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        addTargets()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Methods
+    
+    private func addTargets() {
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func cancelButtonTapped() {
+        onCancel?()
+    }
+    
+    @objc func saveButtonTapped() {
+        onSave?()
     }
     
     private func setupViews() {

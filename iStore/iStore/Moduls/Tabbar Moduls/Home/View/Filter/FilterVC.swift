@@ -6,11 +6,9 @@
 //
 
 import UIKit
-
+// разделение фильтра по секциям
 enum FilterSection: Int, CaseIterable {
-    case sortBy
-    case priceRange
-    case buttons
+    case sortBy, priceRange, buttons
 
     var title: String {
         switch self {
@@ -24,13 +22,26 @@ enum FilterSection: Int, CaseIterable {
     }
 }
 
+// для сортировки
 struct FilterOption {
     let button: UIButton
     let title: String
     let handler: (() -> Void)
 }
+//виды сортировки
+enum SortingModel {
+    case name, priceLow, priceHigh
+}
+
+protocol FilterVCDelegate: AnyObject {
+    func didChooseSorting(option: SortingModel)
+}
 
 class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    weak var delegate: FilterVCDelegate?
+    
+    // MARK: - UI
     private let tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.register(SortByCell.self, forCellReuseIdentifier: SortByCell.identifier)
@@ -46,7 +57,7 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var selectedSortOption: Int?
     
     
-    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -56,6 +67,8 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tableView.dataSource = self
         tableView.frame = view.bounds
     }
+    
+    // MARK: - Methods
     
     func configure() {
         self.models = sortOption.enumerated().map { index, title in
@@ -82,6 +95,30 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         updateRadioButtons()
     }
     
+    @objc func saveButtonTapped() {
+        print("kjhjhj")
+//         if let selectedOption = selectedSortOption {
+//             let filterType: SortingModel
+//             switch sortOption[selectedOption] {
+//             case "Name (A - Z)":
+//                 filterType = .name
+//             case "Price (low first)":
+//                 filterType = .priceLow
+//             case "Price (high first)":
+//                 filterType = .priceHigh
+//             default:
+//                 filterType = .noFilter
+//             }
+//             delegate?.didChooseSorting(option: filterType)
+//         }
+//         dismiss(animated: true, completion: nil)
+     }
+    private func saveFilters() {
+        print("Filters saved")
+        dismiss(animated: true, completion: nil)
+    }
+    // MARK: - Tableview
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         FilterSection.allCases.count
     }
@@ -98,6 +135,7 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 
         FilterSection(rawValue: section)?.title
@@ -125,11 +163,18 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ButtonsCell.identifier, for: indexPath) as? ButtonsCell else {
                 return UITableViewCell()
             }
+            cell.onSave = { [weak self] in
+                self?.saveFilters()
+            }
+            cell.onCancel = { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
+            }
             return cell
         }
     }
 }
 
+// MARK: - Extensions
 extension UIButton {
     func setupAsRadioButton() {
         self.setImage(UIImage(systemName: "circle"), for: .normal)

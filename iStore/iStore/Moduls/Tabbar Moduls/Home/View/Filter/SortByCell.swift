@@ -8,11 +8,13 @@
 import UIKit
 class SortByCell: UITableViewCell {
     
+    // MARK: - Properties
     static let identifier = String(describing: SortByCell.self)
  
     var titleLabel: UILabel!
     var radioButton: UIButton!
     
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -21,6 +23,8 @@ class SortByCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Methods
     
     public func configure(with model: FilterOption, isSelected: Bool) {
         radioButton.isSelected = isSelected
