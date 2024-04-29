@@ -3,30 +3,40 @@ import FirebaseFirestore
 import Firebase
 
 protocol WishlistPresenterProtocol: AnyObject {
-    func viewDidLoad()
     var productCount: Int { get }
+    func setView()
     func getProduct(at index: Int) -> Product
+    func showCartVC()
+    func showDetailsVC(data: SingleProduct)
     //    func toggleFavorite(at index: Int)
 }
 
 final class WishlistPresenter: WishlistPresenterProtocol {
     
     weak var view: WishlistVCProtocol?
-    var products: [Product] = []
+    private let router: WishlistRouterProtocol
     private let db = Firestore.firestore()
-    
-    init(viewController: WishlistVC? = nil) {
-        self.view = viewController
-    }
+
+    var products: [Product] = []
+
     var productCount: Int {
         return products.count
     }
-    
+
+    // MARK: Init
+
+    init(view: WishlistVCProtocol, router: WishlistRouterProtocol) {
+        self.view = view
+        self.router = router
+    }
+
+    // MARK: Methods
+
     func getProduct(at index: Int) -> Product {
         return products[index]
     }
-    
-    func viewDidLoad() {
+
+    func setView() {
         products = [Product(id: 0, picture: "imgProduct", description: "Earphones for monitor", price: 100, isFavourite: false),
                     Product(id: 1, picture: "imgProduct", description: "Earphones for monitor, but cheaper", price: 99.99, isFavourite: false),
                     Product(id: 2, picture: "imgProduct", description: "Earphones for great look on the street", price: 100, isFavourite: true),
@@ -40,12 +50,20 @@ final class WishlistPresenter: WishlistPresenterProtocol {
                     Product(id: 10, picture: "imgProduct", description: "Earphones for those, who is making Onboarding screens", price: 100, isFavourite: false)
         ]
     }
+
+    func showCartVC() {
+        router.showCartVC()
+    }
+
+    func showDetailsVC(data: SingleProduct) {
+        router.showDetailsVC(data: data)
+    }
 }
 
 //MARK: - WishCollectionCellDelegate
 extension WishlistPresenter: WishCollectionCellDelegate {
     func buyButtonPressed() {
-        print("Buy pressed")
+        print("add to cart pressed")
     }
     
     func heartButtonPressed(at index: Int) {
