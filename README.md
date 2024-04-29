@@ -30,12 +30,12 @@
 * Kingfisher for images downloading and caching
 * Firebase for authorizathion and database
 ---
-
-
-
-
-
-
+<img src="https://github.com/michaelbolgar/iStore/assets/31271156/8a3bda10-7ed3-4aac-a492-388b4811127d)" width="300"/>
+<img src="https://github.com/michaelbolgar/iStore/assets/31271156/972a5864-cce5-49f9-8293-169c522f1229" width="300"/>
+<img src="https://github.com/michaelbolgar/iStore/assets/31271156/3403da9c-53f0-4c66-94ba-fc77f75e2b19" width="300"/>
+<img src="https://github.com/michaelbolgar/iStore/assets/31271156/8175b6b2-0a53-477b-8b90-034a59fda0ac" width="300"/>
+<img src="https://github.com/michaelbolgar/iStore/assets/31271156/62c22e76-616f-4441-a4f0-05f3ac7aa170" width="300"/>
+<img src="https://github.com/michaelbolgar/iStore/assets/31271156/cdfa191e-9ce9-4936-837d-890a3d43b5de)" width="300"/>
 
 ---
 [ios]: https://img.shields.io/badge/iOS-15.0-critical
