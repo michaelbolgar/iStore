@@ -1,6 +1,11 @@
 import UIKit
 
+protocol ChangeProfileViewControllerDelegate: AnyObject {
+    func didSelectAccountType(_ type: String)
+}
+
 final class ChangeProfileViewController: UIViewController {
+    weak var delegate: ChangeProfileViewControllerDelegate?
     
     // MARK: - UI Element
     private lazy var containerView: UIView = {
@@ -60,11 +65,28 @@ final class ChangeProfileViewController: UIViewController {
     
     // MARK: - Selector Methods
     @objc private func userViewTapped() {
-        print("takePhotoButton Tapped")
+        delegate?.didSelectAccountType("User")
+        if let window = UIApplication.shared.windows.first,
+           let tabBarController = window.rootViewController as? UITabBarController,
+           let viewControllers = tabBarController.viewControllers,
+           viewControllers.count > 3 {
+            tabBarController.viewControllers?.remove(at: 2)
+        }
+        dismiss(animated: true, completion: nil)
     }
-
+    
     @objc private func managerViewTapped() {
-        print("chooseFromFileButton Tapped")
+        delegate?.didSelectAccountType("Manager")
+        if let window = UIApplication.shared.windows.first,
+           let tabBarController = window.rootViewController as? UITabBarController,
+           let viewControllers = tabBarController.viewControllers,
+           viewControllers.count < 4 {
+            let managerVC = ManagerVC()
+            managerVC.tabBarItem = UITabBarItem(title: "Manager", image: UIImage.paper, selectedImage: UIImage.selectedpaper)
+                    
+                    tabBarController.viewControllers?.insert(managerVC, at: 2)
+        }
+        dismiss(animated: true, completion: nil)
     }
 }
 

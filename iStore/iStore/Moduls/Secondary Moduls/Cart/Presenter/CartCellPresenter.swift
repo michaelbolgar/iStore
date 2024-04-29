@@ -1,9 +1,3 @@
-//
-//  CartCellPresenter.swift
-//  iStore
-//
-
-
 import UIKit
 
 protocol CartCellView: AnyObject {

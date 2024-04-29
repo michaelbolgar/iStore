@@ -1,15 +1,20 @@
 import UIKit
+import FirebaseFirestore
+import Firebase
+
+protocol ProfileViewProtocol: AnyObject {
+    func updateProfile(with name: String, email: String, imageUrl: String?)
+    func navigateToLoginScreen()
+    func showSignOutError(_ error: Error)
+    func imageUploadCompleted()
+}
 
 final class ProfileVC: UIViewController {
-
+    
+    var changePhotoPresenter: ChangePhotoPresenter?
     var presenter: ProfilePresenterProtocol!
-
+    
     // MARK: - UI Elements
-    private let profileTitle = UILabel.makeLabel(text: "Profile",
-                                                 font: .InterBold(ofSize: 24),
-                                                 textColor: .customDarkGray,
-                                                 numberOfLines: nil,
-                                                 alignment: .center)
     
     private lazy var profileImage: UIImageView = {
         let element = UIImageView()
@@ -20,27 +25,17 @@ final class ProfileVC: UIViewController {
         return element
     }()
     
-    private let profileName = UILabel.makeLabel(text: "Mstr. Anderson",
+    private let profileName = UILabel.makeLabel(text: "",
                                                 font: .InterSemiBold(ofSize: 20),
                                                 textColor: .customDarkGray,
                                                 numberOfLines: 1,
                                                 alignment: .left)
     
-    private let profileEmail = UILabel.makeLabel(text: "dev@gmail.com",
+    private let profileEmail = UILabel.makeLabel(text: "",
                                                  font: .InterSemiBold(ofSize: 14),
                                                  textColor: .customLightGray,
                                                  numberOfLines: 1,
                                                  alignment: .left)
-    
-    private lazy var settingsProfileButton: UIButton = {
-        let element = UIButton(type: .system)
-        element.setBackgroundImage(UIImage(systemName: "gearshape.2"), for: .normal)
-        element.backgroundColor = .white
-        element.tintColor = .customDarkGray
-        element.addTarget(self, action: #selector(settingsProfileButtonTapped), for: .touchUpInside)
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
-    }()
     
     
     private lazy var changePhotoProfileButton: UIButton = {
@@ -55,26 +50,37 @@ final class ProfileVC: UIViewController {
         return element
     }()
     
-    private let typeAccountView = UIView.makeGreyButton(textLabel: "Type of account", 
+    /// buttons on the underside
+    private let typeAccountView = UIView.makeGreyButton(textLabel: "Type of account",
+                                                        textColor: .customDarkGray,
+                                                        nameMarker: "chevron.forward",
+                                                        colorMarker: .customDarkGray)
+    
+    private let termsView = UIView.makeGreyButton(textLabel: "Terms & Conditions",
                                                   textColor: .customDarkGray,
-                                                  nameMarker: "chevron.forward", 
+                                                  nameMarker: "chevron.forward",
                                                   colorMarker: .customDarkGray)
     
-    private let termsView = UIView.makeGreyButton(textLabel: "Terms & Conditions", 
-                                            textColor: .customDarkGray,
-                                            nameMarker: "chevron.forward",
-                                            colorMarker: .customDarkGray)
+    private let signoutView = UIView.makeGreyButton(textLabel: "Log out",
+                                                    textColor: .customDarkGray,
+                                                    nameMarker: "arrow.forward.to.line.square",
+                                                    colorMarker: .customDarkGray)
     
-    private let signoutView = UIView.makeGreyButton(textLabel: "Sign Out",
-                                              textColor: .customDarkGray,
-                                              nameMarker: "arrow.forward.to.line.square", 
-                                              colorMarker: .customDarkGray)
+    // MARK: init
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
+        presenter.fetchProfileData()
     }
     
     //MARK: Private Methods
@@ -83,8 +89,18 @@ final class ProfileVC: UIViewController {
         view.backgroundColor = .white
         
         view.hideKeyboard() // это нужно для реализации функции по изменению логина и почты
-     
-        [profileTitle, settingsProfileButton, profileImage, profileName, profileEmail, changePhotoProfileButton, typeAccountView, termsView, signoutView].forEach { view.addSubview($0) }
+        
+        setNavigationBar(title: "Profile")
+        navigationController?.isNavigationBarHidden = false
+        
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
+        navigationController?.navigationBar.tintColor = UIColor.black
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"),
+                                                            style: .plain, target: self,
+                                                            action: #selector(settingsProfileButtonTapped))
+        
+        [profileImage, profileName, profileEmail, changePhotoProfileButton, typeAccountView, termsView, signoutView].forEach { view.addSubview($0) }
         
         //добавляем рекогнайзер на кнопки(вью)
         typeAccountView.isUserInteractionEnabled = true
@@ -102,13 +118,31 @@ final class ProfileVC: UIViewController {
         
     }
     
+    private func loadImage(from url: URL) {
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let data = data, error == nil, let image = UIImage(data: data) else {
+                DispatchQueue.main.async {
+                    self?.profileImage.image = UIImage(named: "defaultProfilePhoto") // Загрузка стандартного изображения в случае ошибки
+                }
+                return
+            }
+            DispatchQueue.main.async {
+                self?.profileImage.image = image
+            }
+        }.resume()
+    }
+    
     // MARK: Selector Methods
     @objc private func settingsProfileButtonTapped() {
-        print("settingsProfile button tapped")
+        let vc = SettingsVC()
+        vc.delegate = self
+        present(vc, animated: true)
     }
     
     @objc private func changePhotoProfileButtonTapped() {
-        let changePhotoVC = ChangePhotoViewController()
+//        presenter.showChangePhotoVC()
+        let profileBuilder = ProfileBuilder()
+        let changePhotoVC = profileBuilder.createChangePhotoModule(delegate: self)
         changePhotoVC.modalPresentationStyle = .automatic
         present(changePhotoVC, animated: true, completion: nil)
     }
@@ -127,7 +161,11 @@ final class ProfileVC: UIViewController {
     }
     
     @objc private func signoutViewTapped() {
-        print("signout button tapped")
+        presenter.signOut()
+    }
+    
+    deinit {
+        print("ProfileVC deinited")
     }
 }
 
@@ -135,18 +173,12 @@ final class ProfileVC: UIViewController {
 private extension ProfileVC {
     
     func setupConstraints() {
-        // Определение константы для удобства
+        
         let inset: CGFloat = 20
         
         NSLayoutConstraint.activate([
             
-            profileTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            profileTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            settingsProfileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            settingsProfileButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
-            
-            profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 92),
+            profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 62),
             profileImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: inset),
             profileImage.widthAnchor.constraint(equalToConstant: 130),
             profileImage.heightAnchor.constraint(equalToConstant: 130),
@@ -156,12 +188,12 @@ private extension ProfileVC {
             changePhotoProfileButton.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor),
             changePhotoProfileButton.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor),
             
-            profileName.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 104),
+            profileName.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 74),
             profileName.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 150),
             profileName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
             profileName.heightAnchor.constraint(equalToConstant: 24),
             
-            profileEmail.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 128),
+            profileEmail.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 98),
             profileEmail.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 150),
             profileEmail.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -inset),
             profileEmail.heightAnchor.constraint(equalToConstant: 24),
@@ -181,3 +213,55 @@ private extension ProfileVC {
     }
 }
 
+// MARK: - Extension ProfileViewProtocol
+extension ProfileVC: ProfileViewProtocol {
+    
+    func imageUploadFailed(_ error: any Error) {
+        print(error.localizedDescription)
+    }
+    
+    func showSignOutError(_ error: any Error) {
+        print(error.localizedDescription)
+    }
+    
+    func navigateToLoginScreen() {
+        //        RootRouter.shared.showLoginNavigationController()
+    }
+    
+    func updateProfile(with name: String, email: String, imageUrl: String?) {
+        profileName.text = name
+        profileEmail.text = email
+        if let imageUrl = imageUrl, let url = URL(string: imageUrl) {
+            loadImage(from: url)
+        } else {
+            profileImage.image = UIImage(named: "profilePhoto")
+        }
+    }
+    func updateProfileImage(_ image: UIImage) {
+        DispatchQueue.main.async {
+            self.profileImage.image = image
+        }
+    }
+    func imageUploadCompleted() {
+        presenter.fetchProfileData() // Refetch profile data after image upload completion
+    }
+}
+
+// MARK: - Extension ChangePhotoPresenterDelegate
+extension ProfileVC: ChangePhotoPresenterDelegate {
+    func imageDidUpdate(url: String) {
+        if let imageUrl = URL(string: url) {
+            loadImage(from: imageUrl)
+        }
+    }
+}
+
+extension ProfileVC: SettingsVCDelegate {
+    func didUpdateName(_ name: String) {
+        profileName.text = name
+    }
+    
+    func didUpdateEmail(_ email: String) {
+        profileEmail.text = email
+    }
+}
