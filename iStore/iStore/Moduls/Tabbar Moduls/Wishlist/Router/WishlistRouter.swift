@@ -5,8 +5,7 @@ import UIKit
 protocol WishlistRouterProtocol: BaseRouter {
     func start()
     func showCartVC()
-    func showDetailsVC()
-//    func initialViewController()
+    func showDetailsVC(data: SingleProduct)
 }
 
 // MARK: WishlistRouter
@@ -25,12 +24,6 @@ final class WishlistRouter: WishlistRouterProtocol {
         self.factory = factory
     }
 
-//    func initialViewController() {
-//        if let wishlistVC = moduleBuilder?.createWishlistModule(router: self) {
-//            navigationController.viewControllers = [wishlistVC]
-//        }
-//    }
-
     func start() {
         if let wishlistVC = moduleBuilder?.createWishlistModule(router: self) {
             navigationController.viewControllers = [wishlistVC]
@@ -38,10 +31,14 @@ final class WishlistRouter: WishlistRouterProtocol {
     }
 
     func showCartVC() {
-        // code
+        if let cartVC = moduleBuilder?.createCartVC() {
+            navigationController.pushViewController(cartVC, animated: true)
+        }
     }
 
-    func showDetailsVC() {
-        // code
+    func showDetailsVC(data: SingleProduct) {
+        if let detailsVC = moduleBuilder?.createDetailsVC(data: data) {
+            navigationController.pushViewController(detailsVC, animated: true)
+        }
     }
 }
