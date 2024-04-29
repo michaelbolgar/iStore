@@ -93,6 +93,7 @@ extension WishlistVC {
     }
     
     func setPresenter() {
+//        presenter = WishlistPresenter(viewController: self)
         presenter.setView()
     }
     
