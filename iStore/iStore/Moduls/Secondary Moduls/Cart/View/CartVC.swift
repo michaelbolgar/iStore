@@ -6,6 +6,7 @@ protocol CartVCProtocol: AnyObject {
 
 final class CartVC: UIViewController, CartVCProtocol {
     var presenter: CartPresenter!
+    var selectedIndices: Set<Int> = []
 
     // MARK: UI Elements
     private let tableView = UITableView()
@@ -24,7 +25,7 @@ final class CartVC: UIViewController, CartVCProtocol {
                                                           numberOfLines: 1,
                                                           alignment: .left)
 
-    private let priceLabel = UILabel.makeLabel(text: "$ 2499,97",
+    private let priceLabel = UILabel.makeLabel(text: "$ 0,00",
                                                           font: UIFont.InterMedium(ofSize: 14),
                                                           textColor: UIColor.customDarkGray,
                                                           numberOfLines: 1,
@@ -59,7 +60,7 @@ final class CartVC: UIViewController, CartVCProtocol {
         let backButton = UIBarButtonItem(image: UIImage(named: "leftArrow"),
                                          style: .plain,
                                          target: self,
-                                         action: #selector(backButtonTapped))
+                                         action: #selector(backButtonPressed))
 
         title = "Your Cart"
         navigationController?.navigationBar.tintColor = UIColor.black
@@ -83,6 +84,14 @@ final class CartVC: UIViewController, CartVCProtocol {
              }
     }
 
+    func updateTotalPrice() {
+        let totalPrice = self.selectedIndices.reduce(0) { total, index in
+              total + self.presenter.items[index].price
+
+        }
+        self.priceLabel.text = "$\(totalPrice)"
+    }
+    
     // MARK: Selector Methods
     @objc func selectPaymentButtonAction() {
         let paymentVC = PaymentVC()
@@ -90,7 +99,7 @@ final class CartVC: UIViewController, CartVCProtocol {
         present(paymentVC, animated: true, completion: nil)
     }
 
-    @objc func backButtonTapped() {
+    @objc func backButtonPressed() {
         navigationController?.popViewController(animated: true)
     }
 }
@@ -106,13 +115,33 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: CartTableCell.identifier) as! CartTableCell
         let product = presenter.getItem(at: indexPath.row)
         cell.set(info: product)
-//        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        cell.checkmarkAction = { [weak self] isSelected in
+            guard let self = self else { return }
+            if isSelected {
+                self.selectedIndices.insert(indexPath.row)
+            } else {
+                self.selectedIndices.remove(indexPath.row)
+            }
+            self.updateTotalPrice()
+        }
+
+        cell.presenter?.deleteButtonAction = { [weak self] in
+            self?.presenter.deleteItem(at: indexPath, tableView: tableView)
+              }
+
+
+
         return cell
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: CartHeaderView.identifier) as! CartHeaderView
         return headerView
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        print("cell tapped")
     }
 }
 

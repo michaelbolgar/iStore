@@ -7,6 +7,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
     static let identifier = String(describing: CartTableCell.self)
     var presenter: CartCellPresenter?
     private let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .ultraLight)
+    var checkmarkAction: ((Bool) -> Void)?
 
     // MARK: UI Elements
     private let checkmarkButton: UIButton = {
@@ -98,9 +99,15 @@ final class CartTableCell: UITableViewCell, CartCellView {
         plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
         minusButton.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
         checkmarkButton.addTarget(self, action: #selector(checkmarkTapped), for: .touchUpInside)
+        basketButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+
     }
 
     // MARK: Selector methods
+
+    @objc func deleteButtonTapped() {
+        presenter?.deleteCell()
+    }
 
     @objc func plusButtonTapped() {
         presenter?.incrementCount()
@@ -109,7 +116,9 @@ final class CartTableCell: UITableViewCell, CartCellView {
         presenter?.decrementCount()
     }
     @objc func checkmarkTapped() {
-        presenter?.checkmarkButtonTapped(checkmarkButton)
+                checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor(red: 0.404, green: 0.769, blue: 0.655, alpha: 1), renderingMode: .alwaysOriginal), for: .selected)
+        checkmarkButton.isSelected = !checkmarkButton.isSelected
+        checkmarkAction?(checkmarkButton.isSelected)
     }
 }
 
