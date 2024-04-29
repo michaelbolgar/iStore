@@ -34,7 +34,6 @@ final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate
         setDelegates()
         presenter?.setCategories()
         presenter?.setProducts(for: 1)
-//        searchBar.backgroundColor = .red
     }
 
     override func viewWillAppear(_ animated: Bool) {

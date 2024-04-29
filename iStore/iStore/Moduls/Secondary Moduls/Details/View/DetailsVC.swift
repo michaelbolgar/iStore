@@ -170,6 +170,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
 
     @objc func heartButtonTapped() {
         heartButton.isSelected = !heartButton.isSelected
+        presenter.toggleFavorite(for: data)
     }
 
     @objc func buyNowAction() {

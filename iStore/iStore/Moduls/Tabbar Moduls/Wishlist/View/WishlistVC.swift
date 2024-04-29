@@ -32,6 +32,14 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     }()
     
     // MARK: Life cycle
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.reloadData()
+        presenter.startListeningForFavoritesUpdates()
+        presenter.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setPresenter()
@@ -71,9 +79,11 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     }
     
     func reloadCollectionView() {
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
+        DispatchQueue.main.async  {
+            print("Перезагружаем коллекцию. Текущее количество продуктов: \(self.presenter.productCount)")
+                   self.collectionView.reloadData()
         }
+        searchBar.isHidden = true
     }
     
     // MARK: Selector Methods
@@ -93,8 +103,8 @@ extension WishlistVC {
     }
     
     func setPresenter() {
-//        presenter = WishlistPresenter(viewController: self)
-        presenter.setView()
+//        presenter = WishlistPresenter(view: self)
+        presenter.viewDidLoad()
     }
     
     func setupUI() {
@@ -123,6 +133,7 @@ extension WishlistVC {
 //MARK: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 extension WishlistVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("Количество продуктов: \(presenter.productCount)")
         return presenter.productCount
     }
     
@@ -152,32 +163,32 @@ extension WishlistVC: SearchBarViewDelegate {
 extension WishlistVC {
     func checkCollectionState() {
         // Check if the collection view is empty
-        let emptyImageView = UIImageView(image: UIImage(named: "bookmark"))
-        let emptyCollectionLabel = UILabel.makeLabel(text: "No saved items yet", font: UIFont.InterMedium(ofSize: 20), textColor: .black, numberOfLines: 2, alignment: .center)
-        
-        if collectionView.numberOfItems(inSection: 0) == 0 {
-            // Collection view is empty, show the image in the center
-            emptyImageView.contentMode = .scaleAspectFit
-            emptyImageView.translatesAutoresizingMaskIntoConstraints = false
-            emptyCollectionLabel.translatesAutoresizingMaskIntoConstraints = false
-            
-            view.addSubview(emptyImageView)
-            view.addSubview(emptyCollectionLabel)
-            
-            NSLayoutConstraint.activate([
-                emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                emptyImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                emptyImageView.heightAnchor.constraint(equalToConstant: 200),
-                emptyImageView.widthAnchor.constraint(equalToConstant: 200),
-                
-                emptyCollectionLabel.topAnchor.constraint(equalTo: emptyImageView.bottomAnchor, constant: 10),
-                emptyCollectionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-            ])
-        } else {
-            // Collection view has data, hide the image if previously shown
-            emptyImageView.removeFromSuperview()
-            emptyCollectionLabel.removeFromSuperview()
-            collectionView.reloadData()
-        }
+//        let emptyImageView = UIImageView(image: UIImage(named: "bookmark"))
+//        let emptyCollectionLabel = UILabel.makeLabel(text: "No saved items yet", font: UIFont.InterMedium(ofSize: 20), textColor: .black, numberOfLines: 2, alignment: .center)
+//        
+//        if collectionView.numberOfItems(inSection: 0) == 0 {
+//            // Collection view is empty, show the image in the center
+//            emptyImageView.contentMode = .scaleAspectFit
+//            emptyImageView.translatesAutoresizingMaskIntoConstraints = false
+//            emptyCollectionLabel.translatesAutoresizingMaskIntoConstraints = false
+//            
+//            view.addSubview(emptyImageView)
+//            view.addSubview(emptyCollectionLabel)
+//            
+//            NSLayoutConstraint.activate([
+//                emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//                emptyImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+//                emptyImageView.heightAnchor.constraint(equalToConstant: 200),
+//                emptyImageView.widthAnchor.constraint(equalToConstant: 200),
+//                
+//                emptyCollectionLabel.topAnchor.constraint(equalTo: emptyImageView.bottomAnchor, constant: 10),
+//                emptyCollectionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+//            ])
+//        } else {
+//            // Collection view has data, hide the image if previously shown
+//            emptyImageView.removeFromSuperview()
+//            emptyCollectionLabel.removeFromSuperview()
+//            collectionView.reloadData()
+//        }
     }
 }
