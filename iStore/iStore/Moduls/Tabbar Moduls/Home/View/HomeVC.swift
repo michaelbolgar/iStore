@@ -1,15 +1,6 @@
 import UIKit
 import SwiftUI
 
-#warning("внести правки:")
-/*
- 
- 1. делать лейблы через extension (заметил в ячейках)
- 2. выставить марки по шаблону, который я закрепил в ветке в дискорде
- 3. поправить кнопку filters и сделать её более похожей на макет в фигме
- 
- */
-
 protocol HomeVCProtocol: AnyObject {
     func reloadData(with section: Int)
 }
@@ -32,10 +23,9 @@ final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
+
     
-    private let searchBar = SearchBarView()
     //MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -63,6 +53,7 @@ final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate
     private func setDelegates() {
         collectionView.delegate = self
         collectionView.dataSource = self
+//        searchBar.delegate = self
     }
     
     func didTapFiltersButton() {
@@ -102,6 +93,7 @@ extension HomeVC: UICollectionViewDataSource {
         case "searchField":
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchFieldView.identifier, for: indexPath) as?
                     SearchFieldView else { return UICollectionViewCell() }
+            cell.delegate = self
             return cell
             
         case "categories":
@@ -169,8 +161,6 @@ extension HomeVC: UICollectionViewDelegate {
             presenter.setProducts(for: (indexPath.row + 1))
         case "products":
             print("item cell tapped")
-//            let detailsVC = DetailsVC(data: presenter.productData[indexPath.row])
-//            navigationController?.pushViewController(detailsVC, animated: true)
             let item = presenter.productData[indexPath.row]
             presenter.showDetailsVC(data: item)
         default:
@@ -295,14 +285,25 @@ extension HomeVC {
     }
 }
 
+/// delegate for recognizing tap on Cart button
 extension HomeVC: HeaderNavBarMenuViewDelegate {
     func cartButtonTapped() {
         presenter.showCartVC()
     }
 }
 
+/// delegate for recognizing tap on the "Add to cart" button
 extension HomeVC: SingleItemCellDelegate {
     func buyButtonPressed() {
         print ("add to cart button tapped")
     }
 }
+
+extension HomeVC: SearchBarViewDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {}
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        presenter.showSearchVC(searchText: searchBar.text ?? "")
+    }
+}
+

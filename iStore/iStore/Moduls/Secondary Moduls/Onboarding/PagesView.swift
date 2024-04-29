@@ -4,6 +4,8 @@ class PagesView: UIView {
     
     // MARK: UI Elements
     
+    var isAnimated = false
+    
     private lazy var titleLabel = UILabel.makeLabel(text: nil, 
                                                     font: .InterBold(ofSize: 30), 
                                                     textColor: .black, 
@@ -46,15 +48,52 @@ class PagesView: UIView {
         titleLabel.text = title
         descriptionLabel.text = description
         imageView.image = UIImage(named: imageName)
+        resetAnimations()
+    }
+    
+    func animateContentEntrance(completion: (() -> Void)? = nil) {
+        guard !isAnimated else { return }
+        isAnimated = true
+        
+        // Начальное положение элементов
+        resetAnimations()
+        
+        // Анимация для titleLabel
+        UIView.animate(withDuration: 1.0,
+                       delay: 0.2,
+                       options: [.curveEaseOut], 
+                       animations: {
+            self.titleLabel.alpha = 1
+            self.titleLabel.transform = .identity
+        }, completion: nil)
+        
+        // Анимация для descriptionLabel
+        UIView.animate(withDuration: 1.0,
+                       delay: 0.4,
+                       options: [.curveEaseOut], 
+                       animations: {
+            self.descriptionLabel.alpha = 1
+            self.descriptionLabel.transform = .identity
+        }, completion: nil)
+        
+        // Анимация для imageView
+        UIView.animate(withDuration: 1.0,
+                       delay: 0.6,
+                       options: [.curveEaseOut], 
+                       animations: {
+            self.imageView.alpha = 1
+            self.imageView.transform = .identity
+        }, completion: nil)
     }
 }
 
-// MARK: Layout extension
+// MARK: Extensions
 
 extension PagesView {
     
     private func setupLayout() {
-        let imageTopPadding: CGFloat = 15
+        let imageSidePadding: CGFloat = 15
+        let imageTopPadding: CGFloat = 5
         let labelBottomPadding: CGFloat = 90
         let labelSidePadding: CGFloat = 20
         let labelToLabelSpacing: CGFloat = 10
@@ -64,9 +103,9 @@ extension PagesView {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: imageTopPadding),
-            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -imageTopPadding),
-            imageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5),
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: imageSidePadding),
+            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -imageSidePadding),
+            imageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: imageTopPadding),
             imageView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.6),
             
             descriptionLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -labelBottomPadding),
@@ -77,5 +116,16 @@ extension PagesView {
             titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: labelSidePadding),
             titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -labelSidePadding)
         ])
+    }
+}
+
+extension PagesView {
+    func resetAnimations() {
+        titleLabel.alpha = 0
+        titleLabel.transform = CGAffineTransform(translationX: 300, y: 0)
+        descriptionLabel.alpha = 0
+        descriptionLabel.transform = CGAffineTransform(translationX: 300, y: 0)
+        imageView.alpha = 0
+        imageView.transform = CGAffineTransform(translationX: 0, y: -300)
     }
 }
