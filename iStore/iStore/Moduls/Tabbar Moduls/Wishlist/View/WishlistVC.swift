@@ -24,9 +24,10 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     
     private lazy var cartButton: UIButton = {
         let element = UIButton()
-        element.setImage(UIImage.cart, for: .normal)
+        element.setBackgroundImage(UIImage(named: "Buy"), for: .normal)
         element.addTarget(self, action: #selector(cartButtonPressed), for: .touchUpInside)
         element.translatesAutoresizingMaskIntoConstraints = false
+//        element.contentMode = .scaleAspectFit
         return element
     }()
     
@@ -79,7 +80,8 @@ final class WishlistVC: UIViewController, WishlistVCProtocol {
     @objc func cartButtonPressed() {
         // go to cart screen
         print("cart button tap")
-        
+        presenter.showCartVC()
+
         // Add tapping animation
         cartButton.tappingAnimation()
     }
@@ -95,7 +97,7 @@ extension WishlistVC {
     }
     
     func setPresenter() {
-        presenter = WishlistPresenter(viewController: self)
+//        presenter = WishlistPresenter(viewController: self)
         presenter.viewDidLoad()
     }
     
@@ -103,10 +105,6 @@ extension WishlistVC {
         view.backgroundColor = .white
 #warning ("Клавиатура не убирается по тапу")
         view.hideKeyboard()
-        //        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.cart,
-        //                                                            style: .plain, target: self,
-        //                                                            action: #selector(cartButtonPressed))
-        //        navigationController?.navigationBar.tintColor = UIColor.black
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 12),
@@ -116,7 +114,9 @@ extension WishlistVC {
             
             cartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
             cartButton.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor),
-            
+            cartButton.heightAnchor.constraint(equalToConstant: 28),
+            cartButton.widthAnchor.constraint(equalToConstant: 28),
+
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
             searchBar.trailingAnchor.constraint(equalTo: cartButton.leadingAnchor, constant: -10),

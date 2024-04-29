@@ -7,11 +7,15 @@
 
 import UIKit
 
+protocol HeaderNavBarMenuViewDelegate: AnyObject {
+    func cartButtonTapped()
+}
+
 final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: Properties
     
-    var presenter: HomePresenterProtocol!
+    weak var delegate: HeaderNavBarMenuViewDelegate?
     private var dropdownTableView: UITableView!
     private var dropdownOptions = ["Europe - €", "USA - $", "Rus - ₽"]
     
@@ -56,7 +60,7 @@ final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate,
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
 
     //MARK: - Initialization
 
@@ -109,11 +113,7 @@ final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate,
 
     @objc private func cartButtonTapped() {
         print("Cart button tapped")
-        let cartVC = CartVC()
-        let navigationController = UINavigationController(rootViewController: cartVC)
-        navigationController.modalPresentationStyle = .formSheet
-        navigationController.isModalInPresentation = true
-        window?.rootViewController?.present(navigationController, animated: true)
+        delegate?.cartButtonTapped()
     }
 
     @objc private func bellButtonTapped() {

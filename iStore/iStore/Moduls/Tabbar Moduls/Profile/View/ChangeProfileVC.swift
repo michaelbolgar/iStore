@@ -56,21 +56,38 @@ final class ChangeProfileViewController: UIViewController {
         userView.isUserInteractionEnabled = true
         managerView.isUserInteractionEnabled = true
 
-        let typeAccountTapGesture = UITapGestureRecognizer(target: self, action: #selector(userViewTapped))
-        userView.addGestureRecognizer(typeAccountTapGesture)
-
-        let termsTapGesture = UITapGestureRecognizer(target: self, action: #selector(managerViewTapped))
-        managerView.addGestureRecognizer(termsTapGesture)
+        /// функции активируют удаление/добавление табы в таббар. Отключено, потому что из-за этого умирает навигация менеджера
+//        let typeAccountTapGesture = UITapGestureRecognizer(target: self, action: #selector(userViewTapped))
+//        userView.addGestureRecognizer(typeAccountTapGesture)
+//
+//        let termsTapGesture = UITapGestureRecognizer(target: self, action: #selector(managerViewTapped))
+//        managerView.addGestureRecognizer(termsTapGesture)
     }
     
     // MARK: - Selector Methods
     @objc private func userViewTapped() {
         delegate?.didSelectAccountType("User")
+        if let window = UIApplication.shared.windows.first,
+           let tabBarController = window.rootViewController as? UITabBarController,
+           let viewControllers = tabBarController.viewControllers,
+           viewControllers.count > 3 {
+            tabBarController.viewControllers?.remove(at: 2)
+        }
         dismiss(animated: true, completion: nil)
     }
-    
+
+
     @objc private func managerViewTapped() {
         delegate?.didSelectAccountType("Manager")
+        if let window = UIApplication.shared.windows.first,
+           let tabBarController = window.rootViewController as? UITabBarController,
+           let viewControllers = tabBarController.viewControllers,
+           viewControllers.count < 4 {
+            let managerVC = ManagerVC()
+            managerVC.tabBarItem = UITabBarItem(title: "Manager", image: UIImage.paper, selectedImage: UIImage.selectedpaper)
+                    
+                    tabBarController.viewControllers?.insert(managerVC, at: 2)
+        }
         dismiss(animated: true, completion: nil)
     }
 }

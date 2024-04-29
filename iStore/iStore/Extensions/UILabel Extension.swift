@@ -14,7 +14,7 @@ extension UILabel {
         label.textColor = textColor
         label.numberOfLines = numberOfLines ?? 0
         label.textAlignment = alignment ?? .left
-        label.adjustsFontSizeToFitWidth = true
+        label.adjustsFontSizeToFitWidth = false
         label.minimumScaleFactor = 0.5
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

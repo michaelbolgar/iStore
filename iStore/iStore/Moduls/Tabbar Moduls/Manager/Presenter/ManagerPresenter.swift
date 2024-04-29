@@ -4,6 +4,7 @@ protocol ManagerPresenterProtocol {
     init(view: ManagerVCProtocol, router: ManagerRouterProtocol)
     func showProductManagerVC()
     func showCategoryManagerVC()
+    func showAddNewCategoryManagerVC()
 }
 
 final class ManagerPresenter: ManagerPresenterProtocol {
@@ -24,4 +25,9 @@ final class ManagerPresenter: ManagerPresenterProtocol {
     func showCategoryManagerVC() {
         router.showCategoryManagerVC()
     }
+    
+    func showAddNewCategoryManagerVC() {
+        router.showAddNewCategoryVC()
+    }
+    
 }

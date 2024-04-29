@@ -29,7 +29,7 @@ extension UIButton {
 
         let button = UIButton(type: .system)
         button.setTitle(text, for: .normal)
-        button.layer.cornerRadius = 8
+//        button.layer.cornerRadius = 8
         button.titleLabel?.font = UIFont.InterRegular(ofSize: titleSize)
         button.tintColor = titleColor
         button.widthAnchor.constraint(equalToConstant: width).isActive = true

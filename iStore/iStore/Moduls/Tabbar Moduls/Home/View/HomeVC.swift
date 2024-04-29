@@ -14,7 +14,7 @@ protocol HomeVCProtocol: AnyObject {
     func reloadData(with section: Int)
 }
 
-final class HomeVC: UIViewController {
+final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate {
     
     var presenter: HomePresenterProtocol!
 
@@ -43,9 +43,13 @@ final class HomeVC: UIViewController {
         setupViews()
         setDelegates()
         presenter?.setCategories()
-        presenter?.setProducts(for: 2)
+        presenter?.setProducts(for: 1)
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = true
+    }
+
     //MARK: - Private Methods
     private func setupViews() {
         collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)
@@ -61,7 +65,9 @@ final class HomeVC: UIViewController {
         collectionView.dataSource = self
     }
     
-    
+    func didTapFiltersButton() {
+        print ("filter tapped")
+    }
 }
 //MARK: - UICollectionViewDataSource
 
@@ -111,6 +117,7 @@ extension HomeVC: UICollectionViewDataSource {
             
             let product = presenter?.productData[indexPath.row] ?? mockSingleProduct
             cell.configure(with: product)
+            cell.delegate = self
             return cell
         default:
             fatalError("Unknown section type")
@@ -128,7 +135,7 @@ extension HomeVC: UICollectionViewDataSource {
                     withReuseIdentifier: "HeaderNavBarMenuView",
                     for: indexPath) as! HeaderNavBarMenuView
                 header.configureHeader(labelName: section)
-                header.presenter = presenter
+                header.delegate = self
                 return header
             case "categories":
                 fallthrough
@@ -137,6 +144,7 @@ extension HomeVC: UICollectionViewDataSource {
                                                                              withReuseIdentifier: "ProductsHeaderView",
                                                                              for: indexPath) as! ProductsHeaderView
                 header.configureHeader(labelName: section)
+                header.delegate = self
                 return header
             default:
                 fatalError("Unknown section type")
@@ -242,12 +250,12 @@ private func createSearchFieldSection() -> NSCollectionLayoutSection {
 private func createCategorySection() -> NSCollectionLayoutSection {
     let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
                                                         heightDimension: .fractionalWidth(1)))
-    let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(57),
-                                                                     heightDimension: .absolute(61)),
+    let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(65),
+                                                                     heightDimension: .absolute(62)),
                                                    subitems: [item])
     let section = createLayoutSection(group: group,
                                       behavior: .continuous,
-                                      interGroupSpacing: 16,
+                                      interGroupSpacing: 10,
                                       supplementaryItems: [],
                                       contentInsets: false)
     section.contentInsets = .init(top: 0, leading: 16, bottom: 16, trailing: 16)
@@ -258,7 +266,7 @@ private func createProductSection() -> NSCollectionLayoutSection {
     let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5),
                                                         heightDimension: .fractionalHeight(1)))
     let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                                                     heightDimension: .fractionalHeight(0.35)),
+                                                                     heightDimension: .absolute(217)),
                                                    subitems: [item])
     group.interItemSpacing = .fixed(16)
     let section = NSCollectionLayoutSection(group: group)
@@ -277,12 +285,24 @@ private func supplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementar
 }
 
 
-extension HomeVC: HomeVCProtocol {
+extension HomeVC {
     func reloadData(with section: Int) {
         if section == 2 {
             collectionView.reloadSections(IndexSet(integer: section))
         } else {
             collectionView.reloadData()
         }
+    }
+}
+
+extension HomeVC: HeaderNavBarMenuViewDelegate {
+    func cartButtonTapped() {
+        presenter.showCartVC()
+    }
+}
+
+extension HomeVC: SingleItemCellDelegate {
+    func buyButtonPressed() {
+        print ("add to cart button tapped")
     }
 }
