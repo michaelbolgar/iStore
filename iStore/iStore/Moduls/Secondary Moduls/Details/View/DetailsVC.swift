@@ -21,9 +21,10 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
     }
 
     override func viewWillAppear(_ animated: Bool) {
-         super.viewWillAppear(animated)
-         self.presenter.getData(with: [data])
-     }
+        super.viewWillAppear(animated)
+        self.presenter.getData(with: [data])
+        navigationController?.navigationBar.isHidden = false
+    }
 
     // MARK: UI Elements
 
