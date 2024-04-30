@@ -29,7 +29,7 @@ protocol AppFactory: AnyObject {
     func makeProfileVC() -> UIViewController
     
     func makeHomeRouter() -> BaseRouter
-    func makeWishlistRouter() -> BaseRouter
+    func makeWishlistRouter() -> WishlistRouter
     func makeManagerRouter() -> ManagerRouter
     func makeProfileRouter() -> ProfileRouter
 }
@@ -78,7 +78,7 @@ final class Factory: AppFactory {
         return router
     }
     
-    func makeWishlistRouter() -> BaseRouter {
+    func makeWishlistRouter() -> WishlistRouter {
         let navController = UINavigationController()
         navController.configureTabBarItem("Wishlist", image: "heart")
         let moduleBuilder = WishlistBuilder()

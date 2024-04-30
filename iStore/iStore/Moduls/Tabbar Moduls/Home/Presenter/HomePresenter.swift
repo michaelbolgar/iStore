@@ -6,7 +6,7 @@ protocol HomePresenterProtocol {
     var productData: [SingleProduct] { get }
 
     func showCartVC()
-    func showSearchVC(with request: String)
+    func showSearchVC(searchText: String)
     func showDetailsVC(data: SingleProduct)
     func showFilterVC()
 
@@ -63,8 +63,8 @@ final class HomePresenter: HomePresenterProtocol {
         router.showCartVC()
     }
 
-    func showSearchVC(with request: String) {
-        // code
+    func showSearchVC(searchText: String) {
+        router.showSearchVC(searchText: searchText)
     }
 
     func showDetailsVC(data: SingleProduct) {
@@ -72,7 +72,7 @@ final class HomePresenter: HomePresenterProtocol {
     }
 
     func showFilterVC() {
-        
+        // code
     }
 }
 

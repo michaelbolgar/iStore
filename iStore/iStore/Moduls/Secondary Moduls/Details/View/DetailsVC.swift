@@ -21,9 +21,10 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
     }
 
     override func viewWillAppear(_ animated: Bool) {
-         super.viewWillAppear(animated)
-         self.presenter.getData(with: [data])
-     }
+        super.viewWillAppear(animated)
+        self.presenter.getData(with: [data])
+        navigationController?.navigationBar.isHidden = false
+    }
 
     // MARK: UI Elements
 
@@ -81,7 +82,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
                                                        imageForSelected: UIImage.selectedheart, 
                                                        color: .lightGreen)
 
-    private let addButton = UIButton.makeButton(text: "Add to Cart", 
+    @objc private let addButton = UIButton.makeButton(text: "Add to Cart", 
                                                 buttonColor: ButtonColor.green,
                                                 titleColor: .white,
                                                 titleSize: 14,
@@ -108,6 +109,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         configureController()
         setupConstraints()
         addBorder(y: 705)
+        setupButtons()
     }
 
     override func viewDidLayoutSubviews() {
@@ -159,10 +161,25 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         view.layer.addSublayer(borderLayer)
      }
 
+    private func setupButtons() {
+        buyButton.addTarget(self, action: #selector(buyNowAction), for: .touchUpInside)
+        addButton.addTarget(self, action: #selector(addToCartAction), for: .touchUpInside)
+    }
+
     // MARK: Selector Methods
 
     @objc func heartButtonTapped() {
         heartButton.isSelected = !heartButton.isSelected
+        presenter.toggleFavorite(for: data)
+    }
+
+    @objc func buyNowAction() {
+        print("buy now tapped")
+
+    }
+
+    @objc func addToCartAction() {
+        print("add cart tapped")
     }
 }
 
