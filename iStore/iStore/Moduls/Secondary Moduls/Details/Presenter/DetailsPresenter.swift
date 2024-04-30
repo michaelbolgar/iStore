@@ -8,6 +8,7 @@ protocol DetailsPresenterProtocol {
     func showPaymentVC()
     func showCartVC()
     func toggleFavorite(for product: SingleProduct)
+    func checkIfProductIsFavorite(_ product: SingleProduct, completion: @escaping (Bool) -> Void)
 }
 
 final class DetailsPresenter: DetailsPresenterProtocol {
@@ -68,6 +69,24 @@ final class DetailsPresenter: DetailsPresenterProtocol {
     
     func showCartVC() {
         // code
+    }
+}
+
+extension DetailsPresenter {
+    func checkIfProductIsFavorite(_ product: SingleProduct, completion: @escaping (Bool) -> Void) {
+        guard let userId = Auth.auth().currentUser?.uid, let productId = product.id else {
+            completion(false)
+            return
+        }
+        let docRef = db.collection("users").document(userId).collection("favorites").document(String(productId))
+
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                completion(true)
+            } else {
+                completion(false)
+            }
+        }
     }
 }
 
