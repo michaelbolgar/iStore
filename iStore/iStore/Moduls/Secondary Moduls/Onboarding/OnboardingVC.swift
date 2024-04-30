@@ -2,6 +2,8 @@ import UIKit
 
 final class OnboardingVC: UIViewController {
     
+    private let userDefaults = UserDefaultsManager()
+
     // MARK: UI Elements
     
     private let titles = ["20% Discount New Arrival Product", 
@@ -10,11 +12,19 @@ final class OnboardingVC: UIViewController {
     private let descriptions = ["Don't miss out — unique prices on the latest arrivals!", 
                                 "Everything you love is now available at great prices.", 
                                 "Discover a variety of offers for every occasion!"]
-    private let imageNames = ["1", 
+
+
+    /// user account
+    private let imageNames = ["1",
                               "2", 
                               "3"]
-    
+    /// manager account
+//    private let imageNames = ["vova",
+//                              "parochka",
+//                              "devushka"]
+
     private var slides: [PagesView] = []
+    private var lastAnimatedPageIndex: Int?
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -54,7 +64,14 @@ final class OnboardingVC: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupLayouts()
-//        TestUD()
+        TestUD() // Тест Удалить
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !slides.isEmpty {
+            slides[0].animateContentEntrance()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -67,7 +84,7 @@ final class OnboardingVC: UIViewController {
     private func setupViews() {
         view.backgroundColor = .white
         navigationController?.isNavigationBarHidden = true
-
+        
         [scrollView, pageControl, nextButtonImageView].forEach { view.addSubview($0) }
     }
     
@@ -105,13 +122,20 @@ final class OnboardingVC: UIViewController {
         
         if nextPage < slides.count {
             let point = CGPoint(x: scrollView.frame.width * CGFloat(nextPage), y: 0)
-            scrollView.setContentOffset(point, animated: true)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.scrollView.setContentOffset(point, animated: false)
+            }) { _ in
+                self.scrollViewDidEndDecelerating(self.scrollView)
+            }
         } else {
-            // Переход на экран Логина
-//            let vc = LoginVC()
-//            vc.modalPresentationStyle = .fullScreen
-//            present(vc, animated: true)
             self.navigationController?.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    private func updateContentAndAnimationsForPage(_ pageIndex: Int) {
+        if pageIndex != lastAnimatedPageIndex {
+            slides[pageIndex].animateContentEntrance()
+            lastAnimatedPageIndex = pageIndex
         }
     }
     
@@ -119,6 +143,7 @@ final class OnboardingVC: UIViewController {
         let pageWidth = scrollView.frame.width
         let offsetX = CGFloat(sender.currentPage) * pageWidth
         scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
+        updateActivePageIndicator()
     }
 }
 
@@ -127,10 +152,27 @@ final class OnboardingVC: UIViewController {
 extension OnboardingVC: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.frame.width > 0 {
-            let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
-            pageControl.currentPage = pageIndex
-            updateActivePageIndicator()
+        let newPageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
+        if scrollView.frame.width > 0 && pageControl.currentPage != newPageIndex {
+            pageControl.currentPage = newPageIndex
+           updateActivePageIndicator()
+        }
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
+        updateContentAndAnimationsForPage(pageIndex)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
+        updateContentAndAnimationsForPage(pageIndex)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        slides.forEach { slide in
+            slide.layer.removeAllAnimations()
+            slide.resetAnimations()
         }
     }
 }
@@ -168,4 +210,15 @@ extension OnboardingVC {
         defaultsManager.clearSearchHistory()
         defaultsManager.printSearchHistory()
     }
+}
+// Тест Удалить
+private func TestUD() {
+    let defaultsManager = UserDefaultsManager()
+    
+    defaultsManager.addSearchQuery("Я")
+    defaultsManager.addSearchQuery("люблю")
+    defaultsManager.addSearchQuery("пиво")
+    defaultsManager.printSearchHistory()
+    defaultsManager.clearSearchHistory()
+    defaultsManager.printSearchHistory()
 }

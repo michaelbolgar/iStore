@@ -24,7 +24,10 @@ final class WishCollectionCell: UICollectionViewCell {
    //MARK: - UI elements
     private lazy var productImage: UIImageView = {
         let image = UIImageView()
+        image.contentMode = .scaleAspectFill
         image.layer.cornerRadius = 5
+        image.layer.masksToBounds = true
+        image.clipsToBounds = true
         return image
     }()
     
@@ -72,17 +75,33 @@ final class WishCollectionCell: UICollectionViewCell {
     //MARK: - Methods
     func set(info: Product, at index: Int) {
         self.index = index
-        let pictureName = info.picture ?? "Buy"
-        productImage.image = UIImage(named: pictureName)
-        productLabel.text = info.description
-        priceLabel.text = String(format: "$%.2f", info.price ?? 0)
-        
-        // Update heart button based on favourite status
-        if let isFavourite = info.isFavourite, isFavourite {
-            heartButton.setImage(UIImage.selectedheart, for: .normal)
+        productLabel.text = info.description ?? "No description available"
+        if let price = info.price {
+            priceLabel.text = String(format: "$%.2f", price)
         } else {
-            heartButton.setImage(UIImage.heart, for: .normal)
+            priceLabel.text = "Price not available"
         }
+
+        // Проверка и установка картинки
+        if let imageString = info.picture, let imageURL = URL(string: imageString) {
+            ImageDownloader.shared.downloadImage(from: imageURL) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let image):
+                        self.productImage.image = image
+                    case .failure(let error):
+                        print("Ошибка загрузки изображения: \(error)")
+                        self.productImage.image = UIImage(named: "placeholder") // Изображение-заполнитель в случае ошибки
+                    }
+                }
+            }
+        } else {
+            productImage.image = UIImage(named: "placeholder") // Изображение-заполнитель, если URL нет
+        }
+
+        // Установка статуса избранного
+        let heartImage = info.isFavourite ?? false ? UIImage(named: "selectedheart") : UIImage(named: "heart")
+        heartButton.setImage(heartImage, for: .normal)
     }
    
     //MARK: - Private Methods

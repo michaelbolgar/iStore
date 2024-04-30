@@ -24,6 +24,12 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         super.viewWillAppear(animated)
         self.presenter.getData(with: [data])
         navigationController?.navigationBar.isHidden = false
+        
+        presenter.checkIfProductIsFavorite(data) { [weak self] isFavorite in
+                DispatchQueue.main.async {
+                    self?.heartButton.isSelected = isFavorite
+                }
+            }
     }
 
     // MARK: UI Elements
@@ -170,6 +176,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
 
     @objc func heartButtonTapped() {
         heartButton.isSelected = !heartButton.isSelected
+        presenter.toggleFavorite(for: data)
     }
 
     @objc func buyNowAction() {

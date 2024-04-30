@@ -34,9 +34,9 @@ final class HomeRouter: HomeRouterProtocol {
     }
 
     func showSearchVC(searchText: String) {
-//        if let detailsVC = moduleBuilder?.createSearchVC(searchText: <#T##String#>)(data: data) {
-//            navigationController.pushViewController(detailsVC, animated: true)
-//        }
+        if let searchVC = moduleBuilder?.createSearchVC(searchText: searchText) {
+            navigationController.pushViewController(searchVC, animated: true)
+        }
     }
 
     func showCartVC() {

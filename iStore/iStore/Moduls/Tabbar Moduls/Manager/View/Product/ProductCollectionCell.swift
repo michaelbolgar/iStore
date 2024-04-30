@@ -2,7 +2,7 @@ import UIKit
 
 protocol ProductCollectionCellDelegate: AnyObject {
     func updateButtonPressed(with product: SingleProduct)
-    func deleteButtonPressed()
+    func deleteButtonPressed(with product: SingleProduct)
 }
 
 final class ProductCollectionCell: UICollectionViewCell {
@@ -108,10 +108,11 @@ final class ProductCollectionCell: UICollectionViewCell {
 
     //MARK: - Selector Methods
     @objc func deleteButtonTapped() {
+        guard let product = product else { return }
+        presenter.deleteButtonPressed(with: product)
     }
     
     @objc func updateButtonTapped() {
-        print("датути from cell")
         guard let product = product else { return }
         presenter.updateButtonPressed(with: product)
     }

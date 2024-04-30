@@ -8,7 +8,7 @@ protocol SearchVCProtocol: AnyObject {
 final class SearchVC: UIViewController, SearchVCProtocol {
     
     var presenter: SearchPresenter!
-//    private let searchText: String
+    private let searchText: String
 
     // MARK: UI Elements
     private lazy var collectionView: UICollectionView = {
@@ -35,39 +35,30 @@ final class SearchVC: UIViewController, SearchVCProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        view.hideKeyboard()
         presenter = SearchPresenter(viewController: self)
         configureCollectionView()
         setViews()
         setupUI()
-        setSearchBar()
-      
+        presenter.searchData(searchText: searchText)
+        navigationController?.navigationBar.isHidden = false
+        setNavigationBar(title: "Search")
     }
 
-//    init(searchText: String) {
-//        self.searchText = searchText
-//
-//        super.init(nibName: nil, bundle: nil)
+//    override func viewWillAppear(_ animated: Bool) {
+//        navigationController?.navigationBar.isHidden = false
 //    }
+
+    init(searchText: String) {
+        self.searchText = searchText
+        super.init(nibName: nil, bundle: nil)
+    }
     
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Private Methods
-    private func setSearchBar() {
-        let frame = CGRect(x: 55, y: 0, width: 250, height: 44)
-        let titleView = UIView(frame: frame)
-        searchBar.frame = frame
-        titleView.addSubview(searchBar)
-        navigationItem.titleView = titleView
-        searchBar.delegate = self
-        searchBar.secondDelegate = self 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Buy"),
-                                                            style: .plain, target: self,
-                                                            action: #selector(buyButtonPressed))
-        navigationController?.navigationBar.tintColor = UIColor.black
-    }
+
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -94,7 +85,7 @@ final class SearchVC: UIViewController, SearchVCProtocol {
        }
 
     // MARK: Selector Methods
-    @objc func buyButtonPressed() {}
+//    @objc func buyButtonPressed() {}
 
 }
 

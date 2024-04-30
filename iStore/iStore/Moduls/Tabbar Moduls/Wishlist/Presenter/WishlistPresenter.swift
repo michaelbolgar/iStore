@@ -4,11 +4,10 @@ import Firebase
 
 protocol WishlistPresenterProtocol: AnyObject {
     var productCount: Int { get }
-    func setView()
     func getProduct(at index: Int) -> Product
     func showCartVC()
     func showDetailsVC(data: SingleProduct)
-    //    func toggleFavorite(at index: Int)
+    func viewDidLoad()
 }
 
 final class WishlistPresenter: WishlistPresenterProtocol {
@@ -28,28 +27,65 @@ final class WishlistPresenter: WishlistPresenterProtocol {
     init(view: WishlistVCProtocol, router: WishlistRouterProtocol) {
         self.view = view
         self.router = router
+        self.startListeningForFavoritesUpdates()
     }
 
     // MARK: Methods
 
     func getProduct(at index: Int) -> Product {
+//        print(products.first?.picture)
         return products[index]
     }
+    
+    var listenerRegistration: ListenerRegistration?
 
-    func setView() {
-        products = [Product(id: 0, picture: "imgProduct", description: "Earphones for monitor", price: 100, isFavourite: false),
-                    Product(id: 1, picture: "imgProduct", description: "Earphones for monitor, but cheaper", price: 99.99, isFavourite: false),
-                    Product(id: 2, picture: "imgProduct", description: "Earphones for great look on the street", price: 100, isFavourite: true),
-                    Product(id: 3, picture: "imgProduct", description: "Earphones for monitor with great sound and quality", price: 100, isFavourite: false),
-                    Product(id: 4, picture: "imgProduct", description: "Earphones for Swift programmer", price: 1000, isFavourite: true),
-                    Product(id: 5, picture: "imgProduct", description: "Earphones for Moms and Dads", price: 200, isFavourite: false),
-                    Product(id: 6, picture: "imgProduct", description: "Earphones for Windows laptop programmer", price: 100, isFavourite: false),
-                    Product(id: 7, picture: "imgProduct", description: "Earphones for poets and designers", price: 100.99, isFavourite: false),
-                    Product(id: 8, picture: "imgProduct", description: "Earphones for Mr. Vladimir Dyadichev", price: 100, isFavourite: false),
-                    Product(id: 9, picture: "imgProduct", description: "Earphones for best team leader ever", price: 100, isFavourite: false),
-                    Product(id: 10, picture: "imgProduct", description: "Earphones for those, who is making Onboarding screens", price: 100, isFavourite: false)
-        ]
+    func startListeningForFavoritesUpdates() {
+        listenerRegistration?.remove()  // Удаляем предыдущий слушатель, если он есть
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("UID пользователя не доступен.")
+            return
+        }
+        let favoritesCollection = db.collection("users").document(userId).collection("favorites")
+
+        listenerRegistration = favoritesCollection.addSnapshotListener { [weak self] (snapshot, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print("Ошибка при обновлении данных: \(error)")
+                return
+            }
+
+            guard let snapshot = snapshot else {
+                print("Данные снимка не доступны.")
+                return
+            }
+            self.products = snapshot.documents.compactMap { document -> Product? in
+                let data = document.data()
+                let id = Int(document.documentID)  // Проверьте, что ID документа можно преобразовать в Int
+                let picture = data["images"] as? [String]
+                let newPicture = picture?.first
+                let description = data["description"] as? String
+                let price = (data["price"] as? NSNumber)?.doubleValue
+                let isFavourite = data["isFavorite"] as? Bool
+                return Product(id: id, picture: newPicture, description: description, price: price, isFavourite: isFavourite)
+            }
+//            self.view?.reloadCollectionView()
+        }
     }
+
+//    func setView() {
+//        products = [Product(id: 0, picture: "imgProduct", description: "Earphones for monitor", price: 100, isFavourite: false),
+//                    Product(id: 1, picture: "imgProduct", description: "Earphones for monitor, but cheaper", price: 99.99, isFavourite: false),
+//                    Product(id: 2, picture: "imgProduct", description: "Earphones for great look on the street", price: 100, isFavourite: true),
+//                    Product(id: 3, picture: "imgProduct", description: "Earphones for monitor with great sound and quality", price: 100, isFavourite: false),
+//                    Product(id: 4, picture: "imgProduct", description: "Earphones for Swift programmer", price: 1000, isFavourite: true),
+//                    Product(id: 5, picture: "imgProduct", description: "Earphones for Moms and Dads", price: 200, isFavourite: false),
+//                    Product(id: 6, picture: "imgProduct", description: "Earphones for Windows laptop programmer", price: 100, isFavourite: false),
+//                    Product(id: 7, picture: "imgProduct", description: "Earphones for poets and designers", price: 100.99, isFavourite: false),
+//                    Product(id: 8, picture: "imgProduct", description: "Earphones for Mr. Vladimir Dyadichev", price: 100, isFavourite: false),
+//                    Product(id: 9, picture: "imgProduct", description: "Earphones for best team leader ever", price: 100, isFavourite: false),
+//                    Product(id: 10, picture: "imgProduct", description: "Earphones for those, who is making Onboarding screens", price: 100, isFavourite: false)
+//        ]
+//    }
 
     func showCartVC() {
         router.showCartVC()
@@ -57,6 +93,62 @@ final class WishlistPresenter: WishlistPresenterProtocol {
 
     func showDetailsVC(data: SingleProduct) {
         router.showDetailsVC(data: data)
+    }
+    
+    func viewDidLoad() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let favoritesCollection = db.collection("users").document(userId).collection("favorites")
+
+        favoritesCollection.getDocuments { [weak self] (querySnapshot, err) in
+            guard let self = self else { return }
+            if let err = err {
+                print("Ошибка получения документов: \(err)")
+            } else {
+                self.products = querySnapshot?.documents.compactMap { document -> Product? in
+                    let data = document.data()
+                    let id = Int(document.documentID) // Преобразуем ID
+                    let title = data["title"] as? String
+                    let description = data["description"] as? String
+                    let price = (data["price"] as? NSNumber)?.doubleValue
+                    let images = data["images"] as? [String]
+                    let isFavourite = data["isFavorite"] as? Bool
+//                    print(images?.first)
+                    if let imagesString = data["images"] as? String,
+                                   let jsonData = imagesString.data(using: .utf8),
+                                   let urls = try? JSONDecoder().decode([String].self, from: jsonData) {
+                                    // Используем первый URL из распаршенного массива
+                                    return Product(id: id, picture: urls.first, description: description, price: price, isFavourite: isFavourite)
+                                } else {
+                                    return nil
+                                }
+                } ?? []
+//                self.view?.reloadCollectionView()
+            }
+        }
+    }
+    func reloadData() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let favoritesCollection = db.collection("users").document(userId).collection("favorites")
+        
+        favoritesCollection.getDocuments { [weak self] (snapshot, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print("Ошибка при обновлении данных: \(error)")
+                return
+            }
+            
+            guard let snapshot = snapshot else { return }
+            self.products = snapshot.documents.compactMap { document -> Product? in
+                let data = document.data()
+                let id = Int(document.documentID) // Преобразуем ID
+                let picture = data["picture"] as? String
+                let description = data["description"] as? String
+                let price = (data["price"] as? NSNumber)?.doubleValue
+                let isFavourite = data["isFavorite"] as? Bool
+                return Product(id: id, picture: picture, description: description, price: price, isFavourite: isFavourite)
+            }
+//            self.view?.reloadCollectionView() // Обновляем UI
+        }
     }
 }
 
@@ -86,20 +178,6 @@ extension WishlistPresenter: WishCollectionCellDelegate {
                         print("Product successfully removed from favorites")
                     }
                     // Обновляем представление после удаления
-                    self.view?.reloadCollectionView()
-                }
-            } else {
-                // Добавляем в избранное
-                let data: [String: Any] = [
-                    "isFavourite": true
-                ]
-                docRef.setData(data) { error in
-                    if let error = error {
-                        print("Error adding document: \(error)")
-                    } else {
-                        print("Document successfully added to favorites")
-                    }
-                    // Обновляем представление после добавления
                     self.view?.reloadCollectionView()
                 }
             }
