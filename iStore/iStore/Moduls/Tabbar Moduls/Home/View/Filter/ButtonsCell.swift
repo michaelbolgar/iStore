@@ -17,9 +17,6 @@ class ButtonsCell: UITableViewCell {
     
     // MARK: - Properties
     static let identifier = String(describing: ButtonsCell.self)
-    var onSave: (() -> Void)?
-    var onCancel: (() -> Void)?
-    var presenter: HomePresenter! //не знаю нужно здесь или нет
     weak var delegate: ButtonCellDelegate?
     
     // MARK: - UI
@@ -56,11 +53,11 @@ class ButtonsCell: UITableViewCell {
     }
     
     @objc func cancelButtonTapped() {
-        onCancel?()
+        delegate?.cancelButtonTapped()
     }
     
     @objc func saveButtonTapped() {
-        onSave?()
+        delegate?.saveButtonTapped()
     }
     
     private func setupViews() {
@@ -72,11 +69,11 @@ class ButtonsCell: UITableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60),
-            cancelButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            cancelButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             cancelButton.widthAnchor.constraint(equalToConstant: 120),
             
             saveButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60),
-            saveButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            saveButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             saveButton.widthAnchor.constraint(equalToConstant: 120)
         ])
     }

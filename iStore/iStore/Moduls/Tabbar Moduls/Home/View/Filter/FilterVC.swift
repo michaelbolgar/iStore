@@ -28,17 +28,19 @@ struct FilterOption {
     let title: String
     let handler: (() -> Void)
 }
-//виды сортировки
+
+виды сортировки
 enum SortingModel {
     case name, priceLow, priceHigh
 }
 
 protocol FilterVCDelegate: AnyObject {
-    func didChooseSorting(option: SortingModel)
+    func didSelectSortOption(sortBy: SortingModel)
 }
 
 class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    var presenter: HomePresenterProtocol!
     weak var delegate: FilterVCDelegate?
     
     // MARK: - UI
@@ -90,33 +92,29 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     @objc private func handleRadioButtonPressed(_ sender: UIButton) {
-        guard let index = models.firstIndex(where: { $0.button === sender }) else { return }
-        selectedSortOption = index
-        updateRadioButtons()
+        let point = sender.convert(CGPoint.zero, to: tableView)
+        if let indexPath = tableView.indexPathForRow(at: point) {
+            
+            let previousIndex = selectedSortOption //
+            selectedSortOption = indexPath.row
+//            tableView.reloadSections([indexPath.section], with: .none)
+            var indexPaths: [IndexPath] = []
+                    if let previous = previousIndex {
+                        indexPaths.append(IndexPath(row: previous, section: indexPath.section))
+                    }
+                    indexPaths.append(indexPath)
+                    tableView.reloadRows(at: indexPaths, with: .none)
+        }
     }
+    @objc private func handleSaveButton() {
+        if let selectedOption = selectedSortOption, let sortModel = SortingModel(rawValue: selectedOption) {
+                delegate?.didSelectSortOption(sortBy: sortModel)
+            } else {
+                print("Invalid sort option or no option selected.")
+            }
+       }
+
     
-    @objc func saveButtonTapped() {
-        print("kjhjhj")
-//         if let selectedOption = selectedSortOption {
-//             let filterType: SortingModel
-//             switch sortOption[selectedOption] {
-//             case "Name (A - Z)":
-//                 filterType = .name
-//             case "Price (low first)":
-//                 filterType = .priceLow
-//             case "Price (high first)":
-//                 filterType = .priceHigh
-//             default:
-//                 filterType = .noFilter
-//             }
-//             delegate?.didChooseSorting(option: filterType)
-//         }
-//         dismiss(animated: true, completion: nil)
-     }
-    private func saveFilters() {
-        print("Filters saved")
-        dismiss(animated: true, completion: nil)
-    }
     // MARK: - Tableview
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -150,7 +148,8 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.configure(with: model, isSelected: indexPath.row == selectedSortOption)
-                    model.button.addTarget(self, action: #selector(handleRadioButtonPressed(_:)), for: .touchUpInside)
+            cell.delegate = self
+            cell.radioButton.addTarget(self, action: #selector(handleRadioButtonPressed(_:)), for: .touchUpInside)
                     return cell
             
         case .priceRange:
@@ -163,14 +162,30 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ButtonsCell.identifier, for: indexPath) as? ButtonsCell else {
                 return UITableViewCell()
             }
-            cell.onSave = { [weak self] in
-                self?.saveFilters()
-            }
-            cell.onCancel = { [weak self] in
-                self?.dismiss(animated: true, completion: nil)
-            }
+            cell.delegate = self
+//            cell.onSave = { [weak self] in
+//                self?.saveFilters()
+//            }
+//            cell.onCancel = { [weak self] in
+//                self?.dismiss(animated: true, completion: nil)
+//            }
             return cell
         }
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //        tableView.deselectRow(at: indexPath, animated: true)
+        guard let cell = tableView.cellForRow(at: indexPath) as? SortByCell else { return }
+        
+        let previousIndex = selectedSortOption
+        selectedSortOption = indexPath.row
+        
+        var indexPaths: [IndexPath] = []
+        if let previous = previousIndex {
+            indexPaths.append(IndexPath(row: previous, section: indexPath.section))
+        }
+        indexPaths.append(indexPath)
+        tableView.reloadRows(at: indexPaths, with: .none)
+        cell.delegate?.radioButtonTapped()
     }
 }
 
@@ -179,12 +194,22 @@ extension UIButton {
     func setupAsRadioButton() {
         self.setImage(UIImage(systemName: "circle"), for: .normal)
         self.setImage(UIImage(systemName: "circle.inset.filled"), for: .selected)
-        self.addTarget(self, action: #selector(toggleRadioButton), for: .touchUpInside)
         self.tintColor = .systemBlue
-    }
-    
-    @objc private func toggleRadioButton() {
-        self.isSelected = !self.isSelected
     }
 }
 
+extension FilterVC: ButtonCellDelegate {
+    func cancelButtonTapped() {
+        print("cancel")
+    }
+    
+    func saveButtonTapped() {
+        print("save")
+    }
+}
+extension FilterVC: SortByCellDelegate {
+    func radioButtonTapped() {
+        print(" radio button tapped")
+
+    }
+}

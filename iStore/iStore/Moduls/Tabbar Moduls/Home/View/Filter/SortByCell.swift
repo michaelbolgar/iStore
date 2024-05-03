@@ -6,6 +6,11 @@
 //
 
 import UIKit
+
+protocol SortByCellDelegate: AnyObject{
+    func radioButtonTapped()
+}
+
 class SortByCell: UITableViewCell {
     
     // MARK: - Properties
@@ -14,10 +19,12 @@ class SortByCell: UITableViewCell {
     var titleLabel: UILabel!
     var radioButton: UIButton!
     
+    weak var delegate: SortByCellDelegate?
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        addTargets()
     }
     
     required init?(coder: NSCoder) {
@@ -29,9 +36,17 @@ class SortByCell: UITableViewCell {
     public func configure(with model: FilterOption, isSelected: Bool) {
         radioButton.isSelected = isSelected
         titleLabel.text = model.title
-        radioButton = model.button
+//        radioButton = model.button
+        titleLabel.textColor = isSelected ? .blue : .black
     }
     
+    private func addTargets() {
+        radioButton.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func radioButtonTapped() {
+        delegate?.radioButtonTapped()
+    }
     
     func setupViews() {
         radioButton = UIButton()

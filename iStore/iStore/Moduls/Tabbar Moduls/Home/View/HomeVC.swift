@@ -5,7 +5,7 @@ protocol HomeVCProtocol: AnyObject {
     func reloadData(with section: Int)
 }
 
-final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate {
+final class HomeVC: UIViewController, HomeVCProtocol {
     
     var presenter: HomePresenterProtocol!
 
@@ -126,7 +126,7 @@ extension HomeVC: UICollectionViewDataSource {
                     ofKind: kind,
                     withReuseIdentifier: "HeaderNavBarMenuView",
                     for: indexPath) as! HeaderNavBarMenuView
-                header.configureHeader(labelName: section)
+                header.configureHeader(labelName: "Choose a location")
                 header.delegate = self
                 return header
             case "categories":
@@ -135,7 +135,7 @@ extension HomeVC: UICollectionViewDataSource {
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                              withReuseIdentifier: "ProductsHeaderView",
                                                                              for: indexPath) as! ProductsHeaderView
-                header.configureHeader(labelName: section)
+                header.configureHeader(labelName: "Products")
                 header.delegate = self
                 return header
             default:
@@ -296,6 +296,12 @@ extension HomeVC: HeaderNavBarMenuViewDelegate {
 extension HomeVC: SingleItemCellDelegate {
     func buyButtonPressed() {
         print ("add to cart button tapped")
+    }
+}
+
+extension HomeVC:  ProductsHeaderViewDelegate {
+    func filtersButtonTapped() {
+        presenter.showFilterVC()
     }
 }
 
