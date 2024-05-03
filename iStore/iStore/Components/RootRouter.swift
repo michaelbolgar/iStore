@@ -20,7 +20,7 @@ final class RootRouter {
         window?.rootViewController = showMainTabBar()
         window?.makeKeyAndVisible()
 
-        // resetOnboardingStatus()
+//         resetOnboardingStatus()
 
         /// показ Onboarding'a с проверкой, был ли уже пройден онбординг
         if userDefaults.onboardingCompleted {
@@ -42,7 +42,7 @@ final class RootRouter {
 
     func showMainTabBar() -> UITabBarController {
         return factory.makeTabBar(
-            factory.makeHomeRouter().navigationController,
+            factory.makeHomeRouter().navigationController ?? UIViewController(),
             factory.makeWishlistRouter().navigationController,
             factory.makeManagerRouter().navigationController ?? UIViewController(),
             factory.makeProfileRouter().navigationController

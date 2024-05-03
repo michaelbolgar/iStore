@@ -1,14 +1,10 @@
 import UIKit
 
 final class AddNewCategoryVC: UIViewController {
+    var product: SingleProduct?
     
     // MARK: - UI Elements
-    private let addNewProductTitle = UILabel.makeLabel(text: "Add new product",
-                                                 font: .InterBold(ofSize: 24),
-                                                 textColor: .customDarkGray,
-                                                 numberOfLines: nil,
-                                                 alignment: .center)
-   
+    
     private let nameLabel = UILabel.makeLabel(text: "Title",
                                   font: UIFont.systemFont(ofSize: 16, weight: .semibold),
                                   textColor: .customDarkGray,
@@ -39,7 +35,13 @@ final class AddNewCategoryVC: UIViewController {
                                   numberOfLines: 1,
                                   alignment: .left)
     
-    private var nameTextView = UITextView.makeTextView(height: 40, scroll: false)
+     let idLabel = UILabel.makeLabel(text: "ID",
+                                  font: UIFont.systemFont(ofSize: 16, weight: .semibold),
+                                  textColor: .customDarkGray,
+                                  numberOfLines: 1,
+                                  alignment: .left)
+
+    private var nameTextView = UITextView.makeTextView(height: 40, scroll: true)
     private var priceTextView = UITextView.makeTextView(height: 40, scroll: false)
    
     private var categoryTextField = UITextField.makeTextField(placeholder: "",
@@ -51,6 +53,7 @@ final class AddNewCategoryVC: UIViewController {
     
     private let descriptionTextView = UITextView.makeTextView(height: 125, scroll: true)
     private var imagesTextView = UITextView.makeTextView(height: 40, scroll: true)
+     var idTextView = UITextView.makeTextView(height: 40, scroll: false)
     
     
     private lazy var categoryPicker: UIPickerView = {
@@ -58,18 +61,19 @@ final class AddNewCategoryVC: UIViewController {
         element.backgroundColor = .lightViolet
         return element
     }()
-    private var categories = ["Phone", "Monitor", "Mouse", "Earphone",]
+    
+    private var categories = ["", "Phone", "Monitor", "Mouse", "Earphone"]
     
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
+        setupUIElements()
         priceTextView.delegate = self
         categoryPicker.delegate = self
         categoryPicker.dataSource = self
         categoryTextField.delegate = self
-//        categoryTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openCategoryPicker)))
     }
     
     //MARK: Private Methods
@@ -79,14 +83,81 @@ final class AddNewCategoryVC: UIViewController {
         
         categoryTextField.layer.borderWidth = 1.0
         categoryTextField.layer.borderColor = UIColor.customLightGray.cgColor
+        
+        navigationController?.isNavigationBarHidden = false
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.customDarkGray, NSAttributedString.Key.font: UIFont.InterBold(ofSize: 18)]
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Save", style: .plain, target: self, action: #selector(saveChangeButtonTapped))
+        
+        navigationItem.leftBarButtonItem?.tintColor = .customDarkGray
+        navigationController?.navigationBar.tintColor = UIColor.black
      
-        [addNewProductTitle, nameLabel, nameTextView, priceLabel, priceTextView, categoryLabel, categoryTextField, descriptionLabel, descriptionTextView, imagesLabel, imagesTextView].forEach { view.addSubview($0) }
+        [nameLabel, nameTextView, priceLabel, priceTextView, categoryLabel, categoryTextField, descriptionLabel, descriptionTextView, imagesLabel, imagesTextView, idLabel, idTextView].forEach { view.addSubview($0) }
     }
-@objc private func openCategoryPicker() {
+    
+    private func setupUIElements() {
+        nameTextView.text = product?.title
+        if let price = product?.price {
+            priceTextView.text = "\(price)"
+        } else {
+            priceTextView.text = ""
+        }
+
+        if let categoryName = product?.category.name {
+            categories.append(categoryName)
+        }
+        categoryTextField.text = categories.last
+        descriptionTextView.text = product?.description
+        imagesTextView.text = product?.images.first!
+    }
+    
+    
+    
+    @objc private func openCategoryPicker() {
         categoryTextField.inputView = categoryPicker
         categoryTextField.reloadInputViews()
     }
-
+    
+    @objc private func saveChangeButtonTapped() {
+        if navigationItem.title == "Update product" {
+            guard let productID = product?.id else { return }
+            guard let newTitle = nameTextView.text, !newTitle.isEmpty else { return }
+            guard let newPriceString = Int(priceTextView.text) else { return }
+            guard let newDescription = descriptionTextView.text else { return }
+            guard let newCategory = categoryTextField.text else { return }
+            //let newImages = imagesTextView.text.components(separatedBy: ",")
+            
+            NetworkingManager.shared.updateProduct(id: productID, 
+                                                   newTitle: newTitle,
+                                                   newPrice: newPriceString,
+                                                   newDescription: newDescription,
+                                                   newCategory: newCategory) {
+                result in
+                switch result {
+                case .success:
+                    print("Product updated successfully")
+                case .failure(let error):
+                    print("Failed to update product:", error)
+                }
+            }
+            
+        } else {
+         
+            NetworkingManager.shared.createProduct(title: nameTextView.text,
+                                                   price: 10,
+                                                   description: descriptionTextView.text,
+                                                   categoryId: 1,
+                                                   images: [imagesTextView.text])  {
+                result in
+                switch result {
+                case .success:
+                    print("Product create successfully")
+                case .failure(let error):
+                    print("Failed to create product:", error)
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Setup Constraints
@@ -97,9 +168,6 @@ private extension AddNewCategoryVC {
         
         
         NSLayoutConstraint.activate([
-            
-            addNewProductTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            addNewProductTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -126,6 +194,11 @@ private extension AddNewCategoryVC {
             imagesLabel.widthAnchor.constraint(equalToConstant: 100),
             imagesLabel.heightAnchor.constraint(equalToConstant: 40),
             
+            idLabel.topAnchor.constraint(equalTo: imagesLabel.bottomAnchor, constant: 30),
+            idLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            idLabel.widthAnchor.constraint(equalToConstant: 100),
+            idLabel.heightAnchor.constraint(equalToConstant: 40),
+            
             nameTextView.topAnchor.constraint(equalTo: nameLabel.topAnchor),
             nameTextView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             nameTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -146,29 +219,11 @@ private extension AddNewCategoryVC {
             imagesTextView.leadingAnchor.constraint(equalTo: imagesLabel.trailingAnchor),
             imagesTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
+            idTextView.topAnchor.constraint(equalTo: idLabel.topAnchor),
+            idTextView.leadingAnchor.constraint(equalTo: idLabel.trailingAnchor),
+            idTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            
         ])
-    }
-}
-
-extension UITextView {
-    static func makeTextView(height: Double, scroll: Bool) -> UITextView {
-            let element = UITextView()
-            element.backgroundColor = .lightViolet
-            element.font = .InterRegular(ofSize: 16)
-            element.textColor = .customDarkGray
-            element.isEditable = true
-            element.isScrollEnabled = scroll
-            element.isSelectable = true
-            element.textAlignment = .left
-            element.layer.cornerRadius = 8
-            element.layer.borderWidth = 1.0
-            element.layer.borderColor = UIColor.customLightGray.cgColor
-            element.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            element.heightAnchor.constraint(equalToConstant: height)
-        ])
-            return element
     }
 }
 
@@ -180,7 +235,6 @@ extension AddNewCategoryVC: UITextViewDelegate {
         let characterSet = CharacterSet(charactersIn: text)
         return allowedCharacters.isSuperset(of: characterSet)
     }
-    
 }
 
 extension AddNewCategoryVC: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -214,3 +268,27 @@ extension AddNewCategoryVC: UITextFieldDelegate {
     }
 }
 
+//guard let newName = nameTextView.text,
+//      let newImage = imagesTextView.text,
+//      let productId = product?.id else {
+////              let newPrice = Int(priceTextView.text ?? ""),
+////              let newCategoryName = categoryTextField.text,
+////              let newDescription = descriptionTextView.text,
+//    return
+//}
+//
+//let updatedProduct = UpdatedProduct(name: newName,
+//                                      image: newImage)
+//print("Инициализация обновленного продукта:", updatedProduct)
+//
+//NetworkingManager.shared.updateProduct(withId: productId, newData: updatedProduct) { [weak self] result in
+//        switch result {
+//        case .success(let updatedProduct):
+//            
+//            // Обновление прошло успешно, обновите интерфейс или выполните другие действия по вашему усмотрению
+//            print("Продукт обновлен:", updatedProduct)
+//        case .failure(let error):
+//            // Обработка ошибки при обновлении продукта
+//            print("Ошибка обновления:", error)
+//        }
+//}

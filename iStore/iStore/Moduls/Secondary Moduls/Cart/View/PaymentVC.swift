@@ -20,6 +20,17 @@ class PaymentVC: UIViewController {
         return button
     }()
     
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Cancel", for: .normal)
+        button.backgroundColor = .lightGray
+        button.layer.cornerRadius = 12
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        button.titleLabel?.font = UIFont.InterBold(ofSize: 25)
+        return button
+    }()
+    
     private lazy var shadowView: UIView = {
         let shadow = UIView()
         shadow.layer.shadowColor = UIColor.black.cgColor
@@ -30,10 +41,9 @@ class PaymentVC: UIViewController {
         return shadow
     }()
     
-    // Затемнение фона с помощью наложения UIView
+    /// затемнение фона с помощью наложения UIView
     lazy var dimmingView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         view.alpha = 0
         return view
@@ -47,10 +57,11 @@ class PaymentVC: UIViewController {
         setupButtons()
         setupTapGesture()
         setupDimmingView()
+//        setNavigationBar(title: "Finish payment")
     }
-    
+
     // MARK: Private methods
-    
+#warning ("Ввод с физической клавиатуры позволяет вводить любые символы")
     private func insertNumber(_ number: String, into textField: UITextField) {
         var currentText = textField.text ?? ""
         currentText += number
@@ -119,6 +130,10 @@ class PaymentVC: UIViewController {
         }
         present(successVC, animated: true)
     }
+    
+    @objc private func cancelButtonTapped() {
+        dismiss(animated: true)
+    }
 }
 
 // MARK: Extension layouts
@@ -127,7 +142,7 @@ extension PaymentVC {
     private func setupView() {
         view.backgroundColor = .white
         
-        let views = [shadowView, cardView, payButton]
+        let views = [shadowView, cardView, payButton, cancelButton, dimmingView]
         
         views.forEach { view in
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -135,23 +150,29 @@ extension PaymentVC {
         
         view.addSubview(shadowView)
         view.addSubview(payButton)
+        view.addSubview(cancelButton)
         shadowView.addSubview(cardView)
         
         NSLayoutConstraint.activate([
-            shadowView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            shadowView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             shadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             shadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             shadowView.heightAnchor.constraint(equalToConstant: 200),
             
-            cardView.topAnchor.constraint(equalTo: shadowView.topAnchor),
+            cardView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: 20),
             cardView.leadingAnchor.constraint(equalTo: shadowView.leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor),
             cardView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor),
             
-            payButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            payButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -20),
             payButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             payButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            payButton.heightAnchor.constraint(equalToConstant: 50)
+            payButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            cancelButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }

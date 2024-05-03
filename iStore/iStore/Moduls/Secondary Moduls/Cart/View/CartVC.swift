@@ -6,6 +6,7 @@ protocol CartVCProtocol: AnyObject {
 
 final class CartVC: UIViewController, CartVCProtocol {
     var presenter: CartPresenter!
+    var selectedIndices: Set<Int> = []
 
     // MARK: UI Elements
     private let tableView = UITableView()
@@ -24,18 +25,19 @@ final class CartVC: UIViewController, CartVCProtocol {
                                                           numberOfLines: 1,
                                                           alignment: .left)
 
-    private let priceLabel = UILabel.makeLabel(text: "$ 2499,97",
+    private let priceLabel = UILabel.makeLabel(text: "$ 0,00",
                                                           font: UIFont.InterMedium(ofSize: 14),
                                                           textColor: UIColor.customDarkGray,
                                                           numberOfLines: 1,
                                                           alignment: .left)
 
-    private let selectButton = UIButton.makeButton(text: "Select payment method",
+    private let selectPaymentButton = UIButton.makeButton(text: "Select payment method",
                                                            buttonColor: ButtonColor.green,
                                                            titleColor: .white,
                                                            titleSize: 16,
                                                            width: 308,
-                                                           height: 50)
+                                                           height: 50,
+                                                           cornerRadius: 6)
 
     // MARK: Life cycle
     override func viewDidLoad() {
@@ -47,17 +49,11 @@ final class CartVC: UIViewController, CartVCProtocol {
         setupUI()
     }
 
-    override func viewDidLayoutSubviews() {
-         super.viewDidLayoutSubviews()
-        footerView.addBorder(y: 0)
-        view.backgroundColor = .white
-        title = "Your Cart"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Buy"),
-                                                            style: .plain, target: self,
-                                                            action: #selector(selectButtonPressed))
-        navigationController?.navigationBar.tintColor = UIColor.black
-     }
-
+    override func viewWillAppear(_ animated: Bool) {
+        setNavigationBar(title: "Your Cart")
+        #warning("не работает при первом запуске, без открытия DetailsVC")
+        navigationController?.navigationBar.isHidden = false
+    }
 
     // MARK: Private Methods
 
@@ -74,13 +70,24 @@ final class CartVC: UIViewController, CartVCProtocol {
     func reloadTableView(at indexPath: IndexPath) {
         DispatchQueue.main.async {
             self.tableView.reloadData()
-             }
+        }
     }
 
+    func updateTotalPrice() {
+        let totalPrice = self.selectedIndices.reduce(0) { total, index in
+              total + self.presenter.items[index].price
+
+        }
+        self.priceLabel.text = "$\(totalPrice)"
+    }
+    
     // MARK: Selector Methods
-    @objc func selectButtonPressed() {}
-
-
+    @objc func selectPaymentButtonAction() {
+        let paymentVC = PaymentVC()
+        #warning("после установления мода automatic перестало перекидывать на сайт девраша")
+        paymentVC.modalPresentationStyle = .fullScreen
+        present(paymentVC, animated: true, completion: nil)
+    }
 }
 
     // MARK: Setup table
@@ -94,13 +101,33 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: CartTableCell.identifier) as! CartTableCell
         let product = presenter.getItem(at: indexPath.row)
         cell.set(info: product)
-//        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        cell.checkmarkAction = { [weak self] isSelected in
+            guard let self = self else { return }
+            if isSelected {
+                self.selectedIndices.insert(indexPath.row)
+            } else {
+                self.selectedIndices.remove(indexPath.row)
+            }
+            self.updateTotalPrice()
+        }
+
+        cell.presenter?.deleteButtonAction = { [weak self] in
+            self?.presenter.deleteItem(at: indexPath, tableView: tableView)
+              }
+
+
+
         return cell
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: CartHeaderView.identifier) as! CartHeaderView
         return headerView
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        print("cell tapped")
     }
 }
 
@@ -109,11 +136,12 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
 extension CartVC {
     func setViews() {
         [tableView, footerView].forEach{view.addSubview($0)}
-        [orderLabel, totalLabel, priceLabel, selectButton].forEach{footerView.addSubview($0)}
+        [orderLabel, totalLabel, priceLabel, selectPaymentButton].forEach{footerView.addSubview($0)}
     }
     func setupUI() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         footerView.translatesAutoresizingMaskIntoConstraints = false
+        selectPaymentButton.addTarget(self, action: #selector(selectPaymentButtonAction), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -124,19 +152,19 @@ extension CartVC {
             footerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             footerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             footerView.heightAnchor.constraint(equalToConstant: 160),
-            footerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            footerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60),
 
-            orderLabel.topAnchor.constraint(equalTo: footerView.topAnchor, constant: 15),
+            orderLabel.topAnchor.constraint(equalTo: footerView.topAnchor, constant: 10),
             orderLabel.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 23),
 
-            totalLabel.topAnchor.constraint(equalTo: orderLabel.bottomAnchor, constant: 10),
+            totalLabel.topAnchor.constraint(equalTo: orderLabel.bottomAnchor, constant: 8),
             totalLabel.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 23),
 
             priceLabel.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
             priceLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -23),
 
-            selectButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 10),
-            selectButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor)
+            selectPaymentButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 15),
+            selectPaymentButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor)
 
         ])
     }

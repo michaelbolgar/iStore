@@ -1,26 +1,93 @@
 import Foundation
+import UIKit
+import Firebase
+import FirebaseAuth
 
 protocol DetailsPresenterProtocol {
-    func getData()
+    func getData(with data: [SingleProduct])
+    func showPaymentVC()
+    func showCartVC()
+    func toggleFavorite(for product: SingleProduct)
+    func checkIfProductIsFavorite(_ product: SingleProduct, completion: @escaping (Bool) -> Void)
 }
 
 final class DetailsPresenter: DetailsPresenterProtocol {
-    var detailProduct: DetailsModel?
-       weak var view: DetailsVCProtocol?
+    
+    weak var view: DetailsVCProtocol?
+    
+    private let db = Firestore.firestore()
+    
     init(view: DetailsVCProtocol? = nil) {
         self.view = view
     }
-    func getData() {
+    
+    
+    // MARK: Methods
+    func getData(with data: [SingleProduct]) {
+        self.view?.displayDetails()
+    }
+    
+    func toggleFavorite(for product: SingleProduct) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let productId = product.id?.description ?? "defaultId"
+        let docRef = db.collection("users").document(userId).collection("favorites").document(productId)
 
-        detailProduct  = DetailsModel(productImage: "img", 
-                                      productLabel: "Air pods max by Apple",
-                                      priceLabel: 1999.99,
-                                      isFavorited: false,
-                                      descriptionProduct: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquet arcu id tincidunt tellus arcu rhoncus, turpis nisl sed. Neque viverra ipsum orci, morbi semper. Nulla bibendum purus tempor semper purus. Ut curabitur platea sed blandit. Amet non at proin justo nulla et. A, blandit morbi suspendisse vel malesuada purus massa mi. Faucibus neque a mi hendrerit. Audio Technology Apple-designed dynamic driver Active Noise Cancellation Transparency mode Adaptive EQ Spatial audio with dynamic head tracking1 Sensors Optical sensor (each ear cup) Position sensor (each ear cup) Case-detect sensor (each ear cup) Accelerometer (each ear cup) Gyroscope (left ear cup) Microphones Nine microphones total: Eight microphones for Active Noise Cancellation Three microphones for voice pickup (two shared with Active Noise Cancellation and one additional microphone) Chip Apple H1 headphone chip (each ear cup) Controls Digital Crown Turn for volume control Press once to play, pause or answer a phone call Press twice to skip forwards Press three times to skip back Press and hold for Siri Noise control button Press to switch between Active Noise Cancellation and Transparency mode Size and Weight2 AirPods Max, including cushions Weight: 384.8g Smart Case Weight: 134.5g Battery AirPods Max Up to 20 hours of listening time on a single charge with Active Noise Cancellation or Transparency mode")
-
-        guard let detailProduct = detailProduct else { return }
-        view?.displayDetails(for: detailProduct)
-
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                // Удаляем продукт из избранного
+                docRef.delete() { error in
+                    if let error = error {
+                        print("Ошибка при удалении из избранного: \(error)")
+                    } else {
+                        print("Продукт успешно удален из избранного")
+                    }
+                }
+            } else {
+                // Добавляем продукт в избранное
+                let data: [String: Any] = [
+                    "title": product.title ?? "",
+                    "description": product.description ?? "",
+                    "price": product.price ?? 0,
+                    "images": product.images,
+                    "isFavorite": true
+                ]
+                docRef.setData(data) { error in
+                    if let error = error {
+                        print("Ошибка при добавлении в избранное: \(error)")
+                    } else {
+                        print("Продукт успешно добавлен в избранное")
+                    }
+                }
+            }
+        }
+    }
+    
+    func showPaymentVC() {
+        let paymentVC = PaymentVC()
+        //        self.navigationController?.pushViewController(paymentVC, animated: true)
+    }
+    
+    func showCartVC() {
+        // code
     }
 }
+
+extension DetailsPresenter {
+    func checkIfProductIsFavorite(_ product: SingleProduct, completion: @escaping (Bool) -> Void) {
+        guard let userId = Auth.auth().currentUser?.uid, let productId = product.id else {
+            completion(false)
+            return
+        }
+        let docRef = db.collection("users").document(userId).collection("favorites").document(String(productId))
+
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                completion(true)
+            } else {
+                completion(false)
+            }
+        }
+    }
+}
+
 

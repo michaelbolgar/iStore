@@ -5,7 +5,7 @@ import UIKit
 protocol WishlistBuilderProtocol {
     func createWishlistModule(router: WishlistRouterProtocol) -> UIViewController
     func createCartVC() -> UIViewController // он тут нужен или можно тянуть из Home?
-    func createDetailsVC() -> UIViewController // тот же вопрос
+    func createDetailsVC(data: SingleProduct) -> UIViewController // тот же вопрос
 }
 
 // MARK: WishlistBuilder
@@ -14,9 +14,8 @@ final class WishlistBuilder: WishlistBuilderProtocol {
 
     func createWishlistModule(router: WishlistRouterProtocol) -> UIViewController {
         let view = WishlistVC()
-        let presenter = WishlistPresenter.self
-#warning("поменял тут WishlistPresenterProtocol на WishlistPresenter, может повлиять на логику в дальнейшем")
-        view.presenter = presenter as? WishlistPresenter
+        let presenter = WishlistPresenter(view: view, router: router)
+        view.presenter = presenter
         return view
     }
 
@@ -24,7 +23,7 @@ final class WishlistBuilder: WishlistBuilderProtocol {
         CartVC()
     }
 
-    func createDetailsVC() -> UIViewController {
-        DetailsVC()
+    func createDetailsVC(data: SingleProduct) -> UIViewController {
+        DetailsVC(data: data)
     }
 }

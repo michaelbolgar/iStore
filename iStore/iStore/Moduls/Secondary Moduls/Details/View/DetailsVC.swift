@@ -1,14 +1,36 @@
 import UIKit
 
 protocol DetailsVCProtocol:AnyObject {
-    func displayDetails(for product: DetailsModel)
+    func displayDetails()
 }
 
 final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, UIScrollViewDelegate {
-   
     // MARK: Properties
 
     var presenter: DetailsPresenter!
+
+    var data: SingleProduct 
+
+      init(data: SingleProduct) {
+          self.data = data
+          super.init(nibName: nil, bundle: nil)
+      }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.presenter.getData(with: [data])
+        navigationController?.navigationBar.isHidden = false
+        
+        presenter.checkIfProductIsFavorite(data) { [weak self] isFavorite in
+                DispatchQueue.main.async {
+                    self?.heartButton.isSelected = isFavorite
+                }
+            }
+    }
 
     // MARK: UI Elements
 
@@ -37,6 +59,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
 
     private let contentImage: UIImageView = {
         let image = UIImageView()
+        image.layer.masksToBounds = true
         image.contentMode = .scaleAspectFill
         return image
     }()
@@ -65,7 +88,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
                                                        imageForSelected: UIImage.selectedheart, 
                                                        color: .lightGreen)
 
-    private let addButton = UIButton.makeButton(text: "Add to Cart", 
+    @objc private let addButton = UIButton.makeButton(text: "Add to Cart", 
                                                 buttonColor: ButtonColor.green,
                                                 titleColor: .white,
                                                 titleSize: 14,
@@ -85,13 +108,14 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         super.viewDidLoad()
         view.backgroundColor = .white
         presenter = DetailsPresenter(view: self)
-        presenter.getData()
-        title = "Details product"
+ //       presenter.getData()
+        setNavigationBar(title: "Product details")
         navigationController?.isNavigationBarHidden = false
         setupViews()
         configureController()
         setupConstraints()
-        addBorder(y: 725)
+        addBorder(y: 705)
+        setupButtons()
     }
 
     override func viewDidLayoutSubviews() {
@@ -116,12 +140,25 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         heartButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
     }
 
-    func displayDetails(for product: DetailsModel) {
-          priceLabel.text = "$ \(product.priceLabel)"
 
-        contentImage.image = UIImage(named: product.productImage)
-        productNameLabel.text = product.productLabel
-        descriptionTextView.text = product.descriptionProduct
+    func displayDetails() {
+        DispatchQueue.main.async {
+            self.priceLabel.text = "$ \(self.data.price ?? 100)"
+            self.productNameLabel.text = self.data.title
+            self.descriptionTextView.text = self.data.description
+
+            guard let imageURL = self.data.images.first else { return }
+            guard let imageName = URL(string: imageURL ?? "https://ionicframework.com/docs/img/demos/thumbnail.svg") else { return }
+
+            ImageDownloader.shared.downloadImage(from: imageName) { result in
+                switch result {
+                case .success(let image):
+                    self.contentImage.image = image
+                case .failure(let error):
+                    print("Error fetching image: \(error)")
+                }
+            }
+        }
     }
     private func addBorder(y: CGFloat) {
          let borderLayer = CALayer()
@@ -130,10 +167,25 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         view.layer.addSublayer(borderLayer)
      }
 
+    private func setupButtons() {
+        buyButton.addTarget(self, action: #selector(buyNowAction), for: .touchUpInside)
+        addButton.addTarget(self, action: #selector(addToCartAction), for: .touchUpInside)
+    }
+
     // MARK: Selector Methods
 
     @objc func heartButtonTapped() {
         heartButton.isSelected = !heartButton.isSelected
+        presenter.toggleFavorite(for: data)
+    }
+
+    @objc func buyNowAction() {
+        print("buy now tapped")
+
+    }
+
+    @objc func addToCartAction() {
+        print("add cart tapped")
     }
 }
 
@@ -148,10 +200,10 @@ private extension DetailsVC {
         }
 
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -132),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -162),
 
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -190,7 +242,7 @@ private extension DetailsVC {
             heartButton.centerYAnchor.constraint(equalTo: grayCircle.centerYAnchor),
 
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 21),
-            addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -63),
+            addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
 
             buyButton.centerYAnchor.constraint(equalTo: addButton.centerYAnchor),
             buyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -21),

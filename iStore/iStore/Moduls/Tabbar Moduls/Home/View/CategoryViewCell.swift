@@ -12,14 +12,14 @@ final class CategoryViewCell: UICollectionViewCell {
     // MARK: - Properties
     private lazy var categoryIcon: UIImageView = {
         let element = UIImageView()
-        element.contentMode = .center
-        element.backgroundColor = .yellow
+        element.contentMode = .scaleAspectFit
         element.layer.cornerRadius = 8
+        element.clipsToBounds = true
         return element
     }()
     
     private lazy var categoryName = UILabel.makeLabel(text: nil,
-                                                      font: UIFont.InterRegular(ofSize: 12),
+                                                      font: UIFont.InterRegular(ofSize: 10),
                                                       textColor: UIColor.darkGray,
                                                       numberOfLines: 1,
                                                       alignment: .center)
@@ -35,11 +35,23 @@ final class CategoryViewCell: UICollectionViewCell {
     }
     
     //MARK: - Methods
-    func configureCell(image: String, category: String) {
-        categoryIcon.image = UIImage(named: image)
-        categoryName.text = category
+
+    func configure(with model: Category) {
+
+        categoryName.text = model.name
+
+        /// getting image from server
+        guard let imageURL = URL(string: model.image ?? "") else { return }
+        ImageDownloader.shared.downloadImage(from: imageURL) { result in
+            switch result {
+            case .success(let image):
+                self.categoryIcon.image = image
+            case .failure(let error):
+                print("Error fetching image: \(error)")
+            }
+        }
     }
-    
+
     private func setViews() {
         addSubview(categoryIcon)
         addSubview(categoryName)
@@ -58,8 +70,8 @@ private extension CategoryViewCell{
         NSLayoutConstraint.activate([
             categoryIcon.topAnchor.constraint(equalTo: self.topAnchor),
             categoryIcon.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            categoryIcon.widthAnchor.constraint(equalToConstant: 40),
-            categoryIcon.heightAnchor.constraint(equalToConstant: 40)
+            categoryIcon.widthAnchor.constraint(equalToConstant: 42),
+            categoryIcon.heightAnchor.constraint(equalToConstant: 42)
         ])
         
         NSLayoutConstraint.activate([
