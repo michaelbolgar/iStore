@@ -6,8 +6,10 @@ final class CartTableCell: UITableViewCell, CartCellView {
 
     static let identifier = String(describing: CartTableCell.self)
     var presenter: CartCellPresenter?
+    private var chosenItem: ChosenItem?
     private let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .ultraLight)
     var checkmarkAction: ((Bool) -> Void)?
+    var totalPriceAction: ((Double) -> Void)?
 
     // MARK: UI Elements
     private let checkmarkButton: UIButton = {
@@ -84,10 +86,13 @@ final class CartTableCell: UITableViewCell, CartCellView {
     //MARK: Methods
 
     func set(info: ChosenItem) {
+        chosenItem = info
         orderImage.image = UIImage(named: info.image)
         bigTitle.text = info.bigTitle
         smallTitle.text = info.smallTitle
-        pricelabel.text = "$ \(info.price)"
+        let totalPrice = info.price * info.numerOfItemsToBuy
+        pricelabel.text = String(format: "$ %.2f", totalPrice)
+        updateCountLabel(count: Int(info.numerOfItemsToBuy))
     }
     func updateCountLabel(count: Int) {
         countLabel.text = "\(count)"
@@ -113,15 +118,38 @@ final class CartTableCell: UITableViewCell, CartCellView {
     }
 
     @objc func plusButtonTapped() {
-        presenter?.incrementCount()
+        guard let item = chosenItem else {
+            return
+        }
+        chosenItem?.numerOfItemsToBuy += 1
+        updateCountLabel(count: Int(item.numerOfItemsToBuy))
+        let fullPrice = item.numerOfItemsToBuy * item.price
+       totalPriceAction?(fullPrice)
     }
+
     @objc func minusButtonTapped() {
-        presenter?.decrementCount()
+        guard let item = chosenItem else {
+            return
+        }
+        if chosenItem?.numerOfItemsToBuy ?? 1 > 1 {
+            chosenItem?.numerOfItemsToBuy -= 1
+            updateCountLabel(count: Int(item.numerOfItemsToBuy))
+            let fullPrice = item.numerOfItemsToBuy * item.price
+            totalPriceAction?(fullPrice)
+        }
     }
     @objc func checkmarkTapped() {
-                checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor(red: 0.404, green: 0.769, blue: 0.655, alpha: 1), renderingMode: .alwaysOriginal), for: .selected)
+        checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor(red: 0.404, green: 0.769, blue: 0.655, alpha: 1), renderingMode: .alwaysOriginal), for: .selected)
         checkmarkButton.isSelected = !checkmarkButton.isSelected
         checkmarkAction?(checkmarkButton.isSelected)
+
+        if checkmarkButton.isSelected {
+            guard let item = chosenItem else { return }
+            let totalPrice = item.price * item.numerOfItemsToBuy
+            totalPriceAction?(totalPrice)
+        } else {
+            totalPriceAction?(0)
+        }
     }
 }
 

@@ -3,11 +3,8 @@ import UIKit
 
 protocol CartPresenterProtocol: AnyObject {
     var itemsCount: Int { get }
-
     func getData()
     func getItem(at index: Int) -> ChosenItem
-//    func showPaymentVC()
-    func showDetailsVC(data: SingleProduct)
 }
 
 final class CartPresenter: CartPresenterProtocol {

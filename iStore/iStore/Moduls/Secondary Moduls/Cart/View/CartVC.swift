@@ -6,7 +6,8 @@ protocol CartVCProtocol: AnyObject {
 
 final class CartVC: UIViewController, CartVCProtocol {
     var presenter: CartPresenter!
-    var selectedIndices: Set<Int> = []
+    var selectedPrices: [Double] = []
+    var totalPrice = 0.0
 
     // MARK: UI Elements
     private let tableView = UITableView()
@@ -42,6 +43,7 @@ final class CartVC: UIViewController, CartVCProtocol {
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         presenter = CartPresenter(viewController: self)
         presenter.getData()
         configureTableView()
@@ -72,14 +74,6 @@ final class CartVC: UIViewController, CartVCProtocol {
             self.tableView.reloadData()
         }
     }
-
-    func updateTotalPrice() {
-        let totalPrice = self.selectedIndices.reduce(0) { total, index in
-              total + self.presenter.items[index].price
-
-        }
-        self.priceLabel.text = "$\(totalPrice)"
-    }
     
     // MARK: Selector Methods
     @objc func selectPaymentButtonAction() {
@@ -101,24 +95,35 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: CartTableCell.identifier) as! CartTableCell
         let product = presenter.getItem(at: indexPath.row)
         cell.set(info: product)
+
         cell.checkmarkAction = { [weak self] isSelected in
             guard let self = self else { return }
             if isSelected {
-                self.selectedIndices.insert(indexPath.row)
-            } else {
-                self.selectedIndices.remove(indexPath.row)
-            }
-            self.updateTotalPrice()
-        }
+                cell.totalPriceAction = { price in
+                    self.selectedPrices.append(price)
+                    self.totalPrice = self.selectedPrices.reduce(0, +)
+                    self.priceLabel.text = String(format: "$ %.2f", self.totalPrice)
+                }
+            }else {
+                cell.totalPriceAction = { [weak self] priceToRemove in
+                    guard let self = self else { return }
+                    if let index = self.selectedPrices.firstIndex(of: priceToRemove) {
+                        self.selectedPrices.remove(at: index)
+                        self.totalPrice = self.selectedPrices.reduce(0, +)
+                        self.priceLabel.text = "$\(self.totalPrice)"
+                    }
+                }
 
+            }
+        }
         cell.presenter?.deleteButtonAction = { [weak self] in
             self?.presenter.deleteItem(at: indexPath, tableView: tableView)
               }
 
-
-
         return cell
     }
+
+
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: CartHeaderView.identifier) as! CartHeaderView
