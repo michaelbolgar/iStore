@@ -1,6 +1,7 @@
 import UIKit
 import SwiftUI
 
+
 protocol HomeVCProtocol: AnyObject {
     func reloadData(with section: Int)
 }

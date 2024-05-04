@@ -29,7 +29,6 @@ struct FilterOption {
     let handler: (() -> Void)
 }
 
-виды сортировки
 enum SortingModel {
     case name, priceLow, priceHigh
 }
@@ -106,13 +105,6 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     tableView.reloadRows(at: indexPaths, with: .none)
         }
     }
-    @objc private func handleSaveButton() {
-        if let selectedOption = selectedSortOption, let sortModel = SortingModel(rawValue: selectedOption) {
-                delegate?.didSelectSortOption(sortBy: sortModel)
-            } else {
-                print("Invalid sort option or no option selected.")
-            }
-       }
 
     
     // MARK: - Tableview

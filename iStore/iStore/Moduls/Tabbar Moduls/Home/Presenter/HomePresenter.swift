@@ -9,6 +9,7 @@ protocol HomePresenterProtocol {
     func showSearchVC(searchText: String)
     func showDetailsVC(data: SingleProduct)
     func showFilterVC()
+    func sortingBy()
 
     func setCategories()
     func setProducts(for id: Int)
@@ -72,7 +73,10 @@ final class HomePresenter: HomePresenterProtocol {
     }
 
     func showFilterVC() {
-        // code
+        router.showFilterVC()
+    }
+    func sortingBy() {
+        print("123455")
     }
 }
 
