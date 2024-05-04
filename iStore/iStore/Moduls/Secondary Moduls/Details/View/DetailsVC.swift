@@ -8,13 +8,16 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
     // MARK: Properties
 
     var presenter: DetailsPresenter!
+    var data: SingleProduct
+    var imageArray: [String?] = []
+    let scrollViewForImages = UIScrollView()
+    let pageControl = UIPageControl()
 
-    var data: SingleProduct 
-
-      init(data: SingleProduct) {
-          self.data = data
-          super.init(nibName: nil, bundle: nil)
-      }
+    init(data: SingleProduct) {
+        self.data = data
+        self.imageArray = data.images
+        super.init(nibName: nil, bundle: nil)
+    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -52,10 +55,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         return scrollView
     }()
 
-    private let contentView: UIView = {
-        let view = UIView()
-        return view
-    }()
+    private let contentView = UIView()
 
     private let contentImage: UIImageView = {
         let image = UIImageView()
@@ -88,7 +88,7 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
                                                        imageForSelected: UIImage.selectedheart, 
                                                        color: .lightGreen)
 
-    @objc private let addButton = UIButton.makeButton(text: "Add to Cart", 
+   private let addButton = UIButton.makeButton(text: "Add to Cart", 
                                                 buttonColor: ButtonColor.green,
                                                 titleColor: .white,
                                                 titleSize: 14,
@@ -108,12 +108,13 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
         super.viewDidLoad()
         view.backgroundColor = .white
         presenter = DetailsPresenter(view: self)
- //       presenter.getData()
         setNavigationBar(title: "Product details")
         navigationController?.isNavigationBarHidden = false
         setupViews()
         configureController()
+        setupScrollView()
         setupConstraints()
+        setupPageControl()
         addBorder(y: 705)
         setupButtons()
     }
@@ -128,10 +129,10 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
     // MARK: Private Methods
 
     private func setupViews() {
-        [contentImage, productNameLabel, descriptionTextView, priceLabel, descriptionProductlabel, grayCircle ].forEach {contentView.addSubview($0) }
-
+        [contentImage, productNameLabel, descriptionTextView, priceLabel, descriptionProductlabel, grayCircle, scrollViewForImages ].forEach {contentView.addSubview($0) }
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        contentView.addSubview(pageControl)
         grayCircle.addSubview(heartButton)
         [addButton, buyButton].forEach{view.addSubview($0)}
     }
@@ -146,19 +147,36 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
             self.priceLabel.text = "$ \(self.data.price ?? 100)"
             self.productNameLabel.text = self.data.title
             self.descriptionTextView.text = self.data.description
+            self.loadImages()
+        }
+    }
+    private func loadImages() {
+        for (index, imageURLString) in imageArray.enumerated() {
+            guard let urlString = imageURLString, let imageURL = URL(string: urlString) else { continue }
 
-            guard let imageURL = self.data.images.first else { return }
-            guard let imageName = URL(string: imageURL ?? "https://ionicframework.com/docs/img/demos/thumbnail.svg") else { return }
+            let imageView = UIImageView()
+            imageView.contentMode = .scaleAspectFill
+            scrollViewForImages.addSubview(imageView)
 
-            ImageDownloader.shared.downloadImage(from: imageName) { result in
+            ImageDownloader.shared.downloadImage(from: imageURL) { result in
                 switch result {
                 case .success(let image):
-                    self.contentImage.image = image
+                    imageView.image = image
                 case .failure(let error):
                     print("Error fetching image: \(error)")
+                    imageView.image = UIImage(named: "img")
                 }
             }
+
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                imageView.leadingAnchor.constraint(equalTo: scrollViewForImages.leadingAnchor, constant: view.frame.width * CGFloat(index)),
+                imageView.topAnchor.constraint(equalTo: scrollViewForImages.topAnchor),
+                imageView.widthAnchor.constraint(equalTo: scrollViewForImages.widthAnchor),
+                imageView.heightAnchor.constraint(equalToConstant: 286),
+            ])
         }
+
     }
     private func addBorder(y: CGFloat) {
          let borderLayer = CALayer()
@@ -170,6 +188,26 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
     private func setupButtons() {
         buyButton.addTarget(self, action: #selector(buyNowAction), for: .touchUpInside)
         addButton.addTarget(self, action: #selector(addToCartAction), for: .touchUpInside)
+    }
+
+    private func setupPageControl() {
+        pageControl.numberOfPages = imageArray.count
+        pageControl.currentPage = 0
+        pageControl.pageIndicatorTintColor = .gray
+        pageControl.currentPageIndicatorTintColor = .white
+    }
+
+    private func setupScrollView() {
+        scrollViewForImages.isPagingEnabled = true
+        scrollViewForImages.delegate = self
+        scrollViewForImages.showsHorizontalScrollIndicator = false
+        scrollViewForImages.contentSize = CGSize(width: view.frame.width * CGFloat(imageArray.count), height: 286)
+    }
+
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let pageIndex = round(scrollView.contentOffset.x / view.frame.width)
+        pageControl.currentPage = Int(pageIndex)
     }
 
     // MARK: Selector Methods
@@ -194,16 +232,24 @@ final class DetailsVC: UIViewController, DetailsVCProtocol, UITextViewDelegate, 
 private extension DetailsVC {
 
     private func setupConstraints() {
-
-        [scrollView, contentView, contentImage, descriptionTextView, grayCircle, heartButton].forEach {
+        [scrollView, contentView, contentImage, descriptionTextView, grayCircle, heartButton, pageControl, scrollViewForImages].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
+            scrollViewForImages.addSubview(contentImage)
         }
-
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollViewForImages.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            scrollViewForImages.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            scrollViewForImages.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            scrollViewForImages.heightAnchor.constraint(equalToConstant: 286),
+
+            pageControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            pageControl.bottomAnchor.constraint(equalTo: scrollViewForImages.bottomAnchor, constant: -20),
+
+
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -162),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -132),
 
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -211,20 +257,17 @@ private extension DetailsVC {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
-            contentImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
-            contentImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentImage.heightAnchor.constraint(equalToConstant: 286),
-
-            productNameLabel.topAnchor.constraint(equalTo: contentImage.bottomAnchor, constant: 15),
+            productNameLabel.topAnchor.constraint(equalTo: scrollViewForImages.bottomAnchor, constant: 9),
             productNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            productNameLabel.trailingAnchor.constraint(equalTo: heartButton.leadingAnchor, constant: -60),
+            productNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            priceLabel.topAnchor.constraint(equalTo: productNameLabel.bottomAnchor, constant: 6),
+            priceLabel.topAnchor.constraint(equalTo:             productNameLabel.bottomAnchor, constant: 6),
             priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            priceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
 
             descriptionProductlabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 15),
             descriptionProductlabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            descriptionProductlabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
             descriptionTextView.topAnchor.constraint(equalTo: descriptionProductlabel.bottomAnchor, constant: 6),
             descriptionTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -234,7 +277,7 @@ private extension DetailsVC {
             grayCircle.heightAnchor.constraint(equalToConstant: 46),
             grayCircle.widthAnchor.constraint(equalToConstant: 46),
             grayCircle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            grayCircle.topAnchor.constraint(equalTo: contentImage.bottomAnchor, constant: 9),
+            grayCircle.topAnchor.constraint(equalTo: scrollViewForImages.bottomAnchor, constant: 9),
 
             heartButton.heightAnchor.constraint(equalToConstant: 26),
             heartButton.widthAnchor.constraint(equalToConstant: 26),
