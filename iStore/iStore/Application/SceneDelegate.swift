@@ -1,6 +1,6 @@
 import UIKit
 
-/// запуск приложения под прод
+/// main start of the app
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
    var window: UIWindow?
@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 
-/// запуск отдельного экрана без навигационного контроллера
+/// start of the certain screen for tests / development
 //class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //
 //    var window: UIWindow?

@@ -1,18 +1,18 @@
 import UIKit
 
 final class OnboardingVC: UIViewController {
-    
-    private let userDefaults = UserDefaultsManager()
 
-    // MARK: UI Elements
+    // MARK: Properties
+
+    private let userDefaults = UserDefaultsManager()
     
     private let titles = ["20% Discount New Arrival Product", 
                           "Take Advantage Of The Offer Shopping", 
                           "All Types Offers Within Your Reactions"]
-    private let descriptions = ["Don't miss out — unique prices on the latest arrivals!", 
-                                "Everything you love is now available at great prices.", 
+    
+    private let descriptions = ["Don't miss out — unique prices on the latest arrivals!",
+                                "Everything you love is now available at great prices.",
                                 "Discover a variety of offers for every occasion!"]
-
 
     /// user account
     private let imageNames = ["1",
@@ -25,7 +25,9 @@ final class OnboardingVC: UIViewController {
 
     private var slides: [PagesView] = []
     private var lastAnimatedPageIndex: Int?
-    
+
+    // MARK: UI Elements
+
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.delegate = self
@@ -64,7 +66,6 @@ final class OnboardingVC: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupLayouts()
-        TestUD() // Тест Удалить
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -113,7 +114,14 @@ final class OnboardingVC: UIViewController {
             pageControl.setIndicatorImage(i == currentPage ? activeImage : nil, forPage: i)
         }
     }
-    
+
+    private func updateContentAndAnimationsForPage(_ pageIndex: Int) {
+        if pageIndex != lastAnimatedPageIndex {
+            slides[pageIndex].animateContentEntrance()
+            lastAnimatedPageIndex = pageIndex
+        }
+    }
+
     // MARK: Selector Methods
     
     @objc private func nextButtonTapped() {
@@ -132,13 +140,6 @@ final class OnboardingVC: UIViewController {
         }
     }
     
-    private func updateContentAndAnimationsForPage(_ pageIndex: Int) {
-        if pageIndex != lastAnimatedPageIndex {
-            slides[pageIndex].animateContentEntrance()
-            lastAnimatedPageIndex = pageIndex
-        }
-    }
-    
     @objc private func pageControlTapped(sender: UIPageControl) {
         let pageWidth = scrollView.frame.width
         let offsetX = CGFloat(sender.currentPage) * pageWidth
@@ -147,7 +148,7 @@ final class OnboardingVC: UIViewController {
     }
 }
 
-// MARK: Extensions
+    // MARK: ScrollView Delegate
 
 extension OnboardingVC: UIScrollViewDelegate {
     
@@ -177,6 +178,8 @@ extension OnboardingVC: UIScrollViewDelegate {
     }
 }
 
+    // MARK: Layout
+
 extension OnboardingVC {
     
     private func setupLayouts() {
@@ -198,27 +201,4 @@ extension OnboardingVC {
             pageControl.centerYAnchor.constraint(equalTo: nextButtonImageView.centerYAnchor)
         ])
     }
-    
-    /// test сохранения истории поиска
-    private func TestUD() {
-        let defaultsManager = UserDefaultsManager()
-        
-        defaultsManager.addSearchQuery("Я")
-        defaultsManager.addSearchQuery("люблю")
-        defaultsManager.addSearchQuery("пиво")
-        defaultsManager.printSearchHistory()
-        defaultsManager.clearSearchHistory()
-        defaultsManager.printSearchHistory()
-    }
-}
-// Тест Удалить
-private func TestUD() {
-    let defaultsManager = UserDefaultsManager()
-    
-    defaultsManager.addSearchQuery("Я")
-    defaultsManager.addSearchQuery("люблю")
-    defaultsManager.addSearchQuery("пиво")
-    defaultsManager.printSearchHistory()
-    defaultsManager.clearSearchHistory()
-    defaultsManager.printSearchHistory()
 }

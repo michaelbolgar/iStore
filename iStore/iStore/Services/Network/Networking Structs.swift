@@ -1,6 +1,6 @@
 import Foundation
 
-/// struct for single item
+/// struct for a single item
 struct SingleProduct: Codable {
     let id: Int?
     let title: String?
@@ -10,7 +10,7 @@ struct SingleProduct: Codable {
     let category: Category
 }
 
-/// struct for single category
+/// struct for a single category
 struct Category: Codable {
     let id: Int?
     let name: String?

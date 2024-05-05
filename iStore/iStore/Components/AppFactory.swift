@@ -27,7 +27,8 @@ protocol AppFactory: AnyObject {
     func makeWishlistVC() -> UIViewController
     func makeManagerVC() -> UIViewController
     func makeProfileVC() -> UIViewController
-    
+
+#warning("привести к общему виду")
     func makeHomeRouter() -> BaseRouter
     func makeWishlistRouter() -> WishlistRouter
     func makeManagerRouter() -> ManagerRouter
@@ -46,7 +47,7 @@ final class Factory: AppFactory {
         return tabBar
     }
     
-    /// making ViewControllers
+    // MARK: Creating ViewControllers
     func makeHomeVC() -> UIViewController {
         HomeVC()
     }
@@ -59,6 +60,7 @@ final class Factory: AppFactory {
         ManagerVC()
     }
     
+    #warning("привести к общему виду с VC выше")
     func makeProfileVC() -> UIViewController {
         let navController = UINavigationController()
         navController.configureTabBarItem("Profile", image: "profile")
@@ -68,7 +70,7 @@ final class Factory: AppFactory {
         return navController
     }
     
-    /// making Routers
+    // MARK: Creating Routers
     func makeHomeRouter() -> BaseRouter {
         let navController = UINavigationController()
         navController.configureTabBarItem("Home", image: "home")

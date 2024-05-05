@@ -1,6 +1,7 @@
 import UIKit
 import Kingfisher
 
+/// manager for downloading and saving images in cache
 final class ImageDownloader {
 
     static let shared = ImageDownloader()

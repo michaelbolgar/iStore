@@ -15,7 +15,7 @@ class SingleItemCell: UICollectionViewCell {
 
     static var identifier: String {"\(Self.self)"}
     weak var delegate: SingleItemCellDelegate?
-    
+
     // MARK: UI Elements
 
     private let productImage: UIImageView = {
@@ -24,7 +24,7 @@ class SingleItemCell: UICollectionViewCell {
         image.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         image.layer.cornerRadius = 6
         image.layer.masksToBounds = true
-//        image.clipsToBounds = true
+        //        image.clipsToBounds = true
         return image
     }()
 
@@ -68,89 +68,50 @@ class SingleItemCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     //MARK: Methods
-    
+
     func configure(with model: SingleProduct) {
 
         productLabel.text = model.title
         priceLabel.text = "$\(model.price ?? 0)"
-        
+
         let correctImageURLString = "https://i.imgur.com/9LFjwpI.jpeg"
+
         /// getting image from server
         if let firstImageURLString = model.images.first,  let imageURL = URL(string: firstImageURLString ?? "") {
-                print("Загрузка изображения с URL: \(imageURL)")
-                ImageDownloader.shared.downloadImage(from: imageURL) { result in
-                    switch result {
-                    case .success(let image):
-                        self.productImage.image = image
-                    case .failure(let error):
-                        print("Ошибка при загрузке изображения: \(error)")
-                        guard let newImageURL = URL(string: correctImageURLString) else {return}
-                        print(newImageURL)
-                        ImageDownloader.shared.downloadImage(from: newImageURL) { result in
-                            switch result {
-                            case .success(let image):
-                                self.productImage.image = image
-                            case .failure(let error):
-                                print("Ошибка при загрузке изображения: \(error)")
-                                
-                            }
+            print("Downloading of image from URL: \(imageURL)")
+            ImageDownloader.shared.downloadImage(from: imageURL) { result in
+                switch result {
+                case .success(let image):
+                    self.productImage.image = image
+                case .failure(let error):
+                    print("Error by downloading of image: \(error)")
+                    guard let newImageURL = URL(string: correctImageURLString) else {return}
+                    print(newImageURL)
+                    ImageDownloader.shared.downloadImage(from: newImageURL) { result in
+                        switch result {
+                        case .success(let image):
+                            self.productImage.image = image
+                        case .failure(let error):
+                            print("Error by downloading of image: \(error)")
+
                         }
                     }
                 }
-            } else {
-                print("Не удалось создать URL для изображения")
             }
+        } else {
+            print("Couldn't make an URL for downloading of image")
+        }
     }
-    
+
     private func setupViewConfigure() {
         contentView.addSubview(backView)
         [productImage, productLabel, buyButton, priceLabel].forEach { backView.addSubview($0)}
     }
-    
+
     private func addTargets() {
         buyButton.addTarget(self, action: #selector(buyButtonTapped), for: .touchUpInside)
-    }
-    
-    //MARK: - Selector Methods
-    @objc func buyButtonTapped() {
-        delegate?.buyButtonPressed()
-    }
-
-
-    private func setupConstraints() {
-        productImage.translatesAutoresizingMaskIntoConstraints = false
-        backView.translatesAutoresizingMaskIntoConstraints = false
-        productLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        NSLayoutConstraint.activate([
-            backView.heightAnchor.constraint(equalToConstant: 217),
-            backView.widthAnchor.constraint(equalToConstant: 170),
-//            backView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-
-//            productImage.widthAnchor.constraint(equalToConstant: 170),
-            productImage.heightAnchor.constraint(equalToConstant: 112),
-            productImage.topAnchor.constraint(equalTo: backView.topAnchor),
-            productImage.leadingAnchor.constraint(equalTo: backView.leadingAnchor),
-            productImage.trailingAnchor.constraint(equalTo: backView.trailingAnchor),
-
-            productLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
-            productLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),
-            productLabel.topAnchor.constraint(equalTo: productImage.bottomAnchor, constant: 13),
-
-//            priceLabel.topAnchor.constraint(equalTo: productLabel.bottomAnchor, constant: 4),
-            priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
-            priceLabel.bottomAnchor.constraint(equalTo: buyButton.topAnchor, constant: -13),
-
-//            buyButton.topAnchor.constraint(greaterThanOrEqualTo: priceLabel.bottomAnchor, constant: 3),
-//            buyButton.topAnchor.constraint(lessThanOrEqualTo: priceLabel.bottomAnchor, constant: 11),
-            buyButton.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -13),
-            buyButton.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
-            buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),
-
-        ])
     }
 
     private func setImage(pictureURL: String) {
@@ -165,6 +126,47 @@ class SingleItemCell: UICollectionViewCell {
                 print("Error fetching image: \(error)")
             }
         }
+    }
+
+    //MARK: - Selector Methods
+    @objc func buyButtonTapped() {
+        delegate?.buyButtonPressed()
+    }
+}
+
+private extension SingleItemCell {
+
+    private func setupConstraints() {
+
+        let offset: CGFloat = 13
+
+        productImage.translatesAutoresizingMaskIntoConstraints = false
+        backView.translatesAutoresizingMaskIntoConstraints = false
+        productLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        
+        NSLayoutConstraint.activate([
+            backView.heightAnchor.constraint(equalToConstant: 217),
+            backView.widthAnchor.constraint(equalToConstant: 170),
+            backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            productImage.heightAnchor.constraint(equalToConstant: 112),
+            productImage.topAnchor.constraint(equalTo: backView.topAnchor),
+            productImage.leadingAnchor.constraint(equalTo: backView.leadingAnchor),
+            productImage.trailingAnchor.constraint(equalTo: backView.trailingAnchor),
+
+            productLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: offset),
+            productLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -offset),
+            productLabel.topAnchor.constraint(equalTo: productImage.bottomAnchor, constant: offset),
+
+            priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: offset),
+            priceLabel.bottomAnchor.constraint(equalTo: buyButton.topAnchor, constant: -offset),
+
+            buyButton.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -offset),
+            buyButton.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: offset),
+            buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -offset),
+
+        ])
     }
 }
 

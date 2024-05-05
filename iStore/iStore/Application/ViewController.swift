@@ -1,10 +1,9 @@
-// экран для быстрых тестов разных фич, как например запросы по апи. Можно оставлять тут примеры для других участников команды
+
+/// screen for tests of new features. Here you can add some examples of your code for other teammates
 
 import UIKit
 
 class ViewController: UIViewController {
-
-    // MARK: Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,9 +14,9 @@ class ViewController: UIViewController {
         deSearch(for: "shoes")
     }
 
-    // MARK: Network methods
+    // MARK: Network methods examples
 
-    /// получить все (пять) категорий
+    /// get all categories
     private func getCategories() {
         NetworkingManager.shared.getCategories { result in
             switch result {
@@ -29,7 +28,7 @@ class ViewController: UIViewController {
         }
     }
 
-    /// получить товары по категории,
+    /// get items by certain category
     private func getProductsByCategory(for id: Int) {
         NetworkingManager.shared.getProductsByCategory(for: id) { result in
             switch result {
@@ -41,7 +40,7 @@ class ViewController: UIViewController {
         }
     }
 
-    /// получить инфу по конкретному товару
+    /// get item details
     private func getProduct(for id: Int) {
         NetworkingManager.shared.getProduct(for: id) { result in
             switch result {
@@ -53,6 +52,7 @@ class ViewController: UIViewController {
         }
     }
 
+    /// search for items
     private func deSearch(for request: String) {
         NetworkingManager.shared.doSearch(for: request) { result in
             switch result {
