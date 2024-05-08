@@ -5,5 +5,5 @@ struct ChosenItem {
     let bigTitle: String
     let smallTitle: String
     let price: Double
-    var numerOfItemsToBuy: Double = 1
+    var numberOfItemsToBuy: Double = 1.00
 }

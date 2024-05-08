@@ -43,13 +43,17 @@ final class CartTableCell: UITableViewCell, CartCellView {
 
     private lazy var minusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "minus.circle", withConfiguration: configuration)?.withTintColor(UIColor(red: 0.224, green: 0.247, blue: 0.259, alpha: 1), renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "minus.circle", 
+                                withConfiguration: configuration)?.withTintColor(UIColor.customDarkGray,
+                                                                                 renderingMode: .alwaysOriginal), for: .normal)
         return button
     }()
 
     private lazy var plusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "plus.circle", withConfiguration: configuration)?.withTintColor(UIColor(red: 0.224, green: 0.247, blue: 0.259, alpha: 1), renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "plus.circle",
+                                withConfiguration: configuration)?.withTintColor(UIColor.customDarkGray,
+                                                                                 renderingMode: .alwaysOriginal), for: .normal)
         return button
     }()
 
@@ -60,7 +64,9 @@ final class CartTableCell: UITableViewCell, CartCellView {
 
     private lazy var basketButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "trash.circle", withConfiguration: configuration)?.withTintColor(UIColor(red: 0.224, green: 0.247, blue: 0.259, alpha: 1), renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "trash.circle", 
+                                withConfiguration: configuration)?.withTintColor(UIColor.customDarkGray,
+                                                                                renderingMode: .alwaysOriginal), for: .normal)
         return button
     }()
 
@@ -90,11 +96,14 @@ final class CartTableCell: UITableViewCell, CartCellView {
         orderImage.image = UIImage(named: info.image)
         bigTitle.text = info.bigTitle
         smallTitle.text = info.smallTitle
-        let totalPrice = info.price * info.numerOfItemsToBuy
-        pricelabel.text = String(format: "$ %.2f", totalPrice)
-        updateCountLabel(count: Int(info.numerOfItemsToBuy))
+//        let totalPrice = info.price * info.numberOfItemsToBuy
+//        pricelabel.text = String(format: "$ %.2f", totalPrice)
+        updateCountLabel(count: Int(info.numberOfItemsToBuy))
+
+//        print("сейчас товаров \(info.bigTitle) в корзине:", info.numberOfItemsToBuy)
     }
     func updateCountLabel(count: Int) {
+        print("с чем будем апдейтить лейбл:", count)
         countLabel.text = "\(count)"
     }
 
@@ -115,27 +124,28 @@ final class CartTableCell: UITableViewCell, CartCellView {
 
     @objc func deleteButtonTapped() {
         guard let item = chosenItem else { return }
-        let fullPrice = item.numerOfItemsToBuy * item.price
         presenter?.deleteCell()
     }
 
     @objc func plusButtonTapped() {
         guard let item = chosenItem else { return }
-        chosenItem?.numerOfItemsToBuy += 1
-        updateCountLabel(count: Int(item.numerOfItemsToBuy))
-        let fullPrice = item.numerOfItemsToBuy * item.price
+        chosenItem?.numberOfItemsToBuy += 1
+        updateCountLabel(count: Int(item.numberOfItemsToBuy) + 1)
+        let fullPrice = item.numberOfItemsToBuy * item.price
         totalPriceAction?(fullPrice)
     }
 
     @objc func minusButtonTapped() {
         guard let item = chosenItem else { return }
-        if chosenItem?.numerOfItemsToBuy ?? 1 > 1 {
-            chosenItem?.numerOfItemsToBuy -= 1
-            updateCountLabel(count: Int(item.numerOfItemsToBuy))
-            let fullPrice = item.numerOfItemsToBuy * item.price
+        /// to improve: by setting "1 >= 1" we can reach the value of 0 to make the cell inactive (but not deleted from the cart yet -> UX question
+        if chosenItem?.numberOfItemsToBuy ?? 1 > 1 {
+            chosenItem?.numberOfItemsToBuy -= 1
+            updateCountLabel(count: Int(item.numberOfItemsToBuy) - 1)
+            let fullPrice = item.numberOfItemsToBuy * item.price
             totalPriceAction?(fullPrice)
         }
     }
+
     @objc func checkmarkTapped() {
         checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor(red: 0.404, green: 0.769, blue: 0.655, alpha: 1), renderingMode: .alwaysOriginal), for: .selected)
         checkmarkButton.isSelected = !checkmarkButton.isSelected
@@ -143,7 +153,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
 
         if checkmarkButton.isSelected {
             guard let item = chosenItem else { return }
-            let totalPrice = item.price * item.numerOfItemsToBuy
+            let totalPrice = item.price * item.numberOfItemsToBuy
             totalPriceAction?(totalPrice)
         } else {
             guard let item = chosenItem else { return }

@@ -4,6 +4,12 @@ protocol CartVCProtocol: AnyObject {
     func reloadTableView(at indexPath: IndexPath)
 }
 
+/*
+ что нужно ещё править:
+ 1. вылет за пределы индекса, если начать удалять ячейки с первой (см. ворнинг ниже)
+ 2. вылет за пределы индекса, если удалять ячейку без чекмарки
+ */
+
 final class CartVC: UIViewController, CartVCProtocol {
 
     // MARK: Properties
@@ -113,8 +119,8 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
             guard let self = self else { return }
             if isSelected {
                 cell.totalPriceAction = { price in
-                    //                    self.presenter?.selectedPrices.append(price)
-                    //                    self.presenter?.totalPrice = self.presenter?.selectedPrices.reduce(0, +) ?? 0.00
+//                    self.presenter?.selectedPrices.append(price)
+//                    self.presenter?.totalPrice = self.presenter?.selectedPrices.reduce(0, +) ?? 0.00
                     self.presenter?.addToTotals(amount: price)
                     self.priceLabel.text = String(format: "$ %.2f", self.presenter?.totalPrice ?? 0.00)
                 }
@@ -122,8 +128,8 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
                 cell.totalPriceAction = { [weak self] priceToRemove in
                     guard let self = self else { return }
                     if let index = self.presenter?.selectedPrices.firstIndex(of: priceToRemove) {
-                        //                        self.presenter?.selectedPrices.remove(at: index)
-                        //                        self.presenter?.totalPrice = self.presenter?.selectedPrices.reduce(0, +) ?? 0.00
+//                        self.presenter?.selectedPrices.remove(at: index)
+//                        self.presenter?.totalPrice = self.presenter?.selectedPrices.reduce(0, +) ?? 0.00
                         self.presenter?.removeFromTotals(at: index)
                         self.priceLabel.text = String(format: "$ %.2f", self.presenter?.totalPrice ?? 0.00)
                     }
@@ -155,11 +161,13 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
 
     // MARK: Layout
 
-extension CartVC {
+private extension CartVC {
+
     func setViews() {
         [tableView, footerView].forEach{view.addSubview($0)}
         [orderLabel, totalLabel, priceLabel, selectPaymentButton].forEach{footerView.addSubview($0)}
     }
+
     func setupUI() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         footerView.translatesAutoresizingMaskIntoConstraints = false
