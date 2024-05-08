@@ -112,7 +112,6 @@ final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate,
     // MARK: Selector Methods
 
     @objc private func cartButtonTapped() {
-        print("Cart button tapped")
         delegate?.cartButtonTapped()
     }
 

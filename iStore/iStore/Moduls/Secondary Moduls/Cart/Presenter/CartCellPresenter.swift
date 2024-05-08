@@ -15,6 +15,8 @@ class CartCellPresenter {
     init(view: CartCellView) {
         self.view = view
     }
+
+    #warning("перенести это в CartPresenter?")
     func deleteCell() {
         deleteButtonAction?()
     }

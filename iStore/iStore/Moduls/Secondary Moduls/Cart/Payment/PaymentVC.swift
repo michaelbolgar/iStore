@@ -216,6 +216,7 @@ extension PaymentVC {
         }
     }
     
+    #warning("переход на сайт не работает до тех пор, пока не потыкаешь другие цифры клавиатуры")
     private func openDevRushWebsite() {
         if let url = URL(string: "https://devrush.eduonline.io") {
             UIApplication.shared.open(url)

@@ -5,13 +5,25 @@ protocol CartVCProtocol: AnyObject {
 }
 
 final class CartVC: UIViewController, CartVCProtocol {
+
+    // MARK: Properties
+
     var presenter: CartPresenter!
-    var selectedPrices: [Double] = []
-    var totalPrice = 0.0
 
     // MARK: UI Elements
-    private let tableView = UITableView()
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .none
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(CartTableCell.self, forCellReuseIdentifier: CartTableCell.identifier)
+        tableView.rowHeight = 100
+        tableView.showsVerticalScrollIndicator = false
+        tableView.register(CartHeaderView.self, forHeaderFooterViewReuseIdentifier: CartHeaderView.identifier)
+        return tableView
+    }()
 
+    #warning("заменить на настоящий футер")
     private let footerView = UIView()
 
     private let orderLabel = UILabel.makeLabel(text: "Order Summary",
@@ -46,7 +58,7 @@ final class CartVC: UIViewController, CartVCProtocol {
         view.backgroundColor = .white
         presenter = CartPresenter(viewController: self)
         presenter.getData()
-        configureTableView()
+//        configureTableView()
         setViews()
         setupUI()
     }
@@ -59,15 +71,16 @@ final class CartVC: UIViewController, CartVCProtocol {
 
     // MARK: Private Methods
 
-    private func configureTableView() {
-        tableView.separatorStyle = .none
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(CartTableCell.self, forCellReuseIdentifier: CartTableCell.identifier)
-        tableView.rowHeight = 100
-        tableView.showsVerticalScrollIndicator = false
-        tableView.register(CartHeaderView.self, forHeaderFooterViewReuseIdentifier: CartHeaderView.identifier)
-    }
+    /// dead code x_x delete after the screen is done
+//    private func configureTableView() {
+//        tableView.separatorStyle = .none
+//        tableView.delegate = self
+//        tableView.dataSource = self
+//        tableView.register(CartTableCell.self, forCellReuseIdentifier: CartTableCell.identifier)
+//        tableView.rowHeight = 100
+//        tableView.showsVerticalScrollIndicator = false
+//        tableView.register(CartHeaderView.self, forHeaderFooterViewReuseIdentifier: CartHeaderView.identifier)
+//    }
 
     func reloadTableView(at indexPath: IndexPath) {
         DispatchQueue.main.async {
@@ -78,7 +91,6 @@ final class CartVC: UIViewController, CartVCProtocol {
     // MARK: Selector Methods
     @objc func selectPaymentButtonAction() {
         let paymentVC = PaymentVC()
-        #warning("после установления мода automatic перестало перекидывать на сайт девраша")
         paymentVC.modalPresentationStyle = .fullScreen
         present(paymentVC, animated: true, completion: nil)
     }
@@ -96,30 +108,35 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
         let product = presenter.getItem(at: indexPath.row)
         cell.set(info: product)
 
+        /// select item in cart
         cell.checkmarkAction = { [weak self] isSelected in
             guard let self = self else { return }
             if isSelected {
                 cell.totalPriceAction = { price in
-                    self.selectedPrices.append(price)
-                    self.totalPrice = self.selectedPrices.reduce(0, +)
-                    self.priceLabel.text = String(format: "$ %.2f", self.totalPrice)
+                    //                    self.presenter?.selectedPrices.append(price)
+                    //                    self.presenter?.totalPrice = self.presenter?.selectedPrices.reduce(0, +) ?? 0.00
+                    self.presenter?.addToTotals(amount: price)
+                    self.priceLabel.text = String(format: "$ %.2f", self.presenter?.totalPrice ?? 0.00)
                 }
-            }else {
+            } else {
                 cell.totalPriceAction = { [weak self] priceToRemove in
                     guard let self = self else { return }
-                    if let index = self.selectedPrices.firstIndex(of: priceToRemove) {
-                        self.selectedPrices.remove(at: index)
-                        self.totalPrice = self.selectedPrices.reduce(0, +)
-                        self.priceLabel.text = "$\(self.totalPrice)"
+                    if let index = self.presenter?.selectedPrices.firstIndex(of: priceToRemove) {
+                        //                        self.presenter?.selectedPrices.remove(at: index)
+                        //                        self.presenter?.totalPrice = self.presenter?.selectedPrices.reduce(0, +) ?? 0.00
+                        self.presenter?.removeFromTotals(at: index)
+                        self.priceLabel.text = String(format: "$ %.2f", self.presenter?.totalPrice ?? 0.00)
                     }
                 }
-
             }
         }
-        cell.presenter?.deleteButtonAction = { [weak self] in
-            self?.presenter.deleteItem(at: indexPath, tableView: tableView)
-              }
 
+        /// delete item from cart
+        cell.presenter?.deleteButtonAction = { [weak self] in
+            print("to delete:", indexPath.row)
+            self?.presenter.deleteItem(at: indexPath, tableView: tableView)
+            self?.priceLabel.text = String(format: "$ %.2f", self?.presenter?.totalPrice ?? 0.00)
+        }
         return cell
     }
 

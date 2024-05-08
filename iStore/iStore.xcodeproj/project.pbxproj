@@ -492,6 +492,7 @@
 		F41763CD2BCF470E00EBB86D /* Cart */ = {
 			isa = PBXGroup;
 			children = (
+				F499AE0C2BE9047F00BB9E9D /* Payment */,
 				F41763ED2BCF49BF00EBB86D /* View */,
 				F41763EC2BCF49BB00EBB86D /* Presenter */,
 			);
@@ -645,10 +646,6 @@
 			children = (
 				F43014BE2BDC5D7B00E0AC21 /* Cell */,
 				F41763EE2BCF49C700EBB86D /* CartVC.swift */,
-				047E0F722BD982F80096E150 /* PaymentVC.swift */,
-				047E0F762BDAB8DB0096E150 /* CardView.swift */,
-				047E0F782BDC08C90096E150 /* SuccessPaymentVC.swift */,
-				047E0F7A2BDC0FCC0096E150 /* HalfScreenPresentationController.swift */,
 				F43014BC2BDC5B8500E0AC21 /* CartHeaderView.swift */,
 			);
 			path = View;
@@ -805,6 +802,17 @@
 				F4900BB12BD05379009BB675 /* WishlistBuilder.swift */,
 			);
 			path = "Module Builder";
+			sourceTree = "<group>";
+		};
+		F499AE0C2BE9047F00BB9E9D /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				047E0F722BD982F80096E150 /* PaymentVC.swift */,
+				047E0F7A2BDC0FCC0096E150 /* HalfScreenPresentationController.swift */,
+				047E0F762BDAB8DB0096E150 /* CardView.swift */,
+				047E0F782BDC08C90096E150 /* SuccessPaymentVC.swift */,
+			);
+			path = Payment;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

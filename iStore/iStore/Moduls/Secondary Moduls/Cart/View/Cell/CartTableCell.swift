@@ -114,23 +114,21 @@ final class CartTableCell: UITableViewCell, CartCellView {
     // MARK: Selector methods
 
     @objc func deleteButtonTapped() {
+        guard let item = chosenItem else { return }
+        let fullPrice = item.numerOfItemsToBuy * item.price
         presenter?.deleteCell()
     }
 
     @objc func plusButtonTapped() {
-        guard let item = chosenItem else {
-            return
-        }
+        guard let item = chosenItem else { return }
         chosenItem?.numerOfItemsToBuy += 1
         updateCountLabel(count: Int(item.numerOfItemsToBuy))
         let fullPrice = item.numerOfItemsToBuy * item.price
-       totalPriceAction?(fullPrice)
+        totalPriceAction?(fullPrice)
     }
 
     @objc func minusButtonTapped() {
-        guard let item = chosenItem else {
-            return
-        }
+        guard let item = chosenItem else { return }
         if chosenItem?.numerOfItemsToBuy ?? 1 > 1 {
             chosenItem?.numerOfItemsToBuy -= 1
             updateCountLabel(count: Int(item.numerOfItemsToBuy))
@@ -148,7 +146,9 @@ final class CartTableCell: UITableViewCell, CartCellView {
             let totalPrice = item.price * item.numerOfItemsToBuy
             totalPriceAction?(totalPrice)
         } else {
-            totalPriceAction?(0)
+            guard let item = chosenItem else { return }
+            let totalPrice = item.price
+            totalPriceAction?(totalPrice)
         }
     }
 }

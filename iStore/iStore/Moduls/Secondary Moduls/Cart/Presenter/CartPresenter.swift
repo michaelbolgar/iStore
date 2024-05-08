@@ -3,16 +3,27 @@ import UIKit
 
 protocol CartPresenterProtocol: AnyObject {
     var itemsCount: Int { get }
+    var totalPrice: Double { get set }
+    var selectedPrices: [Double] { get set }
+
     func getData()
     func getItem(at index: Int) -> ChosenItem
+
+    func showDetailsVC(data: SingleProduct)
+
+    func addToTotals(amount: Double)
+    func removeFromTotals(at index: Int)
+    func deleteItem(at indexPath: IndexPath, tableView: UITableView)
 }
 
 final class CartPresenter: CartPresenterProtocol {
 
-//    private let router: HomeRouterProtocol
     weak var view: CartVCProtocol?
     var items: [ChosenItem] = []
     var amountForPriceLabel = [Double]()
+    var selectedPrices: [Double] = []
+    var totalPrice = 0.0
+    var deleteButtonAction: (() -> Void)?
 
     var itemsCount: Int {
         return items.count
@@ -28,7 +39,6 @@ final class CartPresenter: CartPresenterProtocol {
 //        self.router = router
     }
 
-
     // MARK: Methods
 
     func getItem(at index: Int) -> ChosenItem {
@@ -42,6 +52,8 @@ final class CartPresenter: CartPresenterProtocol {
         ]
     }
 
+    // MARK: Navigation Methods
+
 //    func showPaymentVC() {
 //        router.showPaymentVC()
 //    }
@@ -51,8 +63,24 @@ final class CartPresenter: CartPresenterProtocol {
 //        self.navigationController.pushViewController(detailsVC, animated: true)
     }
 
+    // MARK: Methods for editing of prices
+
+    func addToTotals(amount: Double) {
+        selectedPrices.append(amount)
+        totalPrice = selectedPrices.reduce(0, +)
+    }
+
+    func removeFromTotals(at index: Int) {
+        selectedPrices.remove(at: index)
+        totalPrice = selectedPrices.reduce(0, +)
+    }
+
+    #warning("выходит за пределы индекса, если удалить например 1ю ячейку, а потом последнюю. Проверить после подключения сети")
     func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
+        let itemToDelete = items[indexPath.row]
+        let indexToDelete = selectedPrices.firstIndex(of: itemToDelete.price) ?? 0
         items.remove(at: indexPath.row)
+        removeFromTotals(at: indexToDelete)
         tableView.deleteRows(at: [indexPath], with: .fade)
     }
 }
