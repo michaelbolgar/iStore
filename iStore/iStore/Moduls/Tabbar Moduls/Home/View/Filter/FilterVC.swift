@@ -34,12 +34,12 @@ enum SortingModel {
 }
 
 protocol FilterVCDelegate: AnyObject {
-    func didSelectSortOption(sortBy: SortingModel)
+//    func didSelectSortOption(sortBy: SortingModel)
 }
 
 class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var presenter: HomePresenterProtocol!
+    var presenter: FilterPresenterProtocol!
     weak var delegate: FilterVCDelegate?
     
     // MARK: - UI
@@ -192,16 +192,19 @@ extension UIButton {
 
 extension FilterVC: ButtonCellDelegate {
     func cancelButtonTapped() {
-        print("cancel")
+        presenter.cancelButtonTapped()
     }
     
     func saveButtonTapped() {
-        print("save")
+        presenter.saveButtonTapped()
     }
 }
 extension FilterVC: SortByCellDelegate {
     func radioButtonTapped() {
-        print(" radio button tapped")
+        presenter.sortByButtonTappet()
 
     }
+}
+
+extension FilterVC: FilterVCDelegate {
 }

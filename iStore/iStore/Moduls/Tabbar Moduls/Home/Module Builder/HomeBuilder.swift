@@ -35,7 +35,9 @@ final class HomeBuilder: HomeBuilderProtocol {
     }
     
     func createFilterVC() -> UIViewController {
-        FilterVC()
+        let vc = FilterVC()
+        vc.presenter = FilterPresenter(view: vc)
+        return vc
     }
 
 //    func createPaymentVC() -> UIViewController {

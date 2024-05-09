@@ -56,10 +56,6 @@ final class HomeVC: UIViewController, HomeVCProtocol {
         collectionView.dataSource = self
 //        searchBar.delegate = self
     }
-    
-    func didTapFiltersButton() {
-        print ("filter tapped")
-    }
 }
 //MARK: - UICollectionViewDataSource
 
