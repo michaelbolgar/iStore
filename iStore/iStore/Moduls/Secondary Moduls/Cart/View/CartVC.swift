@@ -44,7 +44,7 @@ final class CartVC: UIViewController, CartVCProtocol {
                                                           numberOfLines: 1,
                                                           alignment: .left)
 
-    private let priceLabel = UILabel.makeLabel(text: "$ 0,00",
+    private let totalPriceLabel = UILabel.makeLabel(text: "$ 0,00",
                                                           font: UIFont.InterMedium(ofSize: 14),
                                                           textColor: UIColor.customDarkGray,
                                                           numberOfLines: 1,
@@ -93,7 +93,11 @@ final class CartVC: UIViewController, CartVCProtocol {
             self.tableView.reloadData()
         }
     }
-    
+
+    private func updateTotalPrice(with amount: Double) {
+        totalPriceLabel.text = String(format: "$ %.2f", amount)
+    }
+
     // MARK: Selector Methods
     @objc func selectPaymentButtonAction() {
         let paymentVC = PaymentVC()
@@ -119,29 +123,35 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
             guard let self = self else { return }
             if isSelected {
                 cell.totalPriceAction = { price in
-//                    self.presenter?.selectedPrices.append(price)
-//                    self.presenter?.totalPrice = self.presenter?.selectedPrices.reduce(0, +) ?? 0.00
                     self.presenter?.addToTotals(amount: price)
-                    self.priceLabel.text = String(format: "$ %.2f", self.presenter?.totalPrice ?? 0.00)
+                    self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
                 }
             } else {
                 cell.totalPriceAction = { [weak self] priceToRemove in
                     guard let self = self else { return }
+                    self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
                     if let index = self.presenter?.selectedPrices.firstIndex(of: priceToRemove) {
-//                        self.presenter?.selectedPrices.remove(at: index)
-//                        self.presenter?.totalPrice = self.presenter?.selectedPrices.reduce(0, +) ?? 0.00
                         self.presenter?.removeFromTotals(at: index)
-                        self.priceLabel.text = String(format: "$ %.2f", self.presenter?.totalPrice ?? 0.00)
-                    }
+                        self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
+                    } /* else {
+                        #warning("по-хорошему надо исправить этот костыль, начиная с удаления функции removeByAmount")
+                        /*
+                         описание бага: при добавлении товаров по одному посредством клика на "+", в массив залетают значения по одному [100, 100, 100], а в момент снятия чекмарки команда selectedPrices.firstIndex(of: priceToRemove) ищет значение 300 по общей сумме айтемов данного типа и не находит его в массиве
+                         */
+                        let item = self.presenter?.items[indexPath.row]
+                        let priceToRemove = (item?.price ?? 0.00) * (Double(cell.countLabel.text ?? "0") ?? 0)
+                        self.presenter?.removeByAmount(of: priceToRemove)
+                        self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
+                    } */
                 }
             }
         }
 
         /// delete item from cart
         cell.presenter?.deleteButtonAction = { [weak self] in
-            print("to delete:", indexPath.row)
+//            print("item to delete:", indexPath.row)
             self?.presenter.deleteItem(at: indexPath, tableView: tableView)
-            self?.priceLabel.text = String(format: "$ %.2f", self?.presenter?.totalPrice ?? 0.00)
+            self?.updateTotalPrice(with: self?.presenter?.totalPrice ?? 0.00)
         }
         return cell
     }
@@ -165,7 +175,7 @@ private extension CartVC {
 
     func setViews() {
         [tableView, footerView].forEach{view.addSubview($0)}
-        [orderLabel, totalLabel, priceLabel, selectPaymentButton].forEach{footerView.addSubview($0)}
+        [orderLabel, totalLabel, totalPriceLabel, selectPaymentButton].forEach{footerView.addSubview($0)}
     }
 
     func setupUI() {
@@ -190,10 +200,10 @@ private extension CartVC {
             totalLabel.topAnchor.constraint(equalTo: orderLabel.bottomAnchor, constant: 8),
             totalLabel.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 23),
 
-            priceLabel.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
-            priceLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -23),
+            totalPriceLabel.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
+            totalPriceLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -23),
 
-            selectPaymentButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 15),
+            selectPaymentButton.topAnchor.constraint(equalTo: totalPriceLabel.bottomAnchor, constant: 15),
             selectPaymentButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor)
 
         ])

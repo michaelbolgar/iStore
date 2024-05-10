@@ -6,8 +6,11 @@ final class CartTableCell: UITableViewCell, CartCellView {
 
     static let identifier = String(describing: CartTableCell.self)
     var presenter: CartCellPresenter?
+
     private var chosenItem: ChosenItem?
     private let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .ultraLight)
+
+//    var totalsumOfItem: [Double] = []
     var checkmarkAction: ((Bool) -> Void)?
     var totalPriceAction: ((Double) -> Void)?
 
@@ -57,7 +60,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
         return button
     }()
 
-    private let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11),
+    let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11),
                                                textColor: UIColor.gray,
                                                numberOfLines: 1,
                                                alignment: .center)
@@ -96,14 +99,12 @@ final class CartTableCell: UITableViewCell, CartCellView {
         orderImage.image = UIImage(named: info.image)
         bigTitle.text = info.bigTitle
         smallTitle.text = info.smallTitle
-//        let totalPrice = info.price * info.numberOfItemsToBuy
-//        pricelabel.text = String(format: "$ %.2f", totalPrice)
+        let totalPrice = info.price * info.numberOfItemsToBuy
+        pricelabel.text = String(format: "$ %.2f", totalPrice)
         updateCountLabel(count: Int(info.numberOfItemsToBuy))
-
-//        print("сейчас товаров \(info.bigTitle) в корзине:", info.numberOfItemsToBuy)
     }
+
     func updateCountLabel(count: Int) {
-        print("с чем будем апдейтить лейбл:", count)
         countLabel.text = "\(count)"
     }
 
@@ -123,6 +124,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
     // MARK: Selector methods
 
     @objc func deleteButtonTapped() {
+        // TO_ASK: зачем тут проверка guard?
         guard let item = chosenItem else { return }
         presenter?.deleteCell()
     }
@@ -131,7 +133,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
         guard let item = chosenItem else { return }
         chosenItem?.numberOfItemsToBuy += 1
         updateCountLabel(count: Int(item.numberOfItemsToBuy) + 1)
-        let fullPrice = item.numberOfItemsToBuy * item.price
+        let fullPrice = 1 * item.price
         totalPriceAction?(fullPrice)
     }
 
@@ -140,14 +142,16 @@ final class CartTableCell: UITableViewCell, CartCellView {
         /// to improve: by setting "1 >= 1" we can reach the value of 0 to make the cell inactive (but not deleted from the cart yet -> UX question
         if chosenItem?.numberOfItemsToBuy ?? 1 > 1 {
             chosenItem?.numberOfItemsToBuy -= 1
+            // TO_ASK: почему в момент тапа не успевает обновляться updateCountLabel ? то же в plusButtonTapped
             updateCountLabel(count: Int(item.numberOfItemsToBuy) - 1)
-            let fullPrice = item.numberOfItemsToBuy * item.price
-            totalPriceAction?(fullPrice)
+            let fullPrice = 1 * item.price
+            totalPriceAction?(-fullPrice)
         }
     }
 
     @objc func checkmarkTapped() {
-        checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor(red: 0.404, green: 0.769, blue: 0.655, alpha: 1), renderingMode: .alwaysOriginal), for: .selected)
+        checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill", 
+                                         withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.lightGreen, renderingMode: .alwaysOriginal), for: .selected)
         checkmarkButton.isSelected = !checkmarkButton.isSelected
         checkmarkAction?(checkmarkButton.isSelected)
 
@@ -157,7 +161,10 @@ final class CartTableCell: UITableViewCell, CartCellView {
             totalPriceAction?(totalPrice)
         } else {
             guard let item = chosenItem else { return }
-            let totalPrice = item.price
+//            print("сколько айтемов мы собираемся удалить из корзины:", item.numberOfItemsToBuy)
+//            print ("цена товаров:", item.price)
+            let totalPrice = item.price * item.numberOfItemsToBuy
+//            print("удаляем следующую сумму:", totalPrice)
             totalPriceAction?(totalPrice)
         }
     }

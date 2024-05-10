@@ -20,7 +20,6 @@ final class CartPresenter: CartPresenterProtocol {
 
     weak var view: CartVCProtocol?
     var items: [ChosenItem] = []
-    var amountForPriceLabel = [Double]()
     var selectedPrices: [Double] = []
     var totalPrice = 0.0
     var deleteButtonAction: (() -> Void)?
@@ -45,8 +44,8 @@ final class CartPresenter: CartPresenterProtocol {
         return items[index]
     }
     func getData() {
-        items = [ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 99.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 299.99),
+        items = [ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 100.00),
+                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 150.00),
                  ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 399.99),
                  ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 599.99)
         ]
@@ -67,13 +66,21 @@ final class CartPresenter: CartPresenterProtocol {
 
     func addToTotals(amount: Double) {
         selectedPrices.append(amount)
+        print("элементы корзины после добавления:", selectedPrices)
         totalPrice = selectedPrices.reduce(0, +)
     }
 
     func removeFromTotals(at index: Int) {
         selectedPrices.remove(at: index)
+        print("элементы корзины после удаления:", selectedPrices)
         totalPrice = selectedPrices.reduce(0, +)
     }
+
+    // функция для удаления суммы из корзины по значению, а не индексу. =костыль для решения бага с моментом, когда в selectedPrice добавляются айтемы по одному
+//    func removeByAmount(of amount: Double) {
+//        selectedPrices.append(-amount)
+//        totalPrice = selectedPrices.reduce(0, +)
+//    }
 
     #warning("выходит за пределы индекса, если удалить например 1ю ячейку, а потом последнюю. Проверить после подключения сети")
     func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
