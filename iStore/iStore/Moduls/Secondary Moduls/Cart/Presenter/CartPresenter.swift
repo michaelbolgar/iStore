@@ -13,7 +13,7 @@ protocol CartPresenterProtocol: AnyObject {
 
     func addToTotals(amount: Double)
     func removeFromTotals(at index: Int)
-    func deleteItem(at indexPath: IndexPath, tableView: UITableView)
+    func deleteItem(at indexPath: IndexPath, tableView: UITableView, price: Double)
 }
 
 final class CartPresenter: CartPresenterProtocol {
@@ -71,23 +71,29 @@ final class CartPresenter: CartPresenterProtocol {
     }
 
     func removeFromTotals(at index: Int) {
-        selectedPrices.remove(at: index)
-        print("элементы корзины после удаления:", selectedPrices)
-        totalPrice = selectedPrices.reduce(0, +)
+        if !selectedPrices.isEmpty { 
+            selectedPrices.remove(at: index)
+            print("элементы корзины после удаления:", selectedPrices)
+            totalPrice = selectedPrices.reduce(0, +)
+        }
     }
 
     // функция для удаления суммы из корзины по значению, а не индексу. =костыль для решения бага с моментом, когда в selectedPrice добавляются айтемы по одному
-//    func removeByAmount(of amount: Double) {
-//        selectedPrices.append(-amount)
-//        totalPrice = selectedPrices.reduce(0, +)
-//    }
+    func removeByAmount(of amount: Double) {
+        selectedPrices.append(-amount)
+        totalPrice = selectedPrices.reduce(0, +)
+    }
 
     #warning("выходит за пределы индекса, если удалить например 1ю ячейку, а потом последнюю. Проверить после подключения сети")
-    func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
+    func deleteItem(at indexPath: IndexPath, tableView: UITableView, price: Double) {
         let itemToDelete = items[indexPath.row]
-        let indexToDelete = selectedPrices.firstIndex(of: itemToDelete.price) ?? 0
+//        let indexToDelete = selectedPrices.firstIndex(of: itemToDelete.price) ?? 0
+//        let priceToRemove = itemToDelete.price * itemToDelete.numberOfItemsToBuy
+        print ("какую сумму сейчас будем удалять:", price)
+        removeByAmount(of: price)
         items.remove(at: indexPath.row)
-        removeFromTotals(at: indexToDelete)
-        tableView.deleteRows(at: [indexPath], with: .fade)
+//        removeFromTotals(at: indexToDelete)
+        tableView.deleteRows(at: [indexPath], with: .bottom)
+        tableView.reloadData()
     }
 }

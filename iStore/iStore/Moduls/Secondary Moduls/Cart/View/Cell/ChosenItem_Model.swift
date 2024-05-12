@@ -7,3 +7,8 @@ struct ChosenItem {
     let price: Double
     var numberOfItemsToBuy: Double = 1.00
 }
+
+struct allItems {
+    var items: [ChosenItem]
+//    var totalPrice: Double = { items.forEach( складывать суммы и возвращать итог ) }
+}

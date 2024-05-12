@@ -87,6 +87,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
         setupConstraints()
         presenter = CartCellPresenter(view: self)
         setButtonsTargets()
+//        self.backgroundColor = .red
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -94,16 +95,18 @@ final class CartTableCell: UITableViewCell, CartCellView {
 
     //MARK: Methods
 
+    // эту функцию надо переиспользовать для перерисовки лейаута ячейки (на основе новой модели)
     func set(info: ChosenItem) {
         chosenItem = info
         orderImage.image = UIImage(named: info.image)
         bigTitle.text = info.bigTitle
         smallTitle.text = info.smallTitle
-        let totalPrice = info.price * info.numberOfItemsToBuy
+        let totalPrice = info.price * info.numberOfItemsToBuy // это тоже надо перенести в модель
         pricelabel.text = String(format: "$ %.2f", totalPrice)
         updateCountLabel(count: Int(info.numberOfItemsToBuy))
     }
 
+    // надо вынести эту и все остальные подобные функции в VC, тогда нужно ещё сообщать какую ячейку обновлять (по индексу)
     func updateCountLabel(count: Int) {
         countLabel.text = "\(count)"
     }
@@ -129,6 +132,8 @@ final class CartTableCell: UITableViewCell, CartCellView {
         presenter?.deleteCell()
     }
 
+    // навешивать эти функции селектора в презенетере, либо как минимум во VC
+    // потом вызывать функцию update в VC по новой модели ячейки
     @objc func plusButtonTapped() {
         guard let item = chosenItem else { return }
         chosenItem?.numberOfItemsToBuy += 1
@@ -143,6 +148,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
         if chosenItem?.numberOfItemsToBuy ?? 1 > 1 {
             chosenItem?.numberOfItemsToBuy -= 1
             // TO_ASK: почему в момент тапа не успевает обновляться updateCountLabel ? то же в plusButtonTapped
+            // запустить reloadItem по индексу (обновить ячейку)
             updateCountLabel(count: Int(item.numberOfItemsToBuy) - 1)
             let fullPrice = 1 * item.price
             totalPriceAction?(-fullPrice)
