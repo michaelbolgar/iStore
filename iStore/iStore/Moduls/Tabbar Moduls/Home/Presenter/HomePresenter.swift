@@ -9,7 +9,7 @@ protocol HomePresenterProtocol {
     func showSearchVC(searchText: String)
     func showDetailsVC(data: SingleProduct)
     func showFilterVC()
-    func sortingBy()
+    func updateSortingCriteria(option: SortingOption)
 
     func setCategories()
     func setProducts(for id: Int)
@@ -75,8 +75,17 @@ final class HomePresenter: HomePresenterProtocol {
     func showFilterVC() {
         router.showFilterVC()
     }
-    func sortingBy() {
-        print("123455")
+    
+    func updateSortingCriteria(option: SortingOption) {
+        switch option {
+        case .title:
+            productData.sort { $0.title ?? "" < $1.title ?? "" }
+        case .priceLow:
+            productData.sort { $0.price ?? 0 < $1.price ?? 0 }
+        case .priceHigh:
+            productData.sort { $0.price ?? 0 > $1.price ?? 0 }
+        }
+        view?.reloadData(with: 2)
     }
 }
 
