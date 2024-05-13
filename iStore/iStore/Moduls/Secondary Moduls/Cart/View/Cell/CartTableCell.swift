@@ -1,11 +1,11 @@
 import UIKit
 
-final class CartTableCell: UITableViewCell, CartCellViewProtocol {
+final class CartTableCell: UITableViewCell /*CartPresenterProtocol*/ {
 
     // MARK: Properties
 
     static let identifier = String(describing: CartTableCell.self)
-    var presenter: CartCellPresenter?
+//    var presenter: CartCellPresenter?
 
     private var chosenItem: ChosenItem?
     private let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .ultraLight)
@@ -15,11 +15,6 @@ final class CartTableCell: UITableViewCell, CartCellViewProtocol {
     var totalPriceAction: ((Double) -> Void)?
 
     // MARK: UI Elements
-    private let checkmarkButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.veryLightGray, renderingMode: .alwaysOriginal), for: .normal)
-        return button
-    }()
 
     private let orderImage: UIImageView = {
         let view = UIImageView()
@@ -44,7 +39,13 @@ final class CartTableCell: UITableViewCell, CartCellViewProtocol {
                                                numberOfLines: 1,
                                                alignment: .left)
 
-    private lazy var minusButton: UIButton = {
+    let checkmarkButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.veryLightGray, renderingMode: .alwaysOriginal), for: .normal)
+        return button
+    }()
+
+    lazy var minusButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "minus.circle", 
                                 withConfiguration: configuration)?.withTintColor(UIColor.customDarkGray,
@@ -52,7 +53,7 @@ final class CartTableCell: UITableViewCell, CartCellViewProtocol {
         return button
     }()
 
-    private lazy var plusButton: UIButton = {
+    lazy var plusButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "plus.circle",
                                 withConfiguration: configuration)?.withTintColor(UIColor.customDarkGray,
@@ -60,18 +61,18 @@ final class CartTableCell: UITableViewCell, CartCellViewProtocol {
         return button
     }()
 
-    let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11),
-                                               textColor: UIColor.gray,
-                                               numberOfLines: 1,
-                                               alignment: .center)
-
-    private lazy var basketButton: UIButton = {
+    lazy var basketButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "trash.circle", 
                                 withConfiguration: configuration)?.withTintColor(UIColor.customDarkGray,
                                                                                 renderingMode: .alwaysOriginal), for: .normal)
         return button
     }()
+
+    let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11),
+                                               textColor: UIColor.gray,
+                                               numberOfLines: 1,
+                                               alignment: .center)
 
     private let countStack: UIStackView = {
         let stack = UIStackView()
@@ -85,8 +86,7 @@ final class CartTableCell: UITableViewCell, CartCellViewProtocol {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
         setupConstraints()
-        presenter = CartCellPresenter(view: self)
-        setButtonsTargets()
+//        presenter = CartCellPresenter(view: self)
 //        self.backgroundColor = .red
     }
     required init?(coder: NSCoder) {
@@ -96,84 +96,24 @@ final class CartTableCell: UITableViewCell, CartCellViewProtocol {
     //MARK: Methods
 
     // эту функцию надо переиспользовать для перерисовки лейаута ячейки (на основе новой модели)
-    func set(info: ChosenItem) {
-        chosenItem = info
-        orderImage.image = UIImage(named: info.image)
-        bigTitle.text = info.bigTitle
-        smallTitle.text = info.smallTitle
-        let totalPrice = info.price * Double(info.numberOfItemsToBuy) // это тоже надо перенести в модель
-        pricelabel.text = String(format: "$ %.2f", totalPrice)
-        updateCountLabel()
+    func set(with item: ChosenItem) {
+        chosenItem = item
+        orderImage.image = UIImage(named: item.image)
+        bigTitle.text = item.bigTitle
+        smallTitle.text = item.smallTitle
+//        let totalPrice = item.price * Double(item.numberOfItemsToBuy) // это тоже надо перенести в модель
+//        pricelabel.text = String(format: "$ %.2f", totalPrice)
+//        updateCountLabel()
     }
 
     // надо вынести эту и все остальные подобные функции в VC, тогда нужно ещё сообщать какую ячейку обновлять (по индексу)
-    func updateCountLabel() {
-        countLabel.text = String(chosenItem?.numberOfItemsToBuy ?? 1)
-    }
+//    func updateCountLabel() {
+//        countLabel.text = String(chosenItem?.numberOfItemsToBuy ?? 1)
+//    }
 
     private func configure() {
         [checkmarkButton, orderImage, bigTitle, smallTitle, pricelabel, countStack].forEach {contentView.addSubview($0)}
         [minusButton, countLabel, plusButton, basketButton].forEach{countStack.addArrangedSubview($0)}
-    }
-
-    private func setButtonsTargets() {
-        plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
-        minusButton.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
-        checkmarkButton.addTarget(self, action: #selector(checkmarkTapped), for: .touchUpInside)
-        basketButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
-
-    }
-
-    // MARK: Selector methods
-
-    @objc func deleteButtonTapped() {
-        // TO_ASK: зачем тут проверка guard?
-        guard let item = chosenItem else { return }
-        presenter?.deleteCell()
-    }
-
-    // навешивать эти функции селектора в презенетере, либо как минимум во VC
-    // потом вызывать функцию update в VC по новой модели ячейки
-    @objc func plusButtonTapped() {
-        guard let item = chosenItem else { return }
-        chosenItem?.numberOfItemsToBuy += 1
-        updateCountLabel()
-        let fullPrice = 1 * item.price
-        totalPriceAction?(fullPrice)
-    }
-
-    @objc func minusButtonTapped() {
-        guard let item = chosenItem else { return }
-        /// to improve: by setting "1 >= 1" we can reach the value of 0 to make the cell inactive (but not deleted from the cart yet -> UX question
-        if chosenItem?.numberOfItemsToBuy ?? 1 > 1 {
-            chosenItem?.numberOfItemsToBuy -= 1
-            // TO_ASK: почему в момент тапа не успевает обновляться updateCountLabel ? то же в plusButtonTapped
-            // запустить reloadItem по индексу (обновить ячейку)
-            updateCountLabel()
-//            let fullPrice = 1 * item.price
-//            totalPriceAction?(-fullPrice)
-        }
-    }
-
-    @objc func checkmarkTapped() {
-        checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill", 
-                                         withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.lightGreen, renderingMode: .alwaysOriginal), for: .selected)
-        checkmarkButton.isSelected = !checkmarkButton.isSelected
-        checkmarkAction?(checkmarkButton.isSelected)
-
-        // порефакторить
-        if checkmarkButton.isSelected {
-            guard let item = chosenItem else { return }
-            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
-            totalPriceAction?(totalPrice)
-        } else {
-            guard let item = chosenItem else { return }
-//            print("сколько айтемов мы собираемся удалить из корзины:", item.numberOfItemsToBuy)
-//            print ("цена товаров:", item.price)
-            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
-//            print("удаляем следующую сумму:", totalPrice)
-            totalPriceAction?(totalPrice)
-        }
     }
 }
 

@@ -2,18 +2,29 @@ import Foundation
 import UIKit
 
 protocol CartPresenterProtocol: AnyObject {
+
+    /// properties
+    var items: [ChosenItem] { get }
+    var selectedItems: SelectedItems { get set }
     var itemsCount: Int { get }
-    var totalPrice: Double { get set }
-//    var selectedPrices: [Double] { get set }
 
-    func getData()
+    //    var totalPrice: Double { get set }
+    //    var selectedPrices: [Double] { get set }
+
+    /// set data
     func getItem(at index: Int) -> ChosenItem
+    func setData()
 
-    func showDetailsVC(data: SingleProduct)
-
+    /// update cart information
     func addToTotals(at index: Int)
     func removeFromTotals(at index: Int)
-    func deleteItem(at indexPath: IndexPath, tableView: UITableView, price: Double)
+    func deleteItem(at indexPath: IndexPath, tableView: UITableView)
+    func tappedPlusButton(at index: IndexPath)
+    func tappedMinusButton(at index: IndexPath)
+    func tappedCheckmarkButton(at index: IndexPath)
+
+    /// navigation
+    func showDetailsVC(data: SingleProduct)
 }
 
 final class CartPresenter: CartPresenterProtocol {
@@ -50,7 +61,7 @@ final class CartPresenter: CartPresenterProtocol {
     func getItem(at index: Int) -> ChosenItem {
         return items[index]
     }
-    func getData() {
+    func setData() {
         items = [ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 100.00),
                  ChosenItem(image: "imgProduct", bigTitle: "Air pods pro by Apple", smallTitle: "Variant: Grey", price: 150.00),
                  ChosenItem(image: "imgProduct", bigTitle: "Air pods fail by honor", smallTitle: "Variant: Grey", price: 399.99),
@@ -102,7 +113,7 @@ final class CartPresenter: CartPresenterProtocol {
         print ("удалить из выбранных")
     }
 
-    func deleteItem(at indexPath: IndexPath, tableView: UITableView, price: Double) {
+    func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
 //        let itemToDelete = items[indexPath.row]
 //        let indexToDelete = selectedPrices.firstIndex(of: itemToDelete.price) ?? 0
 //        let priceToRemove = itemToDelete.price * itemToDelete.numberOfItemsToBuy
@@ -118,4 +129,17 @@ final class CartPresenter: CartPresenterProtocol {
         tableView.deleteRows(at: [indexPath], with: .bottom)
         tableView.reloadData()
     }
+
+    func tappedPlusButton(at index: IndexPath) {
+        print ("plus tapped")
+    }
+
+    func tappedMinusButton(at index: IndexPath) {
+        print ("minus tapped")
+    }
+
+    func tappedCheckmarkButton(at index: IndexPath) {
+        print ("checkmark tapped")
+    }
+
 }

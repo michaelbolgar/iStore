@@ -6,6 +6,12 @@ struct ChosenItem {
     let smallTitle: String
     let price: Double
     var numberOfItemsToBuy: Int = 1
+
+//    var totalPrice: Double {
+//        get {
+//            return price * Double(numberOfItemsToBuy)
+//        }
+//    }
 }
 
 struct SelectedItems {
