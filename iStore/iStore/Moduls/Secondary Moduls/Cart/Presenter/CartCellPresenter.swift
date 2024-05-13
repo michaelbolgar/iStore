@@ -1,18 +1,18 @@
 import UIKit
 
-protocol CartCellView: AnyObject {
-    func updateCountLabel(count: Int)
+protocol CartCellViewProtocol: AnyObject {
+    func updateCountLabel()
     func set(info: ChosenItem)
 }
 
 class CartCellPresenter {
-    private weak var view: CartCellView?
+    private weak var view: CartCellViewProtocol?
     var checkmarkAction: (() -> Void)?
     var updatePriceAction: ((String) -> Void)?
     var deleteButtonAction: (() -> Void)?
 
 
-    init(view: CartCellView) {
+    init(view: CartCellViewProtocol) {
         self.view = view
     }
 

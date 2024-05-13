@@ -1,7 +1,7 @@
 import UIKit
 
 protocol CartVCProtocol: AnyObject {
-    func reloadTableView(at indexPath: IndexPath)
+    func reloadTableView()
 }
 
 /*
@@ -92,7 +92,7 @@ final class CartVC: UIViewController, CartVCProtocol {
 //        tableView.register(CartHeaderView.self, forHeaderFooterViewReuseIdentifier: CartHeaderView.identifier)
 //    }
 
-    func reloadTableView(at indexPath: IndexPath) {
+    func reloadTableView() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -127,31 +127,38 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
             guard let self = self else { return }
             if isSelected {
                 cell.totalPriceAction = { price in
-                    self.presenter?.addToTotals(amount: price)
+                    self.presenter?.addToTotals(at: indexPath.row)
+                    // обновить данные таблицы, перерисовать, и не вызывать функцию updateTotalPrice
                     self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
                 }
             } else {
                 cell.totalPriceAction = { [weak self] priceToRemove in
                     guard let self = self else { return }
+                    self.presenter?.removeFromTotals(at: indexPath.row)
+                    // обновить данные таблицы, перерисовать, и не вызывать функцию updateTotalPrice
                     self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
-                    if let index = self.presenter?.selectedPrices.firstIndex(of: priceToRemove) {
-                        self.presenter?.removeFromTotals(at: index)
-                        self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
-                    } else {
+                }
+            }
+        }
+//                    if let index = self.presenter?.selectedItems.items.price.firstIndex(of: priceToRemove) {
+//                        self.presenter?.removeFromTotals(at: index)
+//                        self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
+//                    } else {
                         #warning("по-хорошему надо исправить этот костыль, начиная с удаления функции removeByAmount")
                         /*
                          описание бага: при добавлении товаров по одному посредством клика на "+", в массив залетают значения по одному [100, 100, 100], а в момент снятия чекмарки команда selectedPrices.firstIndex(of: priceToRemove) ищет значение 300 по общей сумме айтемов данного типа и не находит его в массиве
 
                          вариант решения: создать промежуточный массив для отслеживания изменения состояния ячейки (кол-ва товаров одной категории) и вставлять его в функции удаления/добавления?
                          */
-                        let item = self.presenter?.items[indexPath.row]
-                        let priceToRemove = (item?.price ?? 0.00) * (Double(cell.countLabel.text ?? "0") ?? 0)
-                        self.presenter?.removeByAmount(of: priceToRemove)
-                        self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
-                    }
-                }
-            }
-        }
+
+//                        let item = self.presenter?.items[indexPath.row]
+//                        let priceToRemove = (item?.price ?? 0.00) * (Double(cell.countLabel.text ?? "0") ?? 0)
+//                        self.presenter?.removeFromTotalsByAmount(of: priceToRemove)
+//                        self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
+//                    }
+//                }
+//            }
+//        }
 
         /// delete item from cart
         cell.presenter?.deleteButtonAction = { [weak self] in

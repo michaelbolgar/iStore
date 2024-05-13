@@ -4,14 +4,14 @@ import UIKit
 protocol CartPresenterProtocol: AnyObject {
     var itemsCount: Int { get }
     var totalPrice: Double { get set }
-    var selectedPrices: [Double] { get set }
+//    var selectedPrices: [Double] { get set }
 
     func getData()
     func getItem(at index: Int) -> ChosenItem
 
     func showDetailsVC(data: SingleProduct)
 
-    func addToTotals(amount: Double)
+    func addToTotals(at index: Int)
     func removeFromTotals(at index: Int)
     func deleteItem(at indexPath: IndexPath, tableView: UITableView, price: Double)
 }
@@ -19,18 +19,25 @@ protocol CartPresenterProtocol: AnyObject {
 final class CartPresenter: CartPresenterProtocol {
 
     weak var view: CartVCProtocol?
+
+    /// all items in the cart
     var items: [ChosenItem] = []
-    var selectedPrices: [Double] = []
-    var totalPrice = 0.0
-    var deleteButtonAction: (() -> Void)?
+
+    /// with green checkmark selected items
+    var selectedItems = SelectedItems(items: [])
+
+//    var selectedPrices: [Double] = []
+    lazy var totalPrice = selectedItems.totalPrice
 
     var itemsCount: Int {
         return items.count
     }
 
+    var deleteButtonAction: (() -> Void)?
+
     /// mock data
-    lazy var mockCategory = Category(id: 1, name: "technik", image: "")
-    lazy var mockItem = SingleProduct(id: 1, title: "iPhone SE", price: 1000, description: "The best iPhone ever", images: [""], category: mockCategory)
+//    lazy var mockCategory = Category(id: 1, name: "technik", image: "")
+//    lazy var mockItem = SingleProduct(id: 1, title: "iPhone SE", price: 1000, description: "The best iPhone ever", images: [""], category: mockCategory)
 
     // MARK: Init
     init(viewController: CartVC? = nil /*router: HomeRouterProtocol*/) {
@@ -45,9 +52,9 @@ final class CartPresenter: CartPresenterProtocol {
     }
     func getData() {
         items = [ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 100.00),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 150.00),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 399.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 599.99)
+                 ChosenItem(image: "imgProduct", bigTitle: "Air pods pro by Apple", smallTitle: "Variant: Grey", price: 150.00),
+                 ChosenItem(image: "imgProduct", bigTitle: "Air pods fail by honor", smallTitle: "Variant: Grey", price: 399.99),
+                 ChosenItem(image: "imgProduct", bigTitle: "Air pods middle by Apple", smallTitle: "Variant: Grey", price: 599.99)
         ]
     }
 
@@ -64,35 +71,50 @@ final class CartPresenter: CartPresenterProtocol {
 
     // MARK: Methods for editing of prices
 
-    func addToTotals(amount: Double) {
-        selectedPrices.append(amount)
-        print("элементы корзины после добавления:", selectedPrices)
-        totalPrice = selectedPrices.reduce(0, +)
+    func updateTotals() {
+        totalPrice = selectedItems.totalPrice
     }
 
+    func addToTotals(at index: Int) {
+        let item = items[index]
+        selectedItems.items.append(item)
+        print (selectedItems.items)
+        updateTotals()
+    }
+
+    // пока что завязано только на снятии галочки
     func removeFromTotals(at index: Int) {
-        if !selectedPrices.isEmpty { 
-            selectedPrices.remove(at: index)
-            print("элементы корзины после удаления:", selectedPrices)
-            totalPrice = selectedPrices.reduce(0, +)
+        if !selectedItems.items.isEmpty {
+            let item = items[index]
+            selectedItems.items.removeAll { $0.bigTitle == item.bigTitle }
+            print (selectedItems.items)
+            updateTotals()
+
+            // нужно развести логику выделения и удаления из корзины полностью
         }
     }
 
-    // функция для удаления суммы из корзины по значению, а не индексу. =костыль для решения бага с моментом, когда в selectedPrice добавляются айтемы по одному
-    func removeByAmount(of amount: Double) {
-        selectedPrices.append(-amount)
-        totalPrice = selectedPrices.reduce(0, +)
+    func removeFromTotalsByAmount(of amount: Double) {
+//        selectedPrices.append(-amount)
+//        totalPrice = selectedPrices.reduce(0, +)
+//        totalPrice -= amount
+
+        print ("удалить из выбранных")
     }
 
-    #warning("выходит за пределы индекса, если удалить например 1ю ячейку, а потом последнюю. Проверить после подключения сети")
     func deleteItem(at indexPath: IndexPath, tableView: UITableView, price: Double) {
-        let itemToDelete = items[indexPath.row]
+//        let itemToDelete = items[indexPath.row]
 //        let indexToDelete = selectedPrices.firstIndex(of: itemToDelete.price) ?? 0
 //        let priceToRemove = itemToDelete.price * itemToDelete.numberOfItemsToBuy
-        print ("какую сумму сейчас будем удалять:", price)
-        removeByAmount(of: price)
+//        print ("какую сумму сейчас будем удалять:", price)
+
+        let itemToDelete = getItem(at: indexPath.row)
+        let priceToRemove = itemToDelete.price * Double(itemToDelete.numberOfItemsToBuy)
+        removeFromTotalsByAmount(of: priceToRemove)
         items.remove(at: indexPath.row)
-//        removeFromTotals(at: indexToDelete)
+
+        // логика удаления из выбранного
+
         tableView.deleteRows(at: [indexPath], with: .bottom)
         tableView.reloadData()
     }

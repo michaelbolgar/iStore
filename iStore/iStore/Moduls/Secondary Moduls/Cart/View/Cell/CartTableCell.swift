@@ -1,6 +1,6 @@
 import UIKit
 
-final class CartTableCell: UITableViewCell, CartCellView {
+final class CartTableCell: UITableViewCell, CartCellViewProtocol {
 
     // MARK: Properties
 
@@ -101,14 +101,14 @@ final class CartTableCell: UITableViewCell, CartCellView {
         orderImage.image = UIImage(named: info.image)
         bigTitle.text = info.bigTitle
         smallTitle.text = info.smallTitle
-        let totalPrice = info.price * info.numberOfItemsToBuy // это тоже надо перенести в модель
+        let totalPrice = info.price * Double(info.numberOfItemsToBuy) // это тоже надо перенести в модель
         pricelabel.text = String(format: "$ %.2f", totalPrice)
-        updateCountLabel(count: Int(info.numberOfItemsToBuy))
+        updateCountLabel()
     }
 
     // надо вынести эту и все остальные подобные функции в VC, тогда нужно ещё сообщать какую ячейку обновлять (по индексу)
-    func updateCountLabel(count: Int) {
-        countLabel.text = "\(count)"
+    func updateCountLabel() {
+        countLabel.text = String(chosenItem?.numberOfItemsToBuy ?? 1)
     }
 
     private func configure() {
@@ -137,7 +137,7 @@ final class CartTableCell: UITableViewCell, CartCellView {
     @objc func plusButtonTapped() {
         guard let item = chosenItem else { return }
         chosenItem?.numberOfItemsToBuy += 1
-        updateCountLabel(count: Int(item.numberOfItemsToBuy) + 1)
+        updateCountLabel()
         let fullPrice = 1 * item.price
         totalPriceAction?(fullPrice)
     }
@@ -149,9 +149,9 @@ final class CartTableCell: UITableViewCell, CartCellView {
             chosenItem?.numberOfItemsToBuy -= 1
             // TO_ASK: почему в момент тапа не успевает обновляться updateCountLabel ? то же в plusButtonTapped
             // запустить reloadItem по индексу (обновить ячейку)
-            updateCountLabel(count: Int(item.numberOfItemsToBuy) - 1)
-            let fullPrice = 1 * item.price
-            totalPriceAction?(-fullPrice)
+            updateCountLabel()
+//            let fullPrice = 1 * item.price
+//            totalPriceAction?(-fullPrice)
         }
     }
 
@@ -161,15 +161,16 @@ final class CartTableCell: UITableViewCell, CartCellView {
         checkmarkButton.isSelected = !checkmarkButton.isSelected
         checkmarkAction?(checkmarkButton.isSelected)
 
+        // порефакторить
         if checkmarkButton.isSelected {
             guard let item = chosenItem else { return }
-            let totalPrice = item.price * item.numberOfItemsToBuy
+            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
             totalPriceAction?(totalPrice)
         } else {
             guard let item = chosenItem else { return }
 //            print("сколько айтемов мы собираемся удалить из корзины:", item.numberOfItemsToBuy)
 //            print ("цена товаров:", item.price)
-            let totalPrice = item.price * item.numberOfItemsToBuy
+            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
 //            print("удаляем следующую сумму:", totalPrice)
             totalPriceAction?(totalPrice)
         }

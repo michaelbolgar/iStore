@@ -5,10 +5,16 @@ struct ChosenItem {
     let bigTitle: String
     let smallTitle: String
     let price: Double
-    var numberOfItemsToBuy: Double = 1.00
+    var numberOfItemsToBuy: Int = 1
 }
 
-struct allItems {
+struct SelectedItems {
     var items: [ChosenItem]
-//    var totalPrice: Double = { items.forEach( складывать суммы и возвращать итог ) }
+
+    var totalPrice: Double {
+        get {
+            return items.reduce (0.0) { $0 + $1.price * Double($1.numberOfItemsToBuy) }
+        }
+//        set (newTotal) { }
+    }
 }
