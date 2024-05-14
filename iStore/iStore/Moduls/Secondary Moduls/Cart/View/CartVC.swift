@@ -134,14 +134,20 @@ final class CartVC: UIViewController {
               let indexPath = tableView.indexPath(for: cell) else {
             return
         }
-//        presenter?.tappedCheckmarkButton(at: isSelected:, for: cell)
+
+        if let cell = self.tableView.cellForRow(at: indexPath) as? CartTableCell {
+            if cell.checkmarkButton.isSelected {
+                presenter?.addToTotals(at: indexPath.row)
+            } else {
+                presenter?.removeFromTotals(at: indexPath.row)
+            }
+        }
     }
 }
 
-    // MARK: Work with tableview
+    // MARK: Work with prices
 
 extension CartVC: CartVCProtocol {
-
 
     func reloadTableView() {
         DispatchQueue.main.async {
@@ -150,6 +156,7 @@ extension CartVC: CartVCProtocol {
     }
 
     func updateTotalPrice(with amount: Double) {
+        print(amount)
         totalPriceLabel.text = String(format: "$ %.2f", amount)
     }
 
@@ -177,6 +184,17 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
         let product = presenter.getItem(at: indexPath.row)
         cell.set(with: product)
         setButtonsTargets(of: cell)
+
+        //         порефакторить
+        //        if checkmarkButton.isSelected {
+        //            guard let item = chosenItem else { return }
+        //            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
+        //            totalPriceAction?(totalPrice)
+        //        } else {
+        //            guard let item = chosenItem else { return }
+        //            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
+        //            totalPriceAction?(totalPrice)
+        //        }
 
         /// select item in cart
         cell.checkmarkAction = { [weak self] isSelected in

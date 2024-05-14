@@ -18,10 +18,11 @@ protocol CartPresenterProtocol: AnyObject {
     /// update cart information
     func addToTotals(at index: Int)
     func removeFromTotals(at index: Int)
+    func tappedCheckmarkButton(at index: Int)
+
     func deleteItem(at indexPath: IndexPath, tableView: UITableView)
     func tappedPlusButton(at index: IndexPath)
     func tappedMinusButton(at index: IndexPath)
-    func tappedCheckmarkButton(for item: ChosenItem, isSelected: Bool)
 
     /// navigation
     func showDetailsVC(data: SingleProduct)
@@ -46,10 +47,6 @@ final class CartPresenter: CartPresenterProtocol {
 
     var deleteButtonAction: (() -> Void)?
 
-    /// mock data
-//    lazy var mockCategory = Category(id: 1, name: "technik", image: "")
-//    lazy var mockItem = SingleProduct(id: 1, title: "iPhone SE", price: 1000, description: "The best iPhone ever", images: [""], category: mockCategory)
-
     // MARK: Init
     init(viewController: CartVC? = nil /*router: HomeRouterProtocol*/) {
         self.view = viewController
@@ -61,6 +58,8 @@ final class CartPresenter: CartPresenterProtocol {
     func getItem(at index: Int) -> ChosenItem {
         return items[index]
     }
+
+    /// mock data
     func setData() {
         items = [ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 100.00),
                  ChosenItem(image: "imgProduct", bigTitle: "Air pods pro by Apple", smallTitle: "Variant: Grey", price: 150.00),
@@ -80,10 +79,12 @@ final class CartPresenter: CartPresenterProtocol {
 //        self.navigationController.pushViewController(detailsVC, animated: true)
     }
 
-    // MARK: Methods for editing of prices
+    // MARK: Methods - Managing of cart
 
     func updateTotals() {
         totalPrice = selectedItems.totalPrice
+        print(totalPrice)
+        view?.updateTotalPrice(with: totalPrice)
     }
 
     func updateCell(at index: IndexPath) {
@@ -119,12 +120,7 @@ final class CartPresenter: CartPresenterProtocol {
     }
 
     func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
-//        let itemToDelete = items[indexPath.row]
-//        let indexToDelete = selectedPrices.firstIndex(of: itemToDelete.price) ?? 0
-//        let priceToRemove = itemToDelete.price * itemToDelete.numberOfItemsToBuy
-//        print ("какую сумму сейчас будем удалять:", price)
-
-        let itemToDelete = getItem(at: indexPath.row)
+        let itemToDelete = items[indexPath.row]
         let priceToRemove = itemToDelete.price * Double(itemToDelete.numberOfItemsToBuy)
         removeFromTotalsByAmount(of: priceToRemove)
         items.remove(at: indexPath.row)
@@ -140,10 +136,8 @@ final class CartPresenter: CartPresenterProtocol {
 //        guard let item = chosenItem else { return }
         items[index.row].numberOfItemsToBuy += 1
         updateCell(at: index)
+//        addToTotals(at: index.row) //тут не надо добавлять; надо добавлять только когда выделяем чекмаркой
         updateTotals()
-//        updateCountLabel()
-//        let fullPrice = 1 * item.price
-//        totalPriceAction?(fullPrice)
     }
 
     func tappedMinusButton(at index: IndexPath) {
@@ -155,17 +149,12 @@ final class CartPresenter: CartPresenterProtocol {
         }
     }
 
-    func tappedCheckmarkButton(for item: ChosenItem, isSelected: Bool) {
-        print("презентер тоже работает")
-//         порефакторить
-//        if checkmarkButton.isSelected {
-//            guard let item = chosenItem else { return }
-//            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
-//            totalPriceAction?(totalPrice)
-//        } else {
-//            guard let item = chosenItem else { return }
-//            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
-//            totalPriceAction?(totalPrice)
-//        }
+    func tappedCheckmarkButton(at index: Int) {
+
+//        print("презентер тоже работает")
+
+//        let item = items[index]
+//        selectedItems.items.append(item)
+//        updateTotals()
     }
 }
