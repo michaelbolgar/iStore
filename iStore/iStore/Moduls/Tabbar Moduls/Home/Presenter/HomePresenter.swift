@@ -73,9 +73,26 @@ final class HomePresenter: HomePresenterProtocol {
     }
 
     func showFilterVC() {
-        router.showFilterVC()
+        router.showFilterVC(delegate: self)
     }
     
+//    func updateSortingCriteria(option: SortingOption) {
+//        switch option {
+//        case .title:
+//            productData.sort { $0.title ?? "" < $1.title ?? "" }
+//        case .priceLow:
+//            productData.sort { $0.price ?? 0 < $1.price ?? 0 }
+//        case .priceHigh:
+//            productData.sort { $0.price ?? 0 > $1.price ?? 0 }
+//        }
+//        view?.reloadData(with: 2)
+//    }
+}
+
+extension HomePresenter: FilterPresenterDelegate {
+    func transferData(_ data: String) {
+        print(data)
+    }
     func updateSortingCriteria(option: SortingOption) {
         switch option {
         case .title:
@@ -86,11 +103,5 @@ final class HomePresenter: HomePresenterProtocol {
             productData.sort { $0.price ?? 0 > $1.price ?? 0 }
         }
         view?.reloadData(with: 2)
-    }
-}
-
-extension HomePresenter: SingleItemCellDelegate {
-    func buyButtonPressed() {
-        print("Buy pressed")
     }
 }

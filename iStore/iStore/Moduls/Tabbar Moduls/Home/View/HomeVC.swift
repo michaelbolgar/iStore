@@ -44,10 +44,10 @@ final class HomeVC: UIViewController, HomeVCProtocol {
     //MARK: - Private Methods
     private func setupViews() {
         collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)
-        collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: "CategoryViewCell")
+        collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: CategoryViewCell.identifier)
         collectionView.register(SingleItemCell.self, forCellWithReuseIdentifier: SingleItemCell.identifier)
-        collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderNavBarMenuView")
-        collectionView.register(ProductsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ProductsHeaderView")
+        collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderNavBarMenuView.identifier)
+        collectionView.register(ProductsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProductsHeaderView.identifier)
         collectionView.collectionViewLayout = createLayout()
     }
     
@@ -60,13 +60,11 @@ final class HomeVC: UIViewController, HomeVCProtocol {
 //MARK: - UICollectionViewDataSource
 
 extension HomeVC: UICollectionViewDataSource {
-    
-    /// fetching collections count
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         sections.count
     }
-    
-    /// fetching cells count in each collection
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         switch sections[section] {
@@ -129,9 +127,13 @@ extension HomeVC: UICollectionViewDataSource {
             case "categories":
                 fallthrough
             case "products":
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                             withReuseIdentifier: "ProductsHeaderView",
-                                                                             for: indexPath) as! ProductsHeaderView
+                let header = collectionView
+                    .dequeueReusableSupplementaryView(
+                        ofKind: kind,
+                        withReuseIdentifier: "ProductsHeaderView",
+                        for: indexPath
+                    ) as! ProductsHeaderView
+                
                 header.configureHeader(labelName: "Products")
                 header.delegate = self
                 return header
@@ -271,6 +273,7 @@ private func supplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementar
           alignment: .top)
 }
 
+// MARK: - Extensions
 
 extension HomeVC {
     func reloadData(with section: Int) {

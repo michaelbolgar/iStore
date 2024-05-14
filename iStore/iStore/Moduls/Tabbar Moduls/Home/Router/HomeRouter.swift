@@ -7,7 +7,7 @@ protocol HomeRouterProtocol: BaseRouter {
     func showSearchVC(searchText: String)
     func showCartVC()
     func showDetailsVC(data: SingleProduct)
-    func showFilterVC()
+    func showFilterVC(delegate: FilterPresenterDelegate)
 //    func showPaymentVC()
 }
 
@@ -51,10 +51,8 @@ final class HomeRouter: HomeRouterProtocol {
         }
     }
     
-    func showFilterVC() {
-        if let filterVC = moduleBuilder?.createFilterVC() {
-            filterVC.modalPresentationStyle = .formSheet
-            filterVC.modalTransitionStyle = .coverVertical
+    func showFilterVC(delegate: FilterPresenterDelegate) {
+        if let filterVC = moduleBuilder?.createFilterVC(delegate: delegate) {
             navigationController.present(filterVC, animated: true)
         }
     }

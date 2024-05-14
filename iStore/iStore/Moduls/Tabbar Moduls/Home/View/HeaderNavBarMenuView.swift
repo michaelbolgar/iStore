@@ -15,6 +15,7 @@ final class HeaderNavBarMenuView: UICollectionReusableView, UITableViewDelegate,
 
     // MARK: Properties
     
+    static var identifier: String {"\(Self.self)"}
     weak var delegate: HeaderNavBarMenuViewDelegate?
     private var dropdownTableView: UITableView!
     private var dropdownOptions = ["Europe - €", "USA - $", "Rus - ₽"]

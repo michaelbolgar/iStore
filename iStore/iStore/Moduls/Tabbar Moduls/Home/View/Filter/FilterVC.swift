@@ -28,13 +28,8 @@ struct FilterOption {
     let title: String
     let handler: (() -> Void)
 }
-//
-//enum SortingModel {
-//    case name, priceLow, priceHigh
-//}
 
 protocol FilterVCDelegate: AnyObject {
-    //    func didSelectSortOption(sortBy: SortingModel)
     func didUpdateSortOption(option: SortingOption)
     func didRequestDismissal()
 }
@@ -134,7 +129,12 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch FilterSection(rawValue: indexPath.section)! {
+        
+        guard let cellStyle = FilterSection(rawValue: indexPath.section) else {
+            return UITableViewCell()
+        }
+        
+        switch cellStyle {
             
         case .sortBy:
             let model = models[indexPath.row]

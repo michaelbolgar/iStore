@@ -12,7 +12,9 @@ protocol ProductsHeaderViewDelegate: AnyObject {
 
 final class ProductsHeaderView: UICollectionReusableView, UITableViewDelegate {
 
+    static var identifier: String {"\(Self.self)"}
     weak var delegate: ProductsHeaderViewDelegate?
+    
     //MARK: UI Elements
 
     private let titleLabel = UILabel.makeLabel(text: "Products",

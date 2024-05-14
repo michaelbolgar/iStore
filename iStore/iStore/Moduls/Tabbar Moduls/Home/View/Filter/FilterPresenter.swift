@@ -13,6 +13,11 @@ protocol FilterPresenterProtocol {
     func sortByButtonTappet(option: SortingOption)
 }
 
+protocol FilterPresenterDelegate: AnyObject {
+    func transferData(_ data: String)
+    func updateSortingCriteria(option: SortingOption)
+}
+
 enum SortingOption {
     case title, priceLow, priceHigh
 }
@@ -20,7 +25,7 @@ enum SortingOption {
 final class FilterPresenter: FilterPresenterProtocol {
 
     weak var view: FilterVCDelegate?
-    weak var delegate: HomePresenter?
+    weak var delegate: FilterPresenterDelegate?
     
     private var selectedSortOption: SortingOption = .title
     
@@ -28,21 +33,19 @@ final class FilterPresenter: FilterPresenterProtocol {
         self.view = view
     }
     
-    
     func cancelButtonTapped() {
-        print("Presenter cancel button tappet")
         view?.didRequestDismissal()
+        print("Presenter cancel button tappet")
     }
     
     func saveButtonTapped() {
-        print("Presenter save button tappet")
         delegate?.updateSortingCriteria(option: selectedSortOption)
         view?.didRequestDismissal()
+        print("Presenter save button tappet")
     }
     
     func sortByButtonTappet(option: SortingOption) {
-        print("Presenter sort by button tapped")
         selectedSortOption = option
-        delegate?.updateSortingCriteria(option: option)
+        print("Presenter sort by button tapped")
     }
 }

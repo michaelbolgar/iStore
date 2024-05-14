@@ -36,7 +36,6 @@ class SortByCell: UITableViewCell {
     public func configure(with model: FilterOption, isSelected: Bool) {
         radioButton.isSelected = isSelected
         titleLabel.text = model.title
-//        radioButton = model.button
         titleLabel.textColor = isSelected ? .systemBlue : .black
     }
     
