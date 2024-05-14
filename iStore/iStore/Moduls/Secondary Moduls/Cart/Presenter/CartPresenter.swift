@@ -21,7 +21,7 @@ protocol CartPresenterProtocol: AnyObject {
     func deleteItem(at indexPath: IndexPath, tableView: UITableView)
     func tappedPlusButton(at index: IndexPath)
     func tappedMinusButton(at index: IndexPath)
-    func tappedCheckmarkButton(at index: IndexPath)
+    func tappedCheckmarkButton(for item: ChosenItem, isSelected: Bool)
 
     /// navigation
     func showDetailsVC(data: SingleProduct)
@@ -86,6 +86,11 @@ final class CartPresenter: CartPresenterProtocol {
         totalPrice = selectedItems.totalPrice
     }
 
+    func updateCell(at index: IndexPath) {
+        let itemInfo = getItem(at: index.row)
+        view?.updateCellInfo(at: index, with: itemInfo)
+    }
+
     func addToTotals(at index: Int) {
         let item = items[index]
         selectedItems.items.append(item)
@@ -131,15 +136,36 @@ final class CartPresenter: CartPresenterProtocol {
     }
 
     func tappedPlusButton(at index: IndexPath) {
-        print ("plus tapped")
+        // тут ведь уже не надо проверять guard'ом, раз это сделано в VC перед вызовом этой функции?
+//        guard let item = chosenItem else { return }
+        items[index.row].numberOfItemsToBuy += 1
+        updateCell(at: index)
+        updateTotals()
+//        updateCountLabel()
+//        let fullPrice = 1 * item.price
+//        totalPriceAction?(fullPrice)
     }
 
     func tappedMinusButton(at index: IndexPath) {
-        print ("minus tapped")
+        /// to improve: by setting "1 >= 1" we can reach the value of 0 to make the cell inactive (but not deleted from the cart yet -> UX question
+        if items[index.row].numberOfItemsToBuy > 1 {
+            items[index.row].numberOfItemsToBuy -= 1
+            updateCell(at: index)
+            updateTotals()
+        }
     }
 
-    func tappedCheckmarkButton(at index: IndexPath) {
-        print ("checkmark tapped")
+    func tappedCheckmarkButton(for item: ChosenItem, isSelected: Bool) {
+        print("презентер тоже работает")
+//         порефакторить
+//        if checkmarkButton.isSelected {
+//            guard let item = chosenItem else { return }
+//            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
+//            totalPriceAction?(totalPrice)
+//        } else {
+//            guard let item = chosenItem else { return }
+//            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
+//            totalPriceAction?(totalPrice)
+//        }
     }
-
 }

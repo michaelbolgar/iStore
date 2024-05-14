@@ -6,12 +6,13 @@ struct ChosenItem {
     let smallTitle: String
     let price: Double
     var numberOfItemsToBuy: Int = 1
+    var isSelected: Bool = false
 
-//    var totalPrice: Double {
-//        get {
-//            return price * Double(numberOfItemsToBuy)
-//        }
-//    }
+    var totalPriceForItem: Double {
+        get {
+            return price * Double(numberOfItemsToBuy)
+        }
+    }
 }
 
 struct SelectedItems {
@@ -19,7 +20,7 @@ struct SelectedItems {
 
     var totalPrice: Double {
         get {
-            return items.reduce (0.0) { $0 + $1.price * Double($1.numberOfItemsToBuy) }
+            return items.reduce (0.0) { $0 + $1.totalPriceForItem }
         }
 //        set (newTotal) { }
     }

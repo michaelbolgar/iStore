@@ -1,13 +1,18 @@
 import UIKit
 
-final class CartTableCell: UITableViewCell /*CartPresenterProtocol*/ {
+protocol CartTableCellDelegate: AnyObject {
+    func cartTableCell(_ cell: CartTableCell, didTapCheckmarkButton isSelected: Bool)
+}
+
+final class CartTableCell: UITableViewCell {
 
     // MARK: Properties
 
+    weak var delegate: CartTableCellDelegate?
     static let identifier = String(describing: CartTableCell.self)
 //    var presenter: CartCellPresenter?
 
-    private var chosenItem: ChosenItem?
+    var chosenItem: ChosenItem?
     private let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .ultraLight)
 
 //    var totalsumOfItem: [Double] = []
@@ -42,6 +47,13 @@ final class CartTableCell: UITableViewCell /*CartPresenterProtocol*/ {
     let checkmarkButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.veryLightGray, renderingMode: .alwaysOriginal), for: .normal)
+
+        button.setImage(UIImage(systemName: "checkmark.square.fill",
+                                         withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.lightGreen, renderingMode: .alwaysOriginal), for: .selected)
+
+        // как замьютить эту гадость?
+        button.addTarget(self, action: #selector(checkmarkButtonTapped(_:)), for: .touchUpInside)
+        button.isSelected = false
         return button
     }()
 
@@ -86,8 +98,6 @@ final class CartTableCell: UITableViewCell /*CartPresenterProtocol*/ {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
         setupConstraints()
-//        presenter = CartCellPresenter(view: self)
-//        self.backgroundColor = .red
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -95,14 +105,12 @@ final class CartTableCell: UITableViewCell /*CartPresenterProtocol*/ {
 
     //MARK: Methods
 
-    // эту функцию надо переиспользовать для перерисовки лейаута ячейки (на основе новой модели)
     func set(with item: ChosenItem) {
         chosenItem = item
         orderImage.image = UIImage(named: item.image)
         bigTitle.text = item.bigTitle
         smallTitle.text = item.smallTitle
-//        let totalPrice = item.price * Double(item.numberOfItemsToBuy) // это тоже надо перенести в модель
-//        pricelabel.text = String(format: "$ %.2f", totalPrice)
+        pricelabel.text = String(format: "$ %.2f", item.price)
 //        updateCountLabel()
     }
 
@@ -111,15 +119,22 @@ final class CartTableCell: UITableViewCell /*CartPresenterProtocol*/ {
 //        countLabel.text = String(chosenItem?.numberOfItemsToBuy ?? 1)
 //    }
 
-    private func configure() {
-        [checkmarkButton, orderImage, bigTitle, smallTitle, pricelabel, countStack].forEach {contentView.addSubview($0)}
-        [minusButton, countLabel, plusButton, basketButton].forEach{countStack.addArrangedSubview($0)}
+    // это одно действие для чекмарки
+    @objc func checkmarkButtonTapped(_ sender: UIButton) {
+        checkmarkAction?(sender.isSelected)
+        checkmarkButton.isSelected = !checkmarkButton.isSelected
+        checkmarkAction?(checkmarkButton.isSelected)
     }
 }
 
     // MARK: Layout
 
 private extension CartTableCell {
+
+    func configure() {
+        [checkmarkButton, orderImage, bigTitle, smallTitle, pricelabel, countStack].forEach {contentView.addSubview($0)}
+        [minusButton, countLabel, plusButton, basketButton].forEach{countStack.addArrangedSubview($0)}
+    }
 
     func setupConstraints() {
         orderImage.translatesAutoresizingMaskIntoConstraints = false

@@ -2,6 +2,8 @@ import UIKit
 
 protocol CartVCProtocol: AnyObject {
     func reloadTableView()
+    func updateCellInfo(at index: IndexPath, with data: ChosenItem)
+    func updateTotalPrice(with amount: Double)
     // добавить сюда все функции
 }
 
@@ -11,7 +13,7 @@ protocol CartVCProtocol: AnyObject {
  2. вылет за пределы индекса, если удалять ячейку без чекмарки
  */
 
-final class CartVC: UIViewController, CartVCProtocol {
+final class CartVC: UIViewController {
 
     // MARK: Properties
 
@@ -29,10 +31,6 @@ final class CartVC: UIViewController, CartVCProtocol {
         tableView.register(CartHeaderView.self, forHeaderFooterViewReuseIdentifier: CartHeaderView.identifier)
         return tableView
     }()
-
-    func colorTableView() {
-        
-    }
 
     #warning("заменить на настоящий футер")
     private let footerView = UIView()
@@ -80,22 +78,11 @@ final class CartVC: UIViewController, CartVCProtocol {
     }
 
     // MARK: Private Methods
-
-    func reloadTableView() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
-
     private func setButtonsTargets(of cell: CartTableCell) {
         cell.plusButton.addTarget(self, action: #selector(plusButtonAction(sender:)), for: .touchUpInside)
         cell.minusButton.addTarget(self, action: #selector(minusButtonAction(sender:)), for: .touchUpInside)
         cell.checkmarkButton.addTarget(self, action: #selector(checkmarkAction(sender:)), for: .touchUpInside)
         cell.basketButton.addTarget(self, action: #selector(deleteButtonAction(sender:)), for: .touchUpInside)
-    }
-
-    private func updateTotalPrice(with amount: Double) {
-        totalPriceLabel.text = String(format: "$ %.2f", amount)
     }
 
     // MARK: Selector Methods
@@ -105,6 +92,7 @@ final class CartVC: UIViewController, CartVCProtocol {
         present(paymentVC, animated: true, completion: nil)
     }
 
+    // TO_ASK: как sender спасает от ошибки -[UIButton length]: unrecognized selector sent to instance ?
     @objc func deleteButtonAction(sender: UIButton) {
         guard let stackView = sender.superview as? UIStackView,
               let contentView = stackView.superview,
@@ -115,22 +103,15 @@ final class CartVC: UIViewController, CartVCProtocol {
         presenter?.deleteItem(at: indexPath, tableView: tableView)
     }
 
-    // потом вызывать функцию update в VC по новой модели ячейки
-    // TO_ASK: как sender спасает от ошибки -[UIButton length]: unrecognized selector sent to instance ?
     @objc func plusButtonAction(sender: UIButton) {
-
         // TO_ASK: реально так сложно надо стучаться к этой кнопке?
         guard let stackView = sender.superview as? UIStackView,
               let contentView = stackView.superview,
               let cell = contentView.superview as? CartTableCell,
+              let tableView = cell.superview as? UITableView,
               let indexPath = tableView.indexPath(for: cell) else {
             return
         }
-        //        guard let item = chosenItem else { return }
-        //        chosenItem?.numberOfItemsToBuy += 1
-        //        updateCountLabel()
-        //        let fullPrice = 1 * item.price
-        //        totalPriceAction?(fullPrice)
         presenter?.tappedPlusButton(at: indexPath)
     }
 
@@ -138,52 +119,55 @@ final class CartVC: UIViewController, CartVCProtocol {
         guard let stackView = sender.superview as? UIStackView,
               let contentView = stackView.superview,
               let cell = contentView.superview as? CartTableCell,
+              let tableView = cell.superview as? UITableView,
               let indexPath = tableView.indexPath(for: cell) else {
             return
         }
         presenter?.tappedMinusButton(at: indexPath)
-
-        //        guard let item = chosenItem else { return }
-        /// to improve: by setting "1 >= 1" we can reach the value of 0 to make the cell inactive (but not deleted from the cart yet -> UX question
-        //        if chosenItem?.numberOfItemsToBuy ?? 1 > 1 {
-        //            chosenItem?.numberOfItemsToBuy -= 1
-
-        // TO_ASK: почему в момент тапа не успевает обновляться updateCountLabel ? то же в plusButtonTapped
-        // запустить reloadItem по индексу (обновить ячейку)
-        //            updateCountLabel()
-        //            let fullPrice = 1 * item.price
-        //            totalPriceAction?(-fullPrice)
     }
 
+    // это второе действие для чекмарки
     @objc func checkmarkAction(sender: UIButton) {
-//        checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill",
-//                                         withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.lightGreen, renderingMode: .alwaysOriginal), for: .selected)
-//        checkmarkButton.isSelected = !checkmarkButton.isSelected
-//        checkmarkAction?(checkmarkButton.isSelected)
-//
-//        // порефакторить
-//        if checkmarkButton.isSelected {
-//            guard let item = chosenItem else { return }
-//            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
-//            totalPriceAction?(totalPrice)
-//        } else {
-//            guard let item = chosenItem else { return }
-//            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
-//            totalPriceAction?(totalPrice)
-//        }
-
         guard let contentView = sender.superview,
               let cell = contentView.superview as? CartTableCell,
+              let tableView = cell.superview as? UITableView,
               let indexPath = tableView.indexPath(for: cell) else {
             return
         }
-        presenter?.tappedCheckmarkButton(at: indexPath)
+//        presenter?.tappedCheckmarkButton(at: isSelected:, for: cell)
     }
 }
 
-    // MARK: Setup table
+    // MARK: Work with tableview
+
+extension CartVC: CartVCProtocol {
+
+
+    func reloadTableView() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+
+    func updateTotalPrice(with amount: Double) {
+        totalPriceLabel.text = String(format: "$ %.2f", amount)
+    }
+
+    func updateCellInfo(at index: IndexPath, with data: ChosenItem) {
+        DispatchQueue.main.async {
+            if let cell = self.tableView.cellForRow(at: index) as? CartTableCell {
+                //TO_ASK: и всё же тут не успевает обновиться инфа
+                cell.countLabel.text = String(data.numberOfItemsToBuy)
+                self.tableView.reloadRows(at: [index], with: .none)
+            }
+        }
+    }
+}
+
+    // MARK: Setup tableview
 
 extension CartVC: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter.itemsCount
     }
@@ -196,6 +180,7 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
 
         /// select item in cart
         cell.checkmarkAction = { [weak self] isSelected in
+            // и тут тоже можно управлять поведением чекмарки
             guard let self = self else { return }
             if isSelected {
                 cell.totalPriceAction = { price in
@@ -255,8 +240,6 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
 
         return cell
     }
-
-
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: CartHeaderView.identifier) as! CartHeaderView
