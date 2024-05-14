@@ -8,9 +8,6 @@ protocol CartPresenterProtocol: AnyObject {
     var selectedItems: SelectedItems { get set }
     var itemsCount: Int { get }
 
-    //    var totalPrice: Double { get set }
-    //    var selectedPrices: [Double] { get set }
-
     /// set data
     func getItem(at index: Int) -> ChosenItem
     func setData()
@@ -18,7 +15,7 @@ protocol CartPresenterProtocol: AnyObject {
     /// update cart information
     func addToTotals(at index: Int)
     func removeFromTotals(at index: Int)
-    func tappedCheckmarkButton(at index: Int)
+//    func tappedCheckmarkButton(at index: Int)
 
     func deleteItem(at indexPath: IndexPath, tableView: UITableView)
     func tappedPlusButton(at index: IndexPath)
@@ -34,23 +31,20 @@ final class CartPresenter: CartPresenterProtocol {
 
     /// all items in the cart
     var items: [ChosenItem] = []
-
-    /// with green checkmark selected items
-    var selectedItems = SelectedItems(items: [])
-
-//    var selectedPrices: [Double] = []
-    lazy var totalPrice = selectedItems.totalPrice
-
     var itemsCount: Int {
         return items.count
     }
 
-    var deleteButtonAction: (() -> Void)?
+    /// with green checkmark selected items
+    var selectedItems = SelectedItems(items: [])
+    lazy var totalPrice = selectedItems.totalPrice
+
+//    var deleteButtonAction: (() -> Void)?
 
     // MARK: Init
     init(viewController: CartVC? = nil /*router: HomeRouterProtocol*/) {
         self.view = viewController
-//        self.router = router
+        //        self.router = router
     }
 
     // MARK: Methods
@@ -70,13 +64,13 @@ final class CartPresenter: CartPresenterProtocol {
 
     // MARK: Navigation Methods
 
-//    func showPaymentVC() {
-//        router.showPaymentVC()
-//    }
+    //    func showPaymentVC() {
+    //        router.showPaymentVC()
+    //    }
 
     func showDetailsVC(data: SingleProduct) {
-//        let detailsVC = DetailsVC(data: mockItem)
-//        self.navigationController.pushViewController(detailsVC, animated: true)
+        //        let detailsVC = DetailsVC(data: mockItem)
+        //        self.navigationController.pushViewController(detailsVC, animated: true)
     }
 
     // MARK: Methods - Managing of cart
@@ -112,9 +106,9 @@ final class CartPresenter: CartPresenterProtocol {
     }
 
     func removeFromTotalsByAmount(of amount: Double) {
-//        selectedPrices.append(-amount)
-//        totalPrice = selectedPrices.reduce(0, +)
-//        totalPrice -= amount
+        //        selectedPrices.append(-amount)
+        //        totalPrice = selectedPrices.reduce(0, +)
+        //        totalPrice -= amount
 
         print ("удалить из выбранных")
     }
@@ -133,10 +127,10 @@ final class CartPresenter: CartPresenterProtocol {
 
     func tappedPlusButton(at index: IndexPath) {
         // тут ведь уже не надо проверять guard'ом, раз это сделано в VC перед вызовом этой функции?
-//        guard let item = chosenItem else { return }
+        //        guard let item = chosenItem else { return }
         items[index.row].numberOfItemsToBuy += 1
         updateCell(at: index)
-//        addToTotals(at: index.row) //тут не надо добавлять; надо добавлять только когда выделяем чекмаркой
+        //        addToTotals(at: index.row) //тут не надо добавлять; надо добавлять только когда выделяем чекмаркой
         updateTotals()
     }
 
@@ -149,12 +143,13 @@ final class CartPresenter: CartPresenterProtocol {
         }
     }
 
-    func tappedCheckmarkButton(at index: Int) {
+    // если удалять, то скорее всего какой-то делегат ячейки надо вместе с тем снести
+    //    func tappedCheckmarkButton(at index: Int) {
 
-//        print("презентер тоже работает")
+    //        print("презентер тоже работает")
 
-//        let item = items[index]
-//        selectedItems.items.append(item)
-//        updateTotals()
-    }
+    //        let item = items[index]
+    //        selectedItems.items.append(item)
+    //        updateTotals()
+    //    }
 }

@@ -9,8 +9,9 @@ protocol CartVCProtocol: AnyObject {
 
 /*
  что нужно ещё править:
- 1. вылет за пределы индекса, если начать удалять ячейки с первой (см. ворнинг ниже)
- 2. вылет за пределы индекса, если удалять ячейку без чекмарки
+ 1. срабатывает чекмарка, если тыкать на +/-
+ 2. лейбл каунта срабатывает с запозданием на одну итерацию
+ 3. внимательно проверить (и дополнить) логику нажатия +/- в сочетании с не/активной чекмаркой
  */
 
 final class CartVC: UIViewController {
@@ -185,18 +186,8 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
         cell.set(with: product)
         setButtonsTargets(of: cell)
 
-        //         порефакторить
-        //        if checkmarkButton.isSelected {
-        //            guard let item = chosenItem else { return }
-        //            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
-        //            totalPriceAction?(totalPrice)
-        //        } else {
-        //            guard let item = chosenItem else { return }
-        //            let totalPrice = item.price * Double(item.numberOfItemsToBuy)
-        //            totalPriceAction?(totalPrice)
-        //        }
-
         /// select item in cart
+        // dead code?
         cell.checkmarkAction = { [weak self] isSelected in
             // и тут тоже можно управлять поведением чекмарки
             guard let self = self else { return }
