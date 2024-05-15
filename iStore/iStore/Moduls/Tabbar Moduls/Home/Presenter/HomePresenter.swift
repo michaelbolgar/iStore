@@ -1,5 +1,6 @@
 import Foundation
 
+// MARK: - Protocol
 protocol HomePresenterProtocol {
 
     var categoryData: [Category] { get }
@@ -9,13 +10,16 @@ protocol HomePresenterProtocol {
     func showSearchVC(searchText: String)
     func showDetailsVC(data: SingleProduct)
     func showFilterVC()
+    func updateSortingCriteria(option: SortingOption)
 
     func setCategories()
     func setProducts(for id: Int)
 }
 
+// MARK: - Class
 final class HomePresenter: HomePresenterProtocol {
 
+    // MARK: - Properties
     weak var view: HomeVCProtocol?
     private let router: HomeRouterProtocol
 
@@ -23,13 +27,12 @@ final class HomePresenter: HomePresenterProtocol {
     var productData: [SingleProduct] = []
 
 
-    init(view: HomeVCProtocol, 
-         router: HomeRouterProtocol)
-    {
+    init(view: HomeVCProtocol, router: HomeRouterProtocol) {
         self.view = view
         self.router = router
     }
 
+    // MARK: - Methods
     func setCategories() {
         NetworkingManager.shared.getCategories { [weak self] result in
             DispatchQueue.main.async {
@@ -72,12 +75,25 @@ final class HomePresenter: HomePresenterProtocol {
     }
 
     func showFilterVC() {
-        // code
+        router.showFilterVC(delegate: self)
     }
 }
 
-extension HomePresenter: SingleItemCellDelegate {
-    func buyButtonPressed() {
-        print("Buy pressed")
+
+// MARK: - Extensions
+extension HomePresenter: FilterPresenterDelegate {
+    func transferData(_ data: String) {
+        print(data)
+    }
+    func updateSortingCriteria(option: SortingOption) {
+        switch option {
+        case .title:
+            productData.sort { $0.title ?? "" < $1.title ?? "" }
+        case .priceLow:
+            productData.sort { $0.price ?? 0 < $1.price ?? 0 }
+        case .priceHigh:
+            productData.sort { $0.price ?? 0 > $1.price ?? 0 }
+        }
+        view?.reloadData(with: 2)
     }
 }

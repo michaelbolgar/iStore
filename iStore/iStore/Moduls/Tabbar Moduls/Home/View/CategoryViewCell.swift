@@ -10,6 +10,8 @@ import UIKit
 final class CategoryViewCell: UICollectionViewCell {
     
     // MARK: - Properties
+    static var identifier: String {"\(Self.self)"}
+    
     private lazy var categoryIcon: UIImageView = {
         let element = UIImageView()
         element.contentMode = .scaleAspectFit

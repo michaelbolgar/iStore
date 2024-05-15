@@ -9,6 +9,7 @@ import UIKit
 
 class RangeTextFieldCell: UITableViewCell {
     
+    // MARK: - Properties
     static let identifier = String(describing: RangeTextFieldCell.self)
     
     private let minTextField = UITextField.makeTextField(placeholder: "Min",
@@ -27,6 +28,7 @@ class RangeTextFieldCell: UITableViewCell {
                                                          height: 40
     )
     
+    // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -37,6 +39,8 @@ class RangeTextFieldCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Methods
+    
     private func setupViews() {
         contentView.addSubview(minTextField)
         contentView.addSubview(maxTextField)
@@ -45,13 +49,13 @@ class RangeTextFieldCell: UITableViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            minTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 90),
-            minTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            minTextField.widthAnchor.constraint(equalToConstant: 80),
+            minTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60),
+            minTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            minTextField.widthAnchor.constraint(equalToConstant: 120),
             
-            maxTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -90),
-            maxTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            maxTextField.widthAnchor.constraint(equalToConstant: 80)
+            maxTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60),
+            maxTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            maxTextField.widthAnchor.constraint(equalToConstant: 120)
         ])
     }
 }

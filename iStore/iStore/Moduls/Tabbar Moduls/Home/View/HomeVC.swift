@@ -1,16 +1,17 @@
 import UIKit
 import SwiftUI
 
+// MARK: - Protocol
 protocol HomeVCProtocol: AnyObject {
     func reloadData(with section: Int)
 }
 
-final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate {
+// MARK: - Class
+final class HomeVC: UIViewController, HomeVCProtocol {
     
     var presenter: HomePresenterProtocol!
 
     //MARK: - UI Elements
-    
     private let mockCategorie = MockData.shared.mockCategorie
     private let mockSingleProduct = MockData.shared.mockSingleProduct
     private let sections = ["searchField","categories","products"]
@@ -43,33 +44,27 @@ final class HomeVC: UIViewController, HomeVCProtocol, ProductsHeaderViewDelegate
     //MARK: - Private Methods
     private func setupViews() {
         collectionView.register(SearchFieldView.self, forCellWithReuseIdentifier: SearchFieldView.identifier)
-        collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: "CategoryViewCell")
+        collectionView.register(CategoryViewCell.self, forCellWithReuseIdentifier: CategoryViewCell.identifier)
         collectionView.register(SingleItemCell.self, forCellWithReuseIdentifier: SingleItemCell.identifier)
-        collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderNavBarMenuView")
-        collectionView.register(ProductsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ProductsHeaderView")
+        collectionView.register(HeaderNavBarMenuView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderNavBarMenuView.identifier)
+        collectionView.register(ProductsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProductsHeaderView.identifier)
         collectionView.collectionViewLayout = createLayout()
     }
     
     private func setDelegates() {
         collectionView.delegate = self
         collectionView.dataSource = self
-//        searchBar.delegate = self
-    }
-    
-    func didTapFiltersButton() {
-        print ("filter tapped")
     }
 }
+
 //MARK: - UICollectionViewDataSource
 
 extension HomeVC: UICollectionViewDataSource {
-    
-    /// fetching collections count
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         sections.count
     }
-    
-    /// fetching cells count in each collection
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         switch sections[section] {
@@ -84,7 +79,7 @@ extension HomeVC: UICollectionViewDataSource {
         }
     }
     
-    /// fetching cells content
+// MARK: - cellForItemAt
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let sectionType = sections[indexPath.section]
         
@@ -116,6 +111,7 @@ extension HomeVC: UICollectionViewDataSource {
         }
     }
     
+    // MARK: - viewForSupplementaryElementOfKind
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -126,16 +122,20 @@ extension HomeVC: UICollectionViewDataSource {
                     ofKind: kind,
                     withReuseIdentifier: "HeaderNavBarMenuView",
                     for: indexPath) as! HeaderNavBarMenuView
-                header.configureHeader(labelName: section)
+                header.configureHeader(labelName: "Choose a location")
                 header.delegate = self
                 return header
             case "categories":
                 fallthrough
             case "products":
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                             withReuseIdentifier: "ProductsHeaderView",
-                                                                             for: indexPath) as! ProductsHeaderView
-                header.configureHeader(labelName: section)
+                let header = collectionView
+                    .dequeueReusableSupplementaryView(
+                        ofKind: kind,
+                        withReuseIdentifier: "ProductsHeaderView",
+                        for: indexPath
+                    ) as! ProductsHeaderView
+                
+                header.configureHeader(labelName: "Products")
                 header.delegate = self
                 return header
             default:
@@ -151,6 +151,7 @@ extension HomeVC: UICollectionViewDataSource {
 
 extension HomeVC: UICollectionViewDelegate {
     
+    // MARK: - didSelectItemAt
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let section = sections[indexPath.section]
@@ -274,6 +275,7 @@ private func supplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementar
           alignment: .top)
 }
 
+// MARK: - Extensions
 
 extension HomeVC {
     func reloadData(with section: Int) {
@@ -296,6 +298,12 @@ extension HomeVC: HeaderNavBarMenuViewDelegate {
 extension HomeVC: SingleItemCellDelegate {
     func buyButtonPressed() {
         print ("add to cart button tapped")
+    }
+}
+
+extension HomeVC:  ProductsHeaderViewDelegate {
+    func filtersButtonTapped() {
+        presenter.showFilterVC()
     }
 }
 
