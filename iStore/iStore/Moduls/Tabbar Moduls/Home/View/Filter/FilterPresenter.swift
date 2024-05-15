@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+// MARK: - Protocols
 protocol FilterPresenterProtocol {
     func cancelButtonTapped()
     func saveButtonTapped()
@@ -22,17 +22,21 @@ enum SortingOption {
     case title, priceLow, priceHigh
 }
 
+// MARK: - Class FilterPresenter
 final class FilterPresenter: FilterPresenterProtocol {
 
+    // MARK: - Properties
     weak var view: FilterVCDelegate?
     weak var delegate: FilterPresenterDelegate?
     
     private var selectedSortOption: SortingOption = .title
     
+    // MARK: - Init
     init(view: FilterVCDelegate) {
         self.view = view
     }
     
+    // MARK: - Methods
     func cancelButtonTapped() {
         view?.didRequestDismissal()
         print("Presenter cancel button tappet")

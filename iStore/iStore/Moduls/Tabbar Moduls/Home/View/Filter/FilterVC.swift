@@ -24,7 +24,6 @@ enum FilterSection: Int, CaseIterable {
 
 // для сортировки
 struct FilterOption {
-    let button: UIButton
     let title: String
     let handler: (() -> Void)
 }
@@ -33,6 +32,7 @@ protocol FilterVCDelegate: AnyObject {
     func didUpdateSortOption(option: SortingOption)
     func didRequestDismissal()
 }
+// MARK: - Class FilterVC
 
 class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -70,39 +70,16 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func configure() {
         self.models = sortOption.enumerated().map { index, title in
-            let button = UIButton()
-            button.setupAsRadioButton()
-            return FilterOption(button: button, title: title) { [weak self] in
+            return FilterOption(title: title) { [weak self] in
                 self?.selectedSortOption = index
-                //                self?.tableView.reloadData()
-                self?.updateRadioButtons()
+                self?.updateSortImages()
             }
         }
     }
     
-    private func updateRadioButtons() {
-        for (index, model) in models.enumerated() {
-            model.button.isSelected = index == selectedSortOption
-        }
+    private func updateSortImages() {
         tableView.reloadData()
     }
-    
-    @objc private func handleRadioButtonPressed(_ sender: UIButton) {
-        let point = sender.convert(CGPoint.zero, to: tableView)
-        if let indexPath = tableView.indexPathForRow(at: point) {
-            
-            let previousIndex = selectedSortOption //
-            selectedSortOption = indexPath.row
-            //            tableView.reloadSections([indexPath.section], with: .none)
-            var indexPaths: [IndexPath] = []
-            if let previous = previousIndex {
-                indexPaths.append(IndexPath(row: previous, section: indexPath.section))
-            }
-            indexPaths.append(indexPath)
-            tableView.reloadRows(at: indexPaths, with: .none)
-        }
-    }
-    
     
     // MARK: - Tableview
     
@@ -111,7 +88,6 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //        return models.count
         switch FilterSection(rawValue: section)! {
         case .sortBy:
             return models.count
@@ -128,6 +104,7 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         FilterSection(rawValue: section)?.title
     }
     
+    // MARK: - cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cellStyle = FilterSection(rawValue: indexPath.section) else {
@@ -138,13 +115,11 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             
         case .sortBy:
             let model = models[indexPath.row]
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: SortByCell.identifier, for: indexPath) as? SortByCell else {
-                return UITableViewCell()
-            }
-            cell.configure(with: model, isSelected: indexPath.row == selectedSortOption)
-            cell.delegate = self
-            cell.radioButton.addTarget(self, action: #selector(handleRadioButtonPressed(_:)), for: .touchUpInside)
-            return cell
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: SortByCell.identifier, for: indexPath) as? SortByCell else {
+                            return UITableViewCell()
+                        }
+                        cell.configure(with: model, isSelected: indexPath.row == selectedSortOption)
+                        return cell
             
         case .priceRange:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: RangeTextFieldCell.identifier, for: indexPath) as? RangeTextFieldCell else {
@@ -160,8 +135,9 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
+    
+    // MARK: - didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) as? SortByCell else { return }
         
         let previousIndex = selectedSortOption
@@ -173,41 +149,14 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
         indexPaths.append(indexPath)
         tableView.reloadRows(at: indexPaths, with: .none)
-        cell.delegate?.radioButtonTapped()
-    }
-}
-
-// MARK: - Extensions
-extension UIButton {
-    func setupAsRadioButton() {
-        self.setImage(UIImage(systemName: "circle"), for: .normal)
-        self.setImage(UIImage(systemName: "circle.inset.filled"), for: .selected)
-        self.tintColor = .systemBlue
-    }
-}
-
-extension FilterVC: ButtonCellDelegate {
-    func cancelButtonTapped() {
-        presenter.cancelButtonTapped()
-    }
-    
-    func saveButtonTapped() {
-        presenter.saveButtonTapped()
-    }
-}
-extension FilterVC: SortByCellDelegate {
-    //    func radioButtonTapped() {
-    //        presenter.sortByButtonTappet(option: SortingOption)
-    //
-    //    }
-    func radioButtonTapped() {
+        
         guard let selectedOptionIndex = selectedSortOption else { return }
         let option = determineSortingOption(from: selectedOptionIndex)
         presenter.sortByButtonTappet(option: option)
+       
     }
     
     private func determineSortingOption(from index: Int) -> SortingOption {
-        
         switch index {
         case 0:
             return .title
@@ -218,6 +167,18 @@ extension FilterVC: SortByCellDelegate {
         default:
             fatalError("Unexpected index for sorting option")
         }
+    }
+}
+
+// MARK: - Extensions
+
+extension FilterVC: ButtonCellDelegate {
+    func cancelButtonTapped() {
+        presenter.cancelButtonTapped()
+    }
+    
+    func saveButtonTapped() {
+        presenter.saveButtonTapped()
     }
 }
 

@@ -1,17 +1,17 @@
 import UIKit
 import SwiftUI
 
-
+// MARK: - Protocol
 protocol HomeVCProtocol: AnyObject {
     func reloadData(with section: Int)
 }
 
+// MARK: - Class
 final class HomeVC: UIViewController, HomeVCProtocol {
     
     var presenter: HomePresenterProtocol!
 
     //MARK: - UI Elements
-    
     private let mockCategorie = MockData.shared.mockCategorie
     private let mockSingleProduct = MockData.shared.mockSingleProduct
     private let sections = ["searchField","categories","products"]
@@ -54,9 +54,9 @@ final class HomeVC: UIViewController, HomeVCProtocol {
     private func setDelegates() {
         collectionView.delegate = self
         collectionView.dataSource = self
-//        searchBar.delegate = self
     }
 }
+
 //MARK: - UICollectionViewDataSource
 
 extension HomeVC: UICollectionViewDataSource {
@@ -79,7 +79,7 @@ extension HomeVC: UICollectionViewDataSource {
         }
     }
     
-    /// fetching cells content
+// MARK: - cellForItemAt
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let sectionType = sections[indexPath.section]
         
@@ -111,6 +111,7 @@ extension HomeVC: UICollectionViewDataSource {
         }
     }
     
+    // MARK: - viewForSupplementaryElementOfKind
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -150,6 +151,7 @@ extension HomeVC: UICollectionViewDataSource {
 
 extension HomeVC: UICollectionViewDelegate {
     
+    // MARK: - didSelectItemAt
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let section = sections[indexPath.section]
