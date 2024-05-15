@@ -14,7 +14,7 @@ protocol CartPresenterProtocol: AnyObject {
 
     /// update cart information
     func addToTotals(at index: Int)
-    func removeFromTotals(at index: Int)
+    func unselectCell(at index: Int)
 //    func tappedCheckmarkButton(at index: Int)
 
     func deleteItem(at indexPath: IndexPath, tableView: UITableView)
@@ -55,10 +55,10 @@ final class CartPresenter: CartPresenterProtocol {
 
     /// mock data
     func setData() {
-        items = [ChosenItem(image: "imgProduct", bigTitle: "Air pods max by Apple", smallTitle: "Variant: Grey", price: 100.00),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods pro by Apple", smallTitle: "Variant: Grey", price: 150.00),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods fail by honor", smallTitle: "Variant: Grey", price: 399.99),
-                 ChosenItem(image: "imgProduct", bigTitle: "Air pods middle by Apple", smallTitle: "Variant: Grey", price: 599.99)
+        items = [ChosenItem(image: "imgProduct", bigTitle: "0. Air pods max by Apple", smallTitle: "Variant: Grey", price: 100.00),
+                 ChosenItem(image: "imgProduct", bigTitle: "1. Air pods pro by Apple", smallTitle: "Variant: Grey", price: 150.00),
+                 ChosenItem(image: "imgProduct", bigTitle: "2. Air pods fail by honor", smallTitle: "Variant: Grey", price: 399.99),
+                 ChosenItem(image: "imgProduct", bigTitle: "3. Air pods middle by Apple", smallTitle: "Variant: Grey", price: 599.99)
         ]
     }
 
@@ -77,7 +77,7 @@ final class CartPresenter: CartPresenterProtocol {
 
     func updateTotals() {
         totalPrice = selectedItems.totalPrice
-        print(totalPrice)
+        print("состояние тотала в момент обновления лейбла:", totalPrice)
         view?.updateTotalPrice(with: totalPrice)
     }
 
@@ -93,36 +93,23 @@ final class CartPresenter: CartPresenterProtocol {
         updateTotals()
     }
 
-    // пока что завязано только на снятии галочки
-    func removeFromTotals(at index: Int) {
+    func unselectCell(at index: Int) {
         if !selectedItems.items.isEmpty {
             let item = items[index]
             selectedItems.items.removeAll { $0.bigTitle == item.bigTitle }
-            print (selectedItems.items)
             updateTotals()
-
-            // нужно развести логику выделения и удаления из корзины полностью
         }
     }
 
-    func removeFromTotalsByAmount(of amount: Double) {
-        //        selectedPrices.append(-amount)
-        //        totalPrice = selectedPrices.reduce(0, +)
-        //        totalPrice -= amount
-
-        print ("удалить из выбранных")
-    }
-
     func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
-        let itemToDelete = items[indexPath.row]
-        let priceToRemove = itemToDelete.price * Double(itemToDelete.numberOfItemsToBuy)
-        removeFromTotalsByAmount(of: priceToRemove)
-        items.remove(at: indexPath.row)
 
-        // логика удаления из выбранного
-
-        tableView.deleteRows(at: [indexPath], with: .bottom)
-        tableView.reloadData()
+        // почекать логику чекмарок
+        if !items.isEmpty {
+            let item = items[indexPath.row]
+            unselectCell(at: indexPath.row)
+            items.removeAll { $0.bigTitle == item.bigTitle }
+            view?.deleteCell(at: indexPath)
+        }
     }
 
     func tappedPlusButton(at index: IndexPath) {

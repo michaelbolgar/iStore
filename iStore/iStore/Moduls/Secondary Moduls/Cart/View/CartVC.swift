@@ -4,6 +4,7 @@ protocol CartVCProtocol: AnyObject {
     func reloadTableView()
     func updateCellInfo(at index: IndexPath, with data: ChosenItem)
     func updateTotalPrice(with amount: Double)
+    func deleteCell(at index: IndexPath)
     // добавить сюда все функции
 }
 
@@ -140,7 +141,7 @@ final class CartVC: UIViewController {
             if cell.checkmarkButton.isSelected {
                 presenter?.addToTotals(at: indexPath.row)
             } else {
-                presenter?.removeFromTotals(at: indexPath.row)
+                presenter?.unselectCell(at: indexPath.row)
             }
         }
     }
@@ -166,6 +167,16 @@ extension CartVC: CartVCProtocol {
             if let cell = self.tableView.cellForRow(at: index) as? CartTableCell {
                 //TO_ASK: и всё же тут не успевает обновиться инфа
                 cell.countLabel.text = String(data.numberOfItemsToBuy)
+                self.tableView.reloadRows(at: [index], with: .none)
+            }
+        }
+    }
+
+    func deleteCell(at index: IndexPath) {
+        DispatchQueue.main.async {
+            if let cell = self.tableView.cellForRow(at: index) as? CartTableCell {
+                //TO_ASK: и всё же тут не успевает обновиться инфа
+                self.tableView.deleteRows(at: [index], with: .bottom)
                 self.tableView.reloadRows(at: [index], with: .none)
             }
         }
@@ -200,7 +211,7 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
             } else {
                 cell.totalPriceAction = { [weak self] priceToRemove in
                     guard let self = self else { return }
-                    self.presenter?.removeFromTotals(at: indexPath.row)
+                    self.presenter?.unselectCell(at: indexPath.row)
                     // обновить данные таблицы, перерисовать, и не вызывать функцию updateTotalPrice
                     self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
                 }
@@ -237,15 +248,15 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
 //            self?.updateTotalPrice(with: self?.presenter?.totalPrice ?? 0.00)
 //        }
 
-//        if indexPath.row == 0 {
-//            cell.backgroundColor = .systemCyan
-//        } else if indexPath.row == 1 {
-//            cell.backgroundColor = .systemGray
-//        } else if indexPath.row == 2 {
-//            cell.backgroundColor = .systemPink
-//        } else if indexPath.row == 3 {
-//            cell.backgroundColor = .systemTeal
-//        }
+        if indexPath.row == 0 {
+            cell.backgroundColor = .systemCyan
+        } else if indexPath.row == 1 {
+            cell.backgroundColor = .systemGray
+        } else if indexPath.row == 2 {
+            cell.backgroundColor = .systemPink
+        } else if indexPath.row == 3 {
+            cell.backgroundColor = .systemTeal
+        }
 
         return cell
     }
