@@ -121,9 +121,16 @@ final class CartTableCell: UITableViewCell {
 
     // это одно действие для чекмарки
     @objc func checkmarkButtonTapped(_ sender: UIButton) {
-        checkmarkAction?(sender.isSelected)
+
+        guard var item = chosenItem else { return }
+
+        delegate?.cartTableCell(self, didTapCheckmarkButton: sender.isSelected)
         checkmarkButton.isSelected = !checkmarkButton.isSelected
-        checkmarkAction?(checkmarkButton.isSelected)
+        item.isSelected = sender.isSelected
+
+//        checkmarkAction?(sender.isSelected)
+//        checkmarkButton.isSelected = !checkmarkButton.isSelected
+//        checkmarkAction?(checkmarkButton.isSelected)
     }
 }
 

@@ -103,7 +103,7 @@ final class CartPresenter: CartPresenterProtocol {
 
     func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
 
-        // почекать логику чекмарок
+        #warning("почекать логику чекмарок")
         if !items.isEmpty {
             let item = items[indexPath.row]
             unselectCell(at: indexPath.row)
