@@ -139,7 +139,7 @@ final class CartVC: UIViewController {
 
         if let cell = self.tableView.cellForRow(at: indexPath) as? CartTableCell {
             if cell.checkmarkButton.isSelected {
-                presenter?.addToTotals(at: indexPath.row)
+                presenter?.selectCell(at: indexPath.row)
                 cell.chosenItem?.isSelected = true // потестить, нужно ли это вообще
             } else {
                 presenter?.unselectCell(at: indexPath.row)
@@ -169,7 +169,13 @@ extension CartVC: CartVCProtocol {
             if let cell = self.tableView.cellForRow(at: index) as? CartTableCell {
                 //TO_ASK: и всё же тут не успевает обновиться инфа
                 cell.countLabel.text = String(data.numberOfItemsToBuy)
-                self.tableView.reloadRows(at: [index], with: .automatic)
+                //обновлять состояние чекмарки до кучи, чтобы пофиксить баг с удалением и чекмаркой?
+//                if ((cell.chosenItem?.isSelected) != nil) {
+//                    print ("selected")
+//                } else {
+//                    print ("unselected")
+//                }
+                self.tableView.reloadRows(at: [index], with: .none)
             }
         }
     }
@@ -180,7 +186,7 @@ extension CartVC: CartVCProtocol {
             if let cell = self.tableView.cellForRow(at: index) as? CartTableCell {
                 //TO_ASK: и всё же тут не успевает обновиться инфа
                 self.tableView.deleteRows(at: [index], with: .automatic)
-                self.tableView.reloadRows(at: [index], with: .automatic)
+                self.tableView.reloadRows(at: [index], with: .none)
             }
         }
     }
@@ -200,48 +206,8 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
         cell.set(with: product)
         setButtonsTargets(of: cell)
 
-        /// select item in cart
-        // dead code?
-        cell.checkmarkAction = { [weak self] isSelected in
-            // и тут тоже можно управлять поведением чекмарки
-            guard let self = self else { return }
-            if isSelected {
-                cell.totalPriceAction = { price in
-                    self.presenter?.addToTotals(at: indexPath.row)
-                    // обновить данные таблицы, перерисовать, и не вызывать функцию updateTotalPrice
-                    self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
-                }
-            } else {
-                cell.totalPriceAction = { [weak self] priceToRemove in
-                    guard let self = self else { return }
-                    self.presenter?.unselectCell(at: indexPath.row)
-                    // обновить данные таблицы, перерисовать, и не вызывать функцию updateTotalPrice
-                    self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
-                }
-            }
-        }
-//                    if let index = self.presenter?.selectedItems.items.price.firstIndex(of: priceToRemove) {
-//                        self.presenter?.removeFromTotals(at: index)
-//                        self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
-//                    } else {
-                        #warning("по-хорошему надо исправить этот костыль, начиная с удаления функции removeByAmount")
-                        /*
-                         описание бага: при добавлении товаров по одному посредством клика на "+", в массив залетают значения по одному [100, 100, 100], а в момент снятия чекмарки команда selectedPrices.firstIndex(of: priceToRemove) ищет значение 300 по общей сумме айтемов данного типа и не находит его в массиве
-
-                         вариант решения: создать промежуточный массив для отслеживания изменения состояния ячейки (кол-ва товаров одной категории) и вставлять его в функции удаления/добавления?
-                         */
-
-//                        let item = self.presenter?.items[indexPath.row]
-//                        let priceToRemove = (item?.price ?? 0.00) * (Double(cell.countLabel.text ?? "0") ?? 0)
-//                        self.presenter?.removeFromTotalsByAmount(of: priceToRemove)
-//                        self.updateTotalPrice(with: self.presenter?.totalPrice ?? 0.00)
-//                    }
-//                }
-//            }
-//        }
-
         /// delete item from cart
-        // эта логика как минимум работала
+        // эта логика работала правильно
 //        cell.presenter?.deleteButtonAction = { [weak self] in
 //            print("item to delete:", indexPath.row)
 //            let item = self?.presenter?.items[indexPath.row]
@@ -251,6 +217,7 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
 //            self?.updateTotalPrice(with: self?.presenter?.totalPrice ?? 0.00)
 //        }
 
+        /// покрасить ячейки для тестинга
 //        if indexPath.row == 0 {
 //            cell.backgroundColor = .systemCyan
 //        } else if indexPath.row == 1 {
@@ -260,7 +227,7 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
 //        } else if indexPath.row == 3 {
 //            cell.backgroundColor = .systemTeal
 //        }
-
+        
         return cell
     }
 
@@ -311,7 +278,6 @@ private extension CartVC {
 
             selectPaymentButton.topAnchor.constraint(equalTo: totalPriceLabel.bottomAnchor, constant: 15),
             selectPaymentButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor)
-
         ])
     }
 }

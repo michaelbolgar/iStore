@@ -10,14 +10,9 @@ final class CartTableCell: UITableViewCell {
 
     weak var delegate: CartTableCellDelegate?
     static let identifier = String(describing: CartTableCell.self)
-//    var presenter: CartCellPresenter?
 
     var chosenItem: ChosenItem?
     private let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .ultraLight)
-
-//    var totalsumOfItem: [Double] = []
-    var checkmarkAction: ((Bool) -> Void)?
-    var totalPriceAction: ((Double) -> Void)?
 
     // MARK: UI Elements
 
@@ -111,15 +106,10 @@ final class CartTableCell: UITableViewCell {
         bigTitle.text = item.bigTitle
         smallTitle.text = item.smallTitle
         pricelabel.text = String(format: "$ %.2f", item.price)
-//        updateCountLabel()
     }
 
-    // надо вынести эту и все остальные подобные функции в VC, тогда нужно ещё сообщать какую ячейку обновлять (по индексу)
-//    func updateCountLabel() {
-//        countLabel.text = String(chosenItem?.numberOfItemsToBuy ?? 1)
-//    }
-
     // это одно действие для чекмарки
+    // перенести это в презентер
     @objc func checkmarkButtonTapped(_ sender: UIButton) {
 
         guard var item = chosenItem else { return }

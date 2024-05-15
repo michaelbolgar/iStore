@@ -13,7 +13,7 @@ protocol CartPresenterProtocol: AnyObject {
     func setData()
 
     /// update cart information
-    func addToTotals(at index: Int)
+    func selectCell(at index: Int)
     func unselectCell(at index: Int)
 //    func tappedCheckmarkButton(at index: Int)
 
@@ -38,8 +38,6 @@ final class CartPresenter: CartPresenterProtocol {
     /// with green checkmark selected items
     var selectedItems = SelectedItems(items: [])
     lazy var totalPrice = selectedItems.totalPrice
-
-//    var deleteButtonAction: (() -> Void)?
 
     // MARK: Init
     init(viewController: CartVC? = nil /*router: HomeRouterProtocol*/) {
@@ -77,7 +75,6 @@ final class CartPresenter: CartPresenterProtocol {
 
     func updateTotals() {
         totalPrice = selectedItems.totalPrice
-        print("состояние тотала в момент обновления лейбла:", totalPrice)
         view?.updateTotalPrice(with: totalPrice)
     }
 
@@ -86,7 +83,7 @@ final class CartPresenter: CartPresenterProtocol {
         view?.updateCellInfo(at: index, with: itemInfo)
     }
 
-    func addToTotals(at index: Int) {
+    func selectCell(at index: Int) {
         let item = items[index]
         selectedItems.items.append(item)
         print (selectedItems.items)
@@ -102,7 +99,6 @@ final class CartPresenter: CartPresenterProtocol {
     }
 
     func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
-
         #warning("почекать логику чекмарок")
         if !items.isEmpty {
             let item = items[indexPath.row]
@@ -117,7 +113,6 @@ final class CartPresenter: CartPresenterProtocol {
         //        guard let item = chosenItem else { return }
         items[index.row].numberOfItemsToBuy += 1
         updateCell(at: index)
-        //        addToTotals(at: index.row) //тут не надо добавлять; надо добавлять только когда выделяем чекмаркой
         updateTotals()
     }
 
