@@ -126,11 +126,9 @@ class SingleItemCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             backView.heightAnchor.constraint(equalToConstant: 217),
             backView.widthAnchor.constraint(equalToConstant: 170),
-//            backView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-//            productImage.widthAnchor.constraint(equalToConstant: 170),
             productImage.heightAnchor.constraint(equalToConstant: 112),
             productImage.topAnchor.constraint(equalTo: backView.topAnchor),
             productImage.leadingAnchor.constraint(equalTo: backView.leadingAnchor),
@@ -140,12 +138,9 @@ class SingleItemCell: UICollectionViewCell {
             productLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),
             productLabel.topAnchor.constraint(equalTo: productImage.bottomAnchor, constant: 13),
 
-//            priceLabel.topAnchor.constraint(equalTo: productLabel.bottomAnchor, constant: 4),
             priceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
             priceLabel.bottomAnchor.constraint(equalTo: buyButton.topAnchor, constant: -13),
 
-//            buyButton.topAnchor.constraint(greaterThanOrEqualTo: priceLabel.bottomAnchor, constant: 3),
-//            buyButton.topAnchor.constraint(lessThanOrEqualTo: priceLabel.bottomAnchor, constant: 11),
             buyButton.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -13),
             buyButton.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 13),
             buyButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),

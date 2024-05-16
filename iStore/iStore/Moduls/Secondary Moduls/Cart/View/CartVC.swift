@@ -1,16 +1,40 @@
 import UIKit
 
 protocol CartVCProtocol: AnyObject {
-    func reloadTableView(at indexPath: IndexPath)
+    func reloadTableView()
+    func updateCellInfo(at index: IndexPath, with data: ChosenItem)
+    func updateTotalPrice(with amount: Double)
+    func deleteCell(at index: IndexPath)
+    // добавить сюда все функции
 }
 
-final class CartVC: UIViewController, CartVCProtocol {
+/*
+ что нужно ещё править:
+ 1. срабатывает чекмарка, если тыкать на +/-
+ 2. лейбл каунта срабатывает с запозданием на одну итерацию
+ 3. внимательно проверить (и дополнить) логику нажатия +/- в сочетании с не/активной чекмаркой
+ */
+
+final class CartVC: UIViewController {
+
+    // MARK: Properties
+
     var presenter: CartPresenter!
-    var selectedIndices: Set<Int> = []
 
     // MARK: UI Elements
-    private let tableView = UITableView()
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .none
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(CartTableCell.self, forCellReuseIdentifier: CartTableCell.identifier)
+        tableView.rowHeight = 100
+        tableView.showsVerticalScrollIndicator = false
+        tableView.register(CartHeaderView.self, forHeaderFooterViewReuseIdentifier: CartHeaderView.identifier)
+        return tableView
+    }()
 
+    #warning("заменить на настоящий футер")
     private let footerView = UIView()
 
     private let orderLabel = UILabel.makeLabel(text: "Order Summary",
@@ -25,7 +49,7 @@ final class CartVC: UIViewController, CartVCProtocol {
                                                           numberOfLines: 1,
                                                           alignment: .left)
 
-    private let priceLabel = UILabel.makeLabel(text: "$ 0,00",
+    private let totalPriceLabel = UILabel.makeLabel(text: "$ 0,00",
                                                           font: UIFont.InterMedium(ofSize: 14),
                                                           textColor: UIColor.customDarkGray,
                                                           numberOfLines: 1,
@@ -42,9 +66,9 @@ final class CartVC: UIViewController, CartVCProtocol {
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         presenter = CartPresenter(viewController: self)
-        presenter.getData()
-        configureTableView()
+        presenter.setData()
         setViews()
         setupUI()
     }
@@ -56,43 +80,122 @@ final class CartVC: UIViewController, CartVCProtocol {
     }
 
     // MARK: Private Methods
-
-    private func configureTableView() {
-        tableView.separatorStyle = .none
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(CartTableCell.self, forCellReuseIdentifier: CartTableCell.identifier)
-        tableView.rowHeight = 100
-        tableView.showsVerticalScrollIndicator = false
-        tableView.register(CartHeaderView.self, forHeaderFooterViewReuseIdentifier: CartHeaderView.identifier)
+    private func setButtonsTargets(of cell: CartTableCell) {
+        cell.plusButton.addTarget(self, action: #selector(plusButtonAction(sender:)), for: .touchUpInside)
+        cell.minusButton.addTarget(self, action: #selector(minusButtonAction(sender:)), for: .touchUpInside)
+        cell.checkmarkButton.addTarget(self, action: #selector(checkmarkAction(sender:)), for: .touchUpInside)
+        cell.basketButton.addTarget(self, action: #selector(deleteButtonAction(sender:)), for: .touchUpInside)
     }
 
-    func reloadTableView(at indexPath: IndexPath) {
+    // MARK: Selector Methods
+    @objc func selectPaymentButtonAction() {
+        let paymentVC = PaymentVC()
+        paymentVC.modalPresentationStyle = .fullScreen
+        present(paymentVC, animated: true, completion: nil)
+    }
+
+    // TO_ASK: как sender спасает от ошибки -[UIButton length]: unrecognized selector sent to instance ?
+    @objc func deleteButtonAction(sender: UIButton) {
+        guard let stackView = sender.superview as? UIStackView,
+              let contentView = stackView.superview,
+              let cell = contentView.superview as? CartTableCell,
+              let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+        presenter?.deleteItem(at: indexPath, tableView: tableView)
+    }
+
+    @objc func plusButtonAction(sender: UIButton) {
+        // TO_ASK: реально так сложно надо стучаться к этой кнопке?
+        guard let stackView = sender.superview as? UIStackView,
+              let contentView = stackView.superview,
+              let cell = contentView.superview as? CartTableCell,
+              let tableView = cell.superview as? UITableView,
+              let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+        presenter?.tappedPlusButton(at: indexPath)
+    }
+
+    @objc func minusButtonAction(sender: UIButton) {
+        guard let stackView = sender.superview as? UIStackView,
+              let contentView = stackView.superview,
+              let cell = contentView.superview as? CartTableCell,
+              let tableView = cell.superview as? UITableView,
+              let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+        presenter?.tappedMinusButton(at: indexPath)
+    }
+
+    // это второе действие для чекмарки
+    @objc func checkmarkAction(sender: UIButton) {
+        guard let contentView = sender.superview,
+              let cell = contentView.superview as? CartTableCell,
+              let tableView = cell.superview as? UITableView,
+              let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+
+        if let cell = self.tableView.cellForRow(at: indexPath) as? CartTableCell {
+            if cell.checkmarkButton.isSelected {
+                presenter?.selectCell(at: indexPath.row)
+                cell.chosenItem?.isSelected = true // потестить, нужно ли это вообще
+            } else {
+                presenter?.unselectCell(at: indexPath.row)
+                cell.chosenItem?.isSelected = false // потестить, нужно ли это вообще
+            }
+        }
+    }
+}
+
+    // MARK: Work with prices
+
+extension CartVC: CartVCProtocol {
+
+    func reloadTableView() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
 
-    func updateTotalPrice() {
-        let totalPrice = self.selectedIndices.reduce(0) { total, index in
-              total + self.presenter.items[index].price
-
-        }
-        self.priceLabel.text = "$\(totalPrice)"
+    func updateTotalPrice(with amount: Double) {
+        print(amount)
+        totalPriceLabel.text = String(format: "$ %.2f", amount)
     }
-    
-    // MARK: Selector Methods
-    @objc func selectPaymentButtonAction() {
-        let paymentVC = PaymentVC()
-        #warning("после установления мода automatic перестало перекидывать на сайт девраша")
-        paymentVC.modalPresentationStyle = .fullScreen
-        present(paymentVC, animated: true, completion: nil)
+
+    func updateCellInfo(at index: IndexPath, with data: ChosenItem) {
+        DispatchQueue.main.async {
+            if let cell = self.tableView.cellForRow(at: index) as? CartTableCell {
+                //TO_ASK: и всё же тут не успевает обновиться инфа
+                cell.countLabel.text = String(data.numberOfItemsToBuy)
+                //обновлять состояние чекмарки до кучи, чтобы пофиксить баг с удалением и чекмаркой?
+//                if ((cell.chosenItem?.isSelected) != nil) {
+//                    print ("selected")
+//                } else {
+//                    print ("unselected")
+//                }
+                self.tableView.reloadRows(at: [index], with: .none)
+            }
+        }
+    }
+
+    #warning("багует, если удалить ячейку между выделенных айтемов")
+    func deleteCell(at index: IndexPath) {
+        DispatchQueue.main.async {
+            if let cell = self.tableView.cellForRow(at: index) as? CartTableCell {
+                //TO_ASK: и всё же тут не успевает обновиться инфа
+                self.tableView.deleteRows(at: [index], with: .automatic)
+                self.tableView.reloadRows(at: [index], with: .none)
+            }
+        }
     }
 }
 
-    // MARK: Setup table
+    // MARK: Setup tableview
 
 extension CartVC: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter.itemsCount
     }
@@ -100,23 +203,31 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CartTableCell.identifier) as! CartTableCell
         let product = presenter.getItem(at: indexPath.row)
-        cell.set(info: product)
-        cell.checkmarkAction = { [weak self] isSelected in
-            guard let self = self else { return }
-            if isSelected {
-                self.selectedIndices.insert(indexPath.row)
-            } else {
-                self.selectedIndices.remove(indexPath.row)
-            }
-            self.updateTotalPrice()
-        }
+        cell.set(with: product)
+        setButtonsTargets(of: cell)
 
-        cell.presenter?.deleteButtonAction = { [weak self] in
-            self?.presenter.deleteItem(at: indexPath, tableView: tableView)
-              }
+        /// delete item from cart
+        // эта логика работала правильно
+//        cell.presenter?.deleteButtonAction = { [weak self] in
+//            print("item to delete:", indexPath.row)
+//            let item = self?.presenter?.items[indexPath.row]
+//            let priceToRemove = (item?.price ?? 0.00) * (Double(cell.countLabel.text ?? "0") ?? 0)
+//
+//            self?.presenter.deleteItem(at: indexPath, tableView: tableView, price: priceToRemove)
+//            self?.updateTotalPrice(with: self?.presenter?.totalPrice ?? 0.00)
+//        }
 
-
-
+        /// покрасить ячейки для тестинга
+//        if indexPath.row == 0 {
+//            cell.backgroundColor = .systemCyan
+//        } else if indexPath.row == 1 {
+//            cell.backgroundColor = .systemGray
+//        } else if indexPath.row == 2 {
+//            cell.backgroundColor = .systemPink
+//        } else if indexPath.row == 3 {
+//            cell.backgroundColor = .systemTeal
+//        }
+        
         return cell
     }
 
@@ -133,11 +244,13 @@ extension CartVC: UITableViewDelegate, UITableViewDataSource {
 
     // MARK: Layout
 
-extension CartVC {
+private extension CartVC {
+
     func setViews() {
         [tableView, footerView].forEach{view.addSubview($0)}
-        [orderLabel, totalLabel, priceLabel, selectPaymentButton].forEach{footerView.addSubview($0)}
+        [orderLabel, totalLabel, totalPriceLabel, selectPaymentButton].forEach{footerView.addSubview($0)}
     }
+
     func setupUI() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         footerView.translatesAutoresizingMaskIntoConstraints = false
@@ -160,12 +273,11 @@ extension CartVC {
             totalLabel.topAnchor.constraint(equalTo: orderLabel.bottomAnchor, constant: 8),
             totalLabel.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 23),
 
-            priceLabel.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
-            priceLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -23),
+            totalPriceLabel.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
+            totalPriceLabel.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -23),
 
-            selectPaymentButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 15),
+            selectPaymentButton.topAnchor.constraint(equalTo: totalPriceLabel.bottomAnchor, constant: 15),
             selectPaymentButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor)
-
         ])
     }
 }

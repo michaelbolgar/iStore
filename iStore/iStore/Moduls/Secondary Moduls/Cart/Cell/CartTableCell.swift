@@ -1,20 +1,20 @@
 import UIKit
 
-final class CartTableCell: UITableViewCell, CartCellView {
+protocol CartTableCellDelegate: AnyObject {
+    func cartTableCell(_ cell: CartTableCell, didTapCheckmarkButton isSelected: Bool)
+}
+
+final class CartTableCell: UITableViewCell {
 
     // MARK: Properties
 
+    weak var delegate: CartTableCellDelegate?
     static let identifier = String(describing: CartTableCell.self)
-    var presenter: CartCellPresenter?
+
+    var chosenItem: ChosenItem?
     private let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .ultraLight)
-    var checkmarkAction: ((Bool) -> Void)?
 
     // MARK: UI Elements
-    private let checkmarkButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.veryLightGray, renderingMode: .alwaysOriginal), for: .normal)
-        return button
-    }()
 
     private let orderImage: UIImageView = {
         let view = UIImageView()
@@ -39,28 +39,47 @@ final class CartTableCell: UITableViewCell, CartCellView {
                                                numberOfLines: 1,
                                                alignment: .left)
 
-    private lazy var minusButton: UIButton = {
+    let checkmarkButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "minus.circle", withConfiguration: configuration)?.withTintColor(UIColor(red: 0.224, green: 0.247, blue: 0.259, alpha: 1), renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.veryLightGray, renderingMode: .alwaysOriginal), for: .normal)
+
+        button.setImage(UIImage(systemName: "checkmark.square.fill",
+                                         withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.lightGreen, renderingMode: .alwaysOriginal), for: .selected)
+
+        // как замьютить эту гадость?
+        button.addTarget(self, action: #selector(checkmarkButtonTapped(_:)), for: .touchUpInside)
+        button.isSelected = false
         return button
     }()
 
-    private lazy var plusButton: UIButton = {
+    lazy var minusButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "plus.circle", withConfiguration: configuration)?.withTintColor(UIColor(red: 0.224, green: 0.247, blue: 0.259, alpha: 1), renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "minus.circle", 
+                                withConfiguration: configuration)?.withTintColor(UIColor.customDarkGray,
+                                                                                 renderingMode: .alwaysOriginal), for: .normal)
         return button
     }()
 
-    private let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11),
+    lazy var plusButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus.circle",
+                                withConfiguration: configuration)?.withTintColor(UIColor.customDarkGray,
+                                                                                 renderingMode: .alwaysOriginal), for: .normal)
+        return button
+    }()
+
+    lazy var basketButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "trash.circle", 
+                                withConfiguration: configuration)?.withTintColor(UIColor.customDarkGray,
+                                                                                renderingMode: .alwaysOriginal), for: .normal)
+        return button
+    }()
+
+    let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11),
                                                textColor: UIColor.gray,
                                                numberOfLines: 1,
                                                alignment: .center)
-
-    private lazy var basketButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "trash.circle", withConfiguration: configuration)?.withTintColor(UIColor(red: 0.224, green: 0.247, blue: 0.259, alpha: 1), renderingMode: .alwaysOriginal), for: .normal)
-        return button
-    }()
 
     private let countStack: UIStackView = {
         let stack = UIStackView()
@@ -74,8 +93,6 @@ final class CartTableCell: UITableViewCell, CartCellView {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
         setupConstraints()
-        presenter = CartCellPresenter(view: self)
-        setButtonsTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -83,51 +100,38 @@ final class CartTableCell: UITableViewCell, CartCellView {
 
     //MARK: Methods
 
-    func set(info: ChosenItem) {
-        orderImage.image = UIImage(named: info.image)
-        bigTitle.text = info.bigTitle
-        smallTitle.text = info.smallTitle
-        pricelabel.text = "$ \(info.price)"
-    }
-    func updateCountLabel(count: Int) {
-        countLabel.text = "\(count)"
+    func set(with item: ChosenItem) {
+        chosenItem = item
+        orderImage.image = UIImage(named: item.image)
+        bigTitle.text = item.bigTitle
+        smallTitle.text = item.smallTitle
+        pricelabel.text = String(format: "$ %.2f", item.price)
     }
 
-    private func configure() {
-        [checkmarkButton, orderImage, bigTitle, smallTitle, pricelabel, countStack].forEach {contentView.addSubview($0)}
-        [minusButton, countLabel, plusButton, basketButton].forEach{countStack.addArrangedSubview($0)}
-    }
+    // это одно действие для чекмарки
+    // перенести это в презентер
+    @objc func checkmarkButtonTapped(_ sender: UIButton) {
 
-    private func setButtonsTargets() {
-        plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
-        minusButton.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
-        checkmarkButton.addTarget(self, action: #selector(checkmarkTapped), for: .touchUpInside)
-        basketButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        guard var item = chosenItem else { return }
 
-    }
-
-    // MARK: Selector methods
-
-    @objc func deleteButtonTapped() {
-        presenter?.deleteCell()
-    }
-
-    @objc func plusButtonTapped() {
-        presenter?.incrementCount()
-    }
-    @objc func minusButtonTapped() {
-        presenter?.decrementCount()
-    }
-    @objc func checkmarkTapped() {
-                checkmarkButton.setImage(UIImage(systemName: "checkmark.square.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor(red: 0.404, green: 0.769, blue: 0.655, alpha: 1), renderingMode: .alwaysOriginal), for: .selected)
+        delegate?.cartTableCell(self, didTapCheckmarkButton: sender.isSelected)
         checkmarkButton.isSelected = !checkmarkButton.isSelected
-        checkmarkAction?(checkmarkButton.isSelected)
+        item.isSelected = sender.isSelected
+
+//        checkmarkAction?(sender.isSelected)
+//        checkmarkButton.isSelected = !checkmarkButton.isSelected
+//        checkmarkAction?(checkmarkButton.isSelected)
     }
 }
 
     // MARK: Layout
 
 private extension CartTableCell {
+
+    func configure() {
+        [checkmarkButton, orderImage, bigTitle, smallTitle, pricelabel, countStack].forEach {contentView.addSubview($0)}
+        [minusButton, countLabel, plusButton, basketButton].forEach{countStack.addArrangedSubview($0)}
+    }
 
     func setupConstraints() {
         orderImage.translatesAutoresizingMaskIntoConstraints = false
