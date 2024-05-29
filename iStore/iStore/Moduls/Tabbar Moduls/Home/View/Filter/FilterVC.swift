@@ -39,6 +39,9 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var presenter: FilterPresenterProtocol!
     weak var delegate: FilterVCDelegate?
     
+    private var minPrice: Double?
+    private var maxPrice: Double?
+    
     // MARK: - UI
     private let tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -100,13 +103,11 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
         FilterSection(rawValue: section)?.title
     }
     
     // MARK: - cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         guard let cellStyle = FilterSection(rawValue: indexPath.section) else {
             return UITableViewCell()
         }
@@ -115,16 +116,17 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             
         case .sortBy:
             let model = models[indexPath.row]
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: SortByCell.identifier, for: indexPath) as? SortByCell else {
-                            return UITableViewCell()
-                        }
-                        cell.configure(with: model, isSelected: indexPath.row == selectedSortOption)
-                        return cell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SortByCell.identifier, for: indexPath) as? SortByCell else {
+                return UITableViewCell()
+            }
+            cell.configure(with: model, isSelected: indexPath.row == selectedSortOption)
+            return cell
             
         case .priceRange:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: RangeTextFieldCell.identifier, for: indexPath) as? RangeTextFieldCell else {
                 return UITableViewCell()
             }
+            cell.delegate = self
             return cell
             
         case .buttons:
@@ -153,7 +155,7 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         guard let selectedOptionIndex = selectedSortOption else { return }
         let option = determineSortingOption(from: selectedOptionIndex)
         presenter.sortByButtonTappet(option: option)
-       
+        
     }
     
     private func determineSortingOption(from index: Int) -> SortingOption {
@@ -170,6 +172,7 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+
 // MARK: - Extensions
 
 extension FilterVC: ButtonCellDelegate {
@@ -178,9 +181,45 @@ extension FilterVC: ButtonCellDelegate {
     }
     
     func saveButtonTapped() {
-        presenter.saveButtonTapped()
+        
+        if let minPrice = minPrice, minPrice < 0  {
+            showAlert()
+        }
+        if let maxPrice = maxPrice, maxPrice > 100000 {
+            showAlert()
+        }
+        if let minPrice, let maxPrice {
+            if minPrice > maxPrice {
+                showAlert()
+            }
+        }
+        
+        presenter.saveButtonTapped(minPrice: minPrice, maxPrice: maxPrice, sortOption: selectedSortOption)
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "Invalid Input", message: "Please ensure the minimum price is not greater than the maximum price.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }
+
+extension FilterVC: RangeTextFieldCellDelegate {
+    func inputMinRange(text: String?) {
+        if let text {
+            minPrice = Double(text)
+        }
+        debugPrint(minPrice)
+    }
+    
+    func inputMaxRange(text: String?) {
+        if let text {
+            maxPrice = Double(text)
+        }
+        debugPrint(maxPrice)
+    }
+}
+
 
 extension FilterVC: FilterVCDelegate {
     func didUpdateSortOption(option: SortingOption) {

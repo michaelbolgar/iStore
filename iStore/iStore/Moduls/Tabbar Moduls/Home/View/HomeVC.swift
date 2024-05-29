@@ -73,7 +73,7 @@ extension HomeVC: UICollectionViewDataSource {
         case "categories":
             return presenter.categoryData.count
         case "products":
-            return presenter.productData.count
+            return presenter.showedProducts.count
         default:
             return 0
         }
@@ -102,7 +102,7 @@ extension HomeVC: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleItemCell.identifier, for: indexPath) as?
                     SingleItemCell else { return UICollectionViewCell() }
             
-            let product = presenter?.productData[indexPath.row] ?? mockSingleProduct
+            let product = presenter?.showedProducts[indexPath.row] ?? mockSingleProduct
             cell.configure(with: product)
             cell.delegate = self
             return cell
@@ -162,7 +162,7 @@ extension HomeVC: UICollectionViewDelegate {
             presenter.setProducts(for: (indexPath.row + 1))
         case "products":
             print("item cell tapped")
-            let item = presenter.productData[indexPath.row]
+            let item = presenter.showedProducts[indexPath.row]
             presenter.showDetailsVC(data: item)
         default:
             fatalError("Unknown section type")
@@ -279,11 +279,11 @@ private func supplementaryHeaderItem() -> NSCollectionLayoutBoundarySupplementar
 
 extension HomeVC {
     func reloadData(with section: Int) {
-        if section == 2 {
-            collectionView.reloadSections(IndexSet(integer: section))
-        } else {
+//        if section == 2 {
+//            collectionView.reloadSections(IndexSet(integer: section))
+//        } else {
             collectionView.reloadData()
-        }
+//        }
     }
 }
 

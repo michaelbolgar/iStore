@@ -9,13 +9,15 @@ import Foundation
 // MARK: - Protocols
 protocol FilterPresenterProtocol {
     func cancelButtonTapped()
-    func saveButtonTapped()
+//    func saveButtonTapped()
+    func saveButtonTapped(minPrice: Double?, maxPrice: Double?, sortOption: Int?)
     func sortByButtonTappet(option: SortingOption)
 }
 
 protocol FilterPresenterDelegate: AnyObject {
     func transferData(_ data: String)
     func updateSortingCriteria(option: SortingOption)
+    func updatePriceRange(minPrice: Double?, maxPrice: Double?)
 }
 
 enum SortingOption {
@@ -41,15 +43,33 @@ final class FilterPresenter: FilterPresenterProtocol {
         view?.didRequestDismissal()
         print("Presenter cancel button tappet")
     }
-    
-    func saveButtonTapped() {
-        delegate?.updateSortingCriteria(option: selectedSortOption)
+
+    func saveButtonTapped(minPrice: Double?, maxPrice: Double?, sortOption: Int?) {
+        if let sortOption = sortOption {
+            let option = determineSortingOption(from: sortOption)
+            selectedSortOption = option
+            delegate?.updateSortingCriteria(option: selectedSortOption)
+        }
+
+        delegate?.updatePriceRange(minPrice: minPrice, maxPrice: maxPrice)
         view?.didRequestDismissal()
-        print("Presenter save button tappet")
+        print("Presenter save button tapped")
     }
     
     func sortByButtonTappet(option: SortingOption) {
         selectedSortOption = option
         print("Presenter sort by button tapped")
+    }
+    private func determineSortingOption(from index: Int) -> SortingOption {
+        switch index {
+        case 0:
+            return .title
+        case 1:
+            return .priceLow
+        case 2:
+            return .priceHigh
+        default:
+            fatalError("Unexpected index for sorting option")
+        }
     }
 }

@@ -4,13 +4,14 @@ import Foundation
 protocol HomePresenterProtocol {
 
     var categoryData: [Category] { get }
-    var productData: [SingleProduct] { get }
-
+    var showedProducts: [SingleProduct] { get }
+    
     func showCartVC()
     func showSearchVC(searchText: String)
     func showDetailsVC(data: SingleProduct)
     func showFilterVC()
     func updateSortingCriteria(option: SortingOption)
+    func updatePriceRange(minPrice: Double?, maxPrice: Double?)
 
     func setCategories()
     func setProducts(for id: Int)
@@ -24,8 +25,10 @@ final class HomePresenter: HomePresenterProtocol {
     private let router: HomeRouterProtocol
 
     var categoryData: [Category] = []
-    var productData: [SingleProduct] = []
-
+    private var productData: [SingleProduct] = []
+    var showedProducts: [SingleProduct] = []
+    private var minPrice: Double?
+        private var maxPrice: Double?
 
     init(view: HomeVCProtocol, router: HomeRouterProtocol) {
         self.view = view
@@ -53,7 +56,8 @@ final class HomePresenter: HomePresenterProtocol {
                 switch result {
                 case .success(let products):
                     self?.productData = products
-                                    print(products)
+                    self?.showedProducts = products
+                    print(products)
                     self?.view?.reloadData(with: 2)
                 case .failure(let error):
                     print("Error fetching: \(error)")
@@ -75,6 +79,7 @@ final class HomePresenter: HomePresenterProtocol {
     }
 
     func showFilterVC() {
+        showedProducts = productData
         router.showFilterVC(delegate: self)
     }
 }
@@ -85,15 +90,31 @@ extension HomePresenter: FilterPresenterDelegate {
     func transferData(_ data: String) {
         print(data)
     }
+    
     func updateSortingCriteria(option: SortingOption) {
         switch option {
         case .title:
-            productData.sort { $0.title ?? "" < $1.title ?? "" }
+            showedProducts.sort { $0.title ?? "" < $1.title ?? "" }
         case .priceLow:
-            productData.sort { $0.price ?? 0 < $1.price ?? 0 }
+            showedProducts.sort { $0.price ?? 0 < $1.price ?? 0 }
         case .priceHigh:
-            productData.sort { $0.price ?? 0 > $1.price ?? 0 }
+            showedProducts.sort { $0.price ?? 0 > $1.price ?? 0 }
+        }
+        view?.reloadData(with: 2)
+    }
+    
+    func updatePriceRange(minPrice: Double?, maxPrice: Double?) {
+        if let minPrice = minPrice {
+            showedProducts = productData.filter({ item in
+                return Double(item.price ?? 0) >= minPrice
+            })
+        }
+        if let maxPrice = maxPrice {
+            showedProducts = productData.filter({ item  in
+                return Double(item.price ?? 0) <= maxPrice
+            })
         }
         view?.reloadData(with: 2)
     }
 }
+

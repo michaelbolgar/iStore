@@ -20,19 +20,24 @@ class ButtonsCell: UITableViewCell {
     weak var delegate: ButtonCellDelegate?
     
     // MARK: - UI
-    private let cancelButton = UIButton.makeButtonFlexWidth(text: "Cancel",
-                                                         buttonColor: .red,
-                                                         titleColor: .white,
-                                                         titleSize: 16,
-                                                         height: 40,
-                                                         cornerRadius: 4)
+    private let cancelButton = UIButton.makeButtonFlexWidth(
+        text: "Cancel",
+        buttonColor: .red,
+        titleColor: .white,
+        titleSize: 16,
+        height: 40,
+        cornerRadius: 4
+    )
     
-    private let saveButton = UIButton.makeButtonFlexWidth(text: "Save",
-                                                         buttonColor: .green,
-                                                         titleColor: .white,
-                                                         titleSize: 16,
-                                                         height: 40,
-                                                         cornerRadius: 4)
+    private let saveButton = UIButton.makeButtonFlexWidth(
+        text: "Save",
+        buttonColor: .green,
+        titleColor: .white,
+        titleSize: 16,
+        height: 40,
+        cornerRadius: 4
+    )
+    
     // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -68,13 +73,13 @@ class ButtonsCell: UITableViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60),
+            cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
             cancelButton.topAnchor.constraint(equalTo: contentView.topAnchor),
-            cancelButton.widthAnchor.constraint(equalToConstant: 120),
+            cancelButton.widthAnchor.constraint(equalToConstant: 140),
             
-            saveButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60),
+            saveButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
             saveButton.topAnchor.constraint(equalTo: contentView.topAnchor),
-            saveButton.widthAnchor.constraint(equalToConstant: 120)
+            saveButton.widthAnchor.constraint(equalToConstant: 140)
         ])
     }
 }
