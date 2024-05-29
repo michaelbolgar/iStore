@@ -49,7 +49,7 @@ class RangeTextFieldCell: UITableViewCell {
     }
     
     // MARK: - Methods
-    
+
     private func addTargets() {
         minTextField.addTarget(self, action: #selector(inputMinRange), for: .editingChanged)
         maxTextField.addTarget(self, action: #selector(inputMaxRange), for: .editingChanged)
@@ -72,11 +72,11 @@ class RangeTextFieldCell: UITableViewCell {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             minTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
-            minTextField.topAnchor.constraint(equalTo: contentView.topAnchor),
+            minTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             minTextField.widthAnchor.constraint(equalToConstant: 140),
             
             maxTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
-            maxTextField.topAnchor.constraint(equalTo: contentView.topAnchor),
+            maxTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             maxTextField.widthAnchor.constraint(equalToConstant: 140)
         ])
     }

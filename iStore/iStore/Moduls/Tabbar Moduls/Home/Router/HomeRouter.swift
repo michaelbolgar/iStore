@@ -13,7 +13,7 @@ protocol HomeRouterProtocol: BaseRouter {
 
 // MARK: HomeRouter
 
-final class HomeRouter: HomeRouterProtocol {
+final class HomeRouter: HomeRouterProtocol{
 
     var navigationController: UINavigationController
     var moduleBuilder: (any HomeBuilderProtocol)?
@@ -53,6 +53,8 @@ final class HomeRouter: HomeRouterProtocol {
     
     func showFilterVC(delegate: FilterPresenterDelegate) {
         if let filterVC = moduleBuilder?.createFilterVC(delegate: delegate) {
+            filterVC.modalPresentationStyle = .custom
+            filterVC.transitioningDelegate = filterVC as! any UIViewControllerTransitioningDelegate
             navigationController.present(filterVC, animated: true)
         }
     }

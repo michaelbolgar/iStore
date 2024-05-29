@@ -34,7 +34,7 @@ protocol FilterVCDelegate: AnyObject {
 }
 // MARK: - Class FilterVC
 
-class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     var presenter: FilterPresenterProtocol!
     weak var delegate: FilterVCDelegate?
@@ -67,9 +67,16 @@ class FilterVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.frame = view.bounds
+        
+        let contentHeight = calculateContentHeight()
+        self.preferredContentSize = CGSize(width: view.bounds.width, height: contentHeight)
     }
     
     // MARK: - Methods
+    private func calculateContentHeight() -> CGFloat {
+            tableView.layoutIfNeeded()
+            return tableView.contentSize.height
+        }
     
     func configure() {
         self.models = sortOption.enumerated().map { index, title in
@@ -227,5 +234,11 @@ extension FilterVC: FilterVCDelegate {
     
     func didRequestDismissal() {
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension FilterVC: UIViewControllerTransitioningDelegate {
+    internal func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return HalfScreenPresentationController(presentedViewController: presented, presenting: presenting)
     }
 }
