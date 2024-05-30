@@ -48,7 +48,8 @@ final class CartTableCell: UITableViewCell {
         button.setImage(UIImage(systemName: "checkmark.square.fill",
                                          withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.lightGreen, renderingMode: .alwaysOriginal), for: .selected)
         // как замьютить эту гадость?
-        button.addTarget(self, action: #selector(checkmarkButtonTapped(_:)), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(checkmarkButtonTapped(_:)), for: .touchUpInside)
+        // этот код остаётся только чтобы задать вопрос, потом -- смело удалять
         return button
     }()
 
@@ -108,11 +109,6 @@ final class CartTableCell: UITableViewCell {
         pricelabel.text = String(format: "$ %.2f", item.price)
         countLabel.text = String(item.numberOfItemsToBuy)
         checkmarkButton.isSelected = item.isSelected
-    }
-
-    @objc func checkmarkButtonTapped(_ sender: UIButton) {
-        guard var item = chosenItem else { return }
-        delegate?.cartTableCell(self, didTapCheckmarkButton: sender.isSelected)
     }
 }
 
