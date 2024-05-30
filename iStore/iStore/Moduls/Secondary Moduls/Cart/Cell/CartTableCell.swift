@@ -110,19 +110,9 @@ final class CartTableCell: UITableViewCell {
         checkmarkButton.isSelected = item.isSelected
     }
 
-    // ловить тап -- отправлять в презентер -- в презентере делать вычисления по тоталу и проч. -- делать релоад айтем (задавать значение чекмарки в функции set)
-    // нужно сохранять последовательность логики (сначала обновляется модель, потом меняется юай для кнопки)
-
     @objc func checkmarkButtonTapped(_ sender: UIButton) {
         guard var item = chosenItem else { return }
         delegate?.cartTableCell(self, didTapCheckmarkButton: sender.isSelected)
-
-//        checkmarkButton.isSelected = !checkmarkButton.isSelected
-//        item.isSelected = sender.isSelected
-
-//        checkmarkAction?(sender.isSelected)
-//        checkmarkButton.isSelected = !checkmarkButton.isSelected
-//        checkmarkAction?(checkmarkButton.isSelected)
     }
 }
 
