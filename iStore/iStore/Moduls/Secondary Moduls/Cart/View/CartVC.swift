@@ -1,7 +1,7 @@
 import UIKit
 
 protocol CartVCProtocol: AnyObject {
-    func reloadTableView()
+//    func reloadTableView()
     func updateCellInfo(at index: IndexPath, with data: ChosenItem)
     func updateTotalPrice(with amount: Double)
     func deleteCell(at index: IndexPath)
@@ -107,10 +107,18 @@ final class CartVC: UIViewController {
 
     @objc func plusButtonAction(sender: UIButton) {
         // TO_ASK: реально так сложно надо стучаться к этой кнопке?
+
+        //вариант 2 -- приоритетный
+//        let test = sender.superview?.superview?.subviews as? CartTableCell
+        // написать рекурсивную функцию, которая будет искать ячейку и возвращать её, когда найдёт
+
+        //вариант 3 -- через модели
+
         guard let stackView = sender.superview as? UIStackView,
+//              sender.tag -- вариант 1
               let contentView = stackView.superview,
               let cell = contentView.superview as? CartTableCell,
-              let tableView = cell.superview as? UITableView,
+//              let tableView = cell.superview as? UITableView,
               let indexPath = tableView.indexPath(for: cell) else {
             return
         }
@@ -128,7 +136,6 @@ final class CartVC: UIViewController {
         presenter?.tappedMinusButton(at: indexPath)
     }
 
-    // это второе действие для чекмарки
     @objc func checkmarkAction(sender: UIButton) {
         guard let contentView = sender.superview,
               let cell = contentView.superview as? CartTableCell,
@@ -138,13 +145,8 @@ final class CartVC: UIViewController {
         }
 
         if let cell = self.tableView.cellForRow(at: indexPath) as? CartTableCell {
-            if cell.checkmarkButton.isSelected {
-                presenter?.selectCell(at: indexPath.row)
-                cell.chosenItem?.isSelected = true // потестить, нужно ли это вообще
-            } else {
-                presenter?.unselectCell(at: indexPath.row)
-                cell.chosenItem?.isSelected = false // потестить, нужно ли это вообще
-            }
+            presenter?.tappedCheckmarkButton(at: indexPath)
+            
         }
     }
 }
@@ -153,11 +155,11 @@ final class CartVC: UIViewController {
 
 extension CartVC: CartVCProtocol {
 
-    func reloadTableView() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
+//    func reloadTableView() {
+//        DispatchQueue.main.async {
+//            self.tableView.reloadData()
+//        }
+//    }
 
     func updateTotalPrice(with amount: Double) {
         print(amount)
@@ -167,14 +169,7 @@ extension CartVC: CartVCProtocol {
     func updateCellInfo(at index: IndexPath, with data: ChosenItem) {
         DispatchQueue.main.async {
             if let cell = self.tableView.cellForRow(at: index) as? CartTableCell {
-                //TO_ASK: и всё же тут не успевает обновиться инфа
-                cell.countLabel.text = String(data.numberOfItemsToBuy)
-                //обновлять состояние чекмарки до кучи, чтобы пофиксить баг с удалением и чекмаркой?
-//                if ((cell.chosenItem?.isSelected) != nil) {
-//                    print ("selected")
-//                } else {
-//                    print ("unselected")
-//                }
+//                cell.set(with: data) // работает и так
                 self.tableView.reloadRows(at: [index], with: .none)
             }
         }
@@ -183,8 +178,7 @@ extension CartVC: CartVCProtocol {
     #warning("багует, если удалить ячейку между выделенных айтемов")
     func deleteCell(at index: IndexPath) {
         DispatchQueue.main.async {
-            if let cell = self.tableView.cellForRow(at: index) as? CartTableCell {
-                //TO_ASK: и всё же тут не успевает обновиться инфа
+            if self.tableView.cellForRow(at: index) is CartTableCell {
                 self.tableView.deleteRows(at: [index], with: .automatic)
                 self.tableView.reloadRows(at: [index], with: .none)
             }

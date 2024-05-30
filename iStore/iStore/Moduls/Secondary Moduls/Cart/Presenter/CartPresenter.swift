@@ -14,8 +14,8 @@ protocol CartPresenterProtocol: AnyObject {
 
     /// update cart information
     func selectCell(at index: Int)
-    func unselectCell(at index: Int)
-//    func tappedCheckmarkButton(at index: Int)
+    func deselectCell(at index: Int)
+    func tappedCheckmarkButton(at index: IndexPath)
 
     func deleteItem(at indexPath: IndexPath, tableView: UITableView)
     func tappedPlusButton(at index: IndexPath)
@@ -73,14 +73,14 @@ final class CartPresenter: CartPresenterProtocol {
 
     // MARK: Methods - Managing of cart
 
-    func updateTotals() {
-        totalPrice = selectedItems.totalPrice
-        view?.updateTotalPrice(with: totalPrice)
-    }
-
     func updateCell(at index: IndexPath) {
         let itemInfo = getItem(at: index.row)
         view?.updateCellInfo(at: index, with: itemInfo)
+    }
+
+    func updateTotals() {
+        totalPrice = selectedItems.totalPrice
+        view?.updateTotalPrice(with: totalPrice)
     }
 
     func selectCell(at index: Int) {
@@ -90,7 +90,7 @@ final class CartPresenter: CartPresenterProtocol {
         updateTotals()
     }
 
-    func unselectCell(at index: Int) {
+    func deselectCell(at index: Int) {
         if !selectedItems.items.isEmpty {
             let item = items[index]
             selectedItems.items.removeAll { $0.bigTitle == item.bigTitle }
@@ -99,10 +99,10 @@ final class CartPresenter: CartPresenterProtocol {
     }
 
     func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
-        #warning("почекать логику чекмарок")
+#warning("почекать логику чекмарок")
         if !items.isEmpty {
             let item = items[indexPath.row]
-            unselectCell(at: indexPath.row)
+            deselectCell(at: indexPath.row)
             items.removeAll { $0.bigTitle == item.bigTitle }
             view?.deleteCell(at: indexPath)
         }
@@ -112,6 +112,7 @@ final class CartPresenter: CartPresenterProtocol {
         // тут ведь уже не надо проверять guard'ом, раз это сделано в VC перед вызовом этой функции?
         //        guard let item = chosenItem else { return }
         items[index.row].numberOfItemsToBuy += 1
+        //        print ("items[index.row]:", items[index.row].numberOfItemsToBuy)
         updateCell(at: index)
         updateTotals()
     }
@@ -125,13 +126,14 @@ final class CartPresenter: CartPresenterProtocol {
         }
     }
 
-    // если удалять, то скорее всего какой-то делегат ячейки надо вместе с тем снести
-    //    func tappedCheckmarkButton(at index: Int) {
-
-    //        print("презентер тоже работает")
-
-    //        let item = items[index]
-    //        selectedItems.items.append(item)
-    //        updateTotals()
-    //    }
+    func tappedCheckmarkButton(at index: IndexPath) {
+        items[index.row].isSelected.toggle()
+        let item = items[index.row]
+        updateCell(at: index)
+        if (item.isSelected) {
+            self.selectCell(at: index.row)
+        } else {
+            self.deselectCell(at: index.row)
+        }
+    }
 }

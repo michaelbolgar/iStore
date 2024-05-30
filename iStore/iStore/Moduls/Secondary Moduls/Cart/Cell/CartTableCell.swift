@@ -17,6 +17,7 @@ final class CartTableCell: UITableViewCell {
     // MARK: UI Elements
 
     private let orderImage: UIImageView = {
+
         let view = UIImageView()
         view.layer.cornerRadius = 6
         view.clipsToBounds = true
@@ -42,13 +43,12 @@ final class CartTableCell: UITableViewCell {
     let checkmarkButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.veryLightGray, renderingMode: .alwaysOriginal), for: .normal)
+        button.isSelected = false
 
         button.setImage(UIImage(systemName: "checkmark.square.fill",
                                          withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.lightGreen, renderingMode: .alwaysOriginal), for: .selected)
-
         // как замьютить эту гадость?
         button.addTarget(self, action: #selector(checkmarkButtonTapped(_:)), for: .touchUpInside)
-        button.isSelected = false
         return button
     }()
 
@@ -76,7 +76,7 @@ final class CartTableCell: UITableViewCell {
         return button
     }()
 
-    let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11),
+    private let countLabel = UILabel.makeLabel(text: "1", font: UIFont.InterMedium(ofSize: 11),
                                                textColor: UIColor.gray,
                                                numberOfLines: 1,
                                                alignment: .center)
@@ -106,17 +106,19 @@ final class CartTableCell: UITableViewCell {
         bigTitle.text = item.bigTitle
         smallTitle.text = item.smallTitle
         pricelabel.text = String(format: "$ %.2f", item.price)
+        countLabel.text = String(item.numberOfItemsToBuy)
+        checkmarkButton.isSelected = item.isSelected
     }
 
-    // это одно действие для чекмарки
-    // перенести это в презентер
+    // ловить тап -- отправлять в презентер -- в презентере делать вычисления по тоталу и проч. -- делать релоад айтем (задавать значение чекмарки в функции set)
+    // нужно сохранять последовательность логики (сначала обновляется модель, потом меняется юай для кнопки)
+
     @objc func checkmarkButtonTapped(_ sender: UIButton) {
-
         guard var item = chosenItem else { return }
-
         delegate?.cartTableCell(self, didTapCheckmarkButton: sender.isSelected)
-        checkmarkButton.isSelected = !checkmarkButton.isSelected
-        item.isSelected = sender.isSelected
+
+//        checkmarkButton.isSelected = !checkmarkButton.isSelected
+//        item.isSelected = sender.isSelected
 
 //        checkmarkAction?(sender.isSelected)
 //        checkmarkButton.isSelected = !checkmarkButton.isSelected
