@@ -5,12 +5,12 @@ protocol CartVCProtocol: AnyObject {
     func updateCellInfo(at index: IndexPath, with data: ChosenItem)
     func updateTotalLabel(with amount: Double)
     func deleteCell(at index: IndexPath)
-    // добавить сюда все функции
 }
 
 /*
  что нужно ещё править:
- 1. криво работает анимация при тапе на ячейку
+ 1. криво работает анимация при удалении
+ 2. прожимается ячейка, появляется анимация
  */
 
 final class CartVC: UIViewController {
@@ -117,12 +117,10 @@ final class CartVC: UIViewController {
 //              sender.tag -- вариант 1
               let contentView = stackView.superview,
               let cell = contentView.superview as? CartTableCell,
-//              let tableView = cell.superview as? UITableView,
               let indexPath = tableView.indexPath(for: cell) else {
             return
         }
         presenter?.tappedPlusButton(at: indexPath)
-        reloadTableRows(at: indexPath)
         updateTotalLabel(with: presenter?.totalPrice ?? 0.00)
     }
 
@@ -135,7 +133,6 @@ final class CartVC: UIViewController {
             return
         }
         presenter?.tappedMinusButton(at: indexPath)
-        presenter?.updateTotals()
         updateTotalLabel(with: presenter?.totalPrice ?? 0.00)
     }
 
