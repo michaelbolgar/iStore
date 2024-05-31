@@ -13,13 +13,17 @@ protocol CartPresenterProtocol: AnyObject {
     func setData()
 
     /// update cart information
+    func updateCell(at index: IndexPath)
+    func updateTotals()
+    func updateSelectedItems()
+
     func selectCell(at index: Int)
     func deselectCell(at index: Int)
-    func tappedCheckmarkButton(at index: IndexPath)
-
     func deleteItem(at indexPath: IndexPath, tableView: UITableView)
+
     func tappedPlusButton(at index: IndexPath)
     func tappedMinusButton(at index: IndexPath)
+    func tappedCheckmarkButton(at index: IndexPath)
 
     /// navigation
     func showDetailsVC(data: SingleProduct)
@@ -80,13 +84,16 @@ final class CartPresenter: CartPresenterProtocol {
 
     func updateTotals() {
         totalPrice = selectedItems.totalPrice
-        view?.updateTotalPrice(with: totalPrice)
+        view?.updateTotalLabel(with: totalPrice)
+    }
+
+    func updateSelectedItems() {
+        selectedItems.items = items.filter { $0.isSelected }
     }
 
     func selectCell(at index: Int) {
         let item = items[index]
         selectedItems.items.append(item)
-        print (selectedItems.items)
         updateTotals()
     }
 
@@ -99,7 +106,6 @@ final class CartPresenter: CartPresenterProtocol {
     }
 
     func deleteItem(at indexPath: IndexPath, tableView: UITableView) {
-#warning("почекать логику чекмарок")
         if !items.isEmpty {
             let item = items[indexPath.row]
             deselectCell(at: indexPath.row)
@@ -108,12 +114,15 @@ final class CartPresenter: CartPresenterProtocol {
         }
     }
 
+    // MARK: Methods - Selector for buttons
+
     func tappedPlusButton(at index: IndexPath) {
         // тут ведь уже не надо проверять guard'ом, раз это сделано в VC перед вызовом этой функции?
         //        guard let item = chosenItem else { return }
         items[index.row].numberOfItemsToBuy += 1
-        //        print ("items[index.row]:", items[index.row].numberOfItemsToBuy)
         updateCell(at: index)
+        view?.reloadTableRows(at: index)
+        updateSelectedItems()
         updateTotals()
     }
 
@@ -122,6 +131,8 @@ final class CartPresenter: CartPresenterProtocol {
         if items[index.row].numberOfItemsToBuy > 1 {
             items[index.row].numberOfItemsToBuy -= 1
             updateCell(at: index)
+            view?.reloadTableRows(at: index)
+            updateSelectedItems() 
             updateTotals()
         }
     }
