@@ -118,8 +118,6 @@ final class CartPresenter: CartPresenterProtocol {
     // MARK: Methods - Selector for buttons
 
     func tappedPlusButton(at index: IndexPath) {
-        // тут ведь уже не надо проверять guard'ом, раз это сделано в VC перед вызовом этой функции?
-        //        guard let item = chosenItem else { return }
         items[index.row].numberOfItemsToBuy += 1
         updateCell(at: index)
         view?.reloadTableRows(at: index)

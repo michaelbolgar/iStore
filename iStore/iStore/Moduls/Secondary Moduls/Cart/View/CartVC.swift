@@ -155,7 +155,6 @@ final class CartVC: UIViewController {
 
 extension CartVC: CartVCProtocol {
 
-    // это всё не нужно делать приватным?
     func reloadTableRows(at index: IndexPath) {
         DispatchQueue.main.async {
             self.tableView.reloadRows(at: [index], with: .none)

@@ -47,9 +47,6 @@ final class CartTableCell: UITableViewCell {
 
         button.setImage(UIImage(systemName: "checkmark.square.fill",
                                          withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.lightGreen, renderingMode: .alwaysOriginal), for: .selected)
-        // как замьютить эту гадость?
-//        button.addTarget(self, action: #selector(checkmarkButtonTapped(_:)), for: .touchUpInside)
-        // этот код остаётся только чтобы задать вопрос, потом -- смело удалять
         return button
     }()
 
