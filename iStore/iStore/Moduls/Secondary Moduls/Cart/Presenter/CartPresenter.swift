@@ -128,7 +128,6 @@ final class CartPresenter: CartPresenterProtocol {
         updateCell(at: index)
         view?.reloadTableRows(at: index)
         updateSelectedItems()
-        updateTotals()
     }
 
     func tappedMinusButton(at index: IndexPath) {
