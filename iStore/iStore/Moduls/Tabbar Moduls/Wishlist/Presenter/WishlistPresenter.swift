@@ -112,20 +112,21 @@ final class WishlistPresenter: WishlistPresenterProtocol {
                     let price = (data["price"] as? NSNumber)?.doubleValue
                     let images = data["images"] as? [String]
                     let isFavourite = data["isFavorite"] as? Bool
-//                    print(images?.first)
+                    //                    print(images?.first)
                     if let imagesString = data["images"] as? String,
-                                   let jsonData = imagesString.data(using: .utf8),
-                                   let urls = try? JSONDecoder().decode([String].self, from: jsonData) {
-                                    // Используем первый URL из распаршенного массива
-                                    return Product(id: id, picture: urls.first, description: description, price: price, isFavourite: isFavourite)
-                                } else {
-                                    return nil
-                                }
+                       let jsonData = imagesString.data(using: .utf8),
+                       let urls = try? JSONDecoder().decode([String].self, from: jsonData) {
+                        // Используем первый URL из распаршенного массива
+                        return Product(id: id, picture: urls.first, description: description, price: price, isFavourite: isFavourite)
+                    } else {
+                        return nil
+                    }
                 } ?? []
-//                self.view?.reloadCollectionView()
+                //                self.view?.reloadCollectionView()
             }
         }
     }
+
     func reloadData() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let favoritesCollection = db.collection("users").document(userId).collection("favorites")

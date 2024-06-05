@@ -40,7 +40,7 @@ final class CartTableCell: UITableViewCell {
                                                numberOfLines: 1,
                                                alignment: .left)
 
-    let checkmarkButton: UIButton = {
+    lazy var checkmarkButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "square", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?.withTintColor(UIColor.veryLightGray, renderingMode: .alwaysOriginal), for: .normal)
         button.isSelected = false

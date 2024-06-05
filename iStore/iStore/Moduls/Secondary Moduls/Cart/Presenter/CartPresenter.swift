@@ -10,7 +10,8 @@ protocol CartPresenterProtocol: AnyObject {
 
     /// set data
     func getItem(at index: Int) -> ChosenItem
-    func setData()
+    func setData() // to delete
+    func addToCart()
 
     /// update cart information
     func updateCell(at index: IndexPath)
@@ -30,6 +31,11 @@ protocol CartPresenterProtocol: AnyObject {
 }
 
 final class CartPresenter: CartPresenterProtocol {
+
+    // to implement
+    func addToCart() {
+        print ("add to cart tapped")
+    }
 
     weak var view: CartVCProtocol?
 
