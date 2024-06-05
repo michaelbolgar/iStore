@@ -93,7 +93,6 @@ final class CartVC: UIViewController {
         present(paymentVC, animated: true, completion: nil)
     }
 
-    // TO_ASK: как sender спасает от ошибки -[UIButton length]: unrecognized selector sent to instance ?
     @objc func deleteButtonAction(sender: UIButton) {
         guard let stackView = sender.superview as? UIStackView,
               let contentView = stackView.superview,
