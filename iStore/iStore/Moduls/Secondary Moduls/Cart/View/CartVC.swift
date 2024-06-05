@@ -85,6 +85,11 @@ final class CartVC: UIViewController {
         cell.checkmarkButton.addTarget(self, action: #selector(checkmarkAction(sender:)), for: .touchUpInside)
         cell.basketButton.addTarget(self, action: #selector(deleteButtonAction(sender:)), for: .touchUpInside)
     }
+}
+
+    // MARK: Work with prices
+
+extension CartVC: CartVCProtocol {
 
     // MARK: Selector Methods
     @objc func selectPaymentButtonAction() {

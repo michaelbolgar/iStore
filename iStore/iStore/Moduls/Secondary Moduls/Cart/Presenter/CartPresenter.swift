@@ -146,4 +146,31 @@ final class CartPresenter: CartPresenterProtocol {
             self.deselectCell(at: index.row)
         }
     }
+
+    func tappedPlusButton(at index: IndexPath) {
+        // тут ведь уже не надо проверять guard'ом, раз это сделано в VC перед вызовом этой функции?
+        //        guard let item = chosenItem else { return }
+        items[index.row].numberOfItemsToBuy += 1
+        updateCell(at: index)
+        updateTotals()
+    }
+
+    func tappedMinusButton(at index: IndexPath) {
+        /// to improve: by setting "1 >= 1" we can reach the value of 0 to make the cell inactive (but not deleted from the cart yet -> UX question
+        if items[index.row].numberOfItemsToBuy > 1 {
+            items[index.row].numberOfItemsToBuy -= 1
+            updateCell(at: index)
+            updateTotals()
+        }
+    }
+
+    // если удалять, то скорее всего какой-то делегат ячейки надо вместе с тем снести
+    //    func tappedCheckmarkButton(at index: Int) {
+
+    //        print("презентер тоже работает")
+
+    //        let item = items[index]
+    //        selectedItems.items.append(item)
+    //        updateTotals()
+    //    }
 }
