@@ -10,7 +10,8 @@ protocol CartPresenterProtocol: AnyObject {
 
     /// set data
     func getItem(at index: Int) -> ChosenItem
-    func setData()
+    func setData() // to delete
+    func addToCart()
 
     /// update cart information
     func selectCell(at index: Int)
@@ -26,6 +27,11 @@ protocol CartPresenterProtocol: AnyObject {
 }
 
 final class CartPresenter: CartPresenterProtocol {
+
+    // to implement
+    func addToCart() {
+        print ("add to cart tapped")
+    }
 
     weak var view: CartVCProtocol?
 
@@ -108,11 +114,21 @@ final class CartPresenter: CartPresenterProtocol {
         }
     }
 
+<<<<<<< HEAD
     func tappedPlusButton(at index: IndexPath) {
         // тут ведь уже не надо проверять guard'ом, раз это сделано в VC перед вызовом этой функции?
         //        guard let item = chosenItem else { return }
         items[index.row].numberOfItemsToBuy += 1
         updateCell(at: index)
+=======
+    // MARK: Methods - Selector for buttons
+
+    func tappedPlusButton(at index: IndexPath) {
+        items[index.row].numberOfItemsToBuy += 1
+        updateCell(at: index)
+        view?.reloadTableRows(at: index)
+        updateSelectedItems()
+>>>>>>> 45d6061... fixed merge
         updateTotals()
     }
 
@@ -121,10 +137,16 @@ final class CartPresenter: CartPresenterProtocol {
         if items[index.row].numberOfItemsToBuy > 1 {
             items[index.row].numberOfItemsToBuy -= 1
             updateCell(at: index)
+<<<<<<< HEAD
+=======
+            view?.reloadTableRows(at: index)
+            updateSelectedItems()
+>>>>>>> 45d6061... fixed merge
             updateTotals()
         }
     }
 
+<<<<<<< HEAD
     // если удалять, то скорее всего какой-то делегат ячейки надо вместе с тем снести
     //    func tappedCheckmarkButton(at index: Int) {
 
@@ -134,4 +156,16 @@ final class CartPresenter: CartPresenterProtocol {
     //        selectedItems.items.append(item)
     //        updateTotals()
     //    }
+=======
+    func tappedCheckmarkButton(at index: IndexPath) {
+        items[index.row].isSelected.toggle()
+        let item = items[index.row]
+        updateCell(at: index)
+        if (item.isSelected) {
+            self.selectCell(at: index.row)
+        } else {
+            self.deselectCell(at: index.row)
+        }
+    }
+>>>>>>> 45d6061... fixed merge
 }
