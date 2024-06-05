@@ -22,5 +22,6 @@ struct SelectedItems {
         get {
             return items.reduce (0.0) { $0 + $1.totalPriceForItem }
         }
+//        set (newTotal) { }
     }
 }
